@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2014-10-09T12:38:21Z" product-name="taskqueue">
+		<header/>
+		<body>
+			<trans-unit id="tx_taskqueue_domain_model_task">
+				<source>Task</source>
+			</trans-unit>
+			<trans-unit id="tx_taskqueue_domain_model_task.name">
+				<source>Name</source>
+			</trans-unit>
+			<trans-unit id="tx_taskqueue_domain_model_task.data">
+				<source>Data</source>
+			</trans-unit>
+			<trans-unit id="tx_taskqueue_domain_model_task.status">
+				<source>Status</source>
+			</trans-unit>
+			<trans-unit id="tx_taskqueue_domain_model_task.start_date">
+				<source>Start Date</source>
+			</trans-unit>
+			<trans-unit id="tx_taskqueue_domain_model_task.message">
+				<source>Message</source>
+			</trans-unit>
+			<trans-unit id="tx_taskqueue_domain_model_task.priority">
+				<source>Priority</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

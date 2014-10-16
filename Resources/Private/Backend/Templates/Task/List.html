@@ -1,0 +1,71 @@
+
+<f:layout name="Default" />
+
+This Template is responsible for creating a table of domain objects.
+
+If you modify this template, do not forget to change the overwrite settings
+in /Configuration/ExtensionBuilder/settings.yaml:
+  Resources:
+    Private:
+      Templates:
+        List.html: keep
+
+Otherwise your changes will be overwritten the next time you save the extension in the extension builder
+
+<f:section name="content">
+<h1>Listing for Task</h1>
+
+<f:flashMessages />
+
+<table  class="tx_taskqueue" >
+	<col width="25">
+	<col width="100">
+    <col width="200">
+    <col width="200">
+    <col width="100">
+    <col width="10">
+    <col width="10">
+    <col width="10">
+	<tr>
+		<th></th>
+		<th align="left"><f:translate key="tx_taskqueue_domain_model_task.name" /></th>
+		<th align="left"><f:translate key="tx_taskqueue_domain_model_task.start_date" /></th>
+		<th align="left"><f:translate key="tx_taskqueue_domain_model_task.message" /></th>
+		<th align="left"><f:translate key="tx_taskqueue_domain_model_task.priority" /></th>
+		<th>  </th>
+		<th>  </th>
+	</tr>
+
+	<f:for each="{tasks}" as="task">
+		<tr style="border-top:dotted 1px black;">
+			<td>	
+				<f:if condition="{task.status}==3">
+					<f:image src="EXT:taskqueue/Resources/Public/Icons/red.png" title="FAILED"/>
+				</f:if>
+				<f:if condition="{task.status}==2">
+					<f:image src="EXT:taskqueue/Resources/Public/Icons/green.png" title="FINISHED"/>
+				</f:if>
+				<f:if condition="{task.status}==0">
+					<f:image src="EXT:taskqueue/Resources/Public/Icons/blue.png" title="WAITING"/>
+				</f:if>
+				<f:if condition="{task.status}==1">
+					<f:image src="EXT:taskqueue/Resources/Public/Icons/blue.png" title="RUNNING"/>
+				</f:if>
+			</td>
+			<td>
+			
+			<f:link.action action="show" arguments="{task : task}"> {task.name}</f:link.action></td>
+			<td><f:format.date format="d.m.Y - H:i:s">@{task.startDate}</f:format.date></td>
+			<td>{task.message}</td>
+			<td>{task.priority}</td>
+			<td><f:be.buttons.icon uri="{f:uri.action(action:'run', arguments:{task : task})}" icon="actions-move-right" title="Run Task"/></td>
+			<td><f:be.buttons.icon uri="{f:uri.action(action:'delete', arguments:{task : task})}" icon="actions-edit-delete" title="Delete Task"/></td>
+		</tr>
+	</f:for>
+</table>
+
+Delete all finished
+
+Delete all failed
+
+</f:section>

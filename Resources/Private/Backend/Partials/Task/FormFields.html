@@ -1,0 +1,22 @@
+
+<label for="name">
+	<f:translate key="tx_taskqueue_domain_model_task.name" />
+</label><br />
+	<f:form.textfield property="name" /><br />
+<label for="status">
+	<f:translate key="tx_taskqueue_domain_model_task.status" />
+</label><br />
+	<f:form.textfield property="status" /><br />
+<label for="startDate">
+	<f:translate key="tx_taskqueue_domain_model_task.start_date" />
+</label><br />
+	<f:form.textfield property="startDate"  value="{task.startDate->f:format.date()}" /><br />
+<label for="message">
+	<f:translate key="tx_taskqueue_domain_model_task.message" />
+</label><br />
+	<f:form.textfield property="message" /><br />
+<label for="priority">
+	<f:translate key="tx_taskqueue_domain_model_task.priority" />
+</label><br />
+	<f:form.textfield property="priority" /><br />
+	<f:form.textfield property="user.username" />

@@ -1,0 +1,12 @@
+
+ # Module configuration
+module.tx_taskqueue {
+	persistence {
+		storagePid = {$module.tx_taskqueue.persistence.storagePid}
+	}
+	view {
+		templateRootPath = {$module.tx_taskqueue.view.templateRootPath}
+		partialRootPath = {$module.tx_taskqueue.view.partialRootPath}
+		layoutRootPath = {$module.tx_taskqueue.view.layoutRootPath}
+	}
+}
