@@ -40,14 +40,23 @@ class TaskRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
         $defaultQuerySettings->setRespectStoragePage(FALSE);
         $this->setDefaultQuerySettings($defaultQuerySettings);
 	}
-
+	
+	/**
+	 * Finds all runnabel tasks
+	 * @param integer $limit
+	 * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+	 */
 	public function findRunableTasks($limit){
 		$query = $this->createQuery();
 		$query->matching(
-				$query->logicalOr(
+			$query->logicalAnd(
+					$query->logicalOr(
 					$query->equals('status',Undkonsorten\Taskqueue\Domain\Model\TaskInterface::WAITING),
 					$query->equals('status',Undkonsorten\Taskqueue\Domain\Model\TaskInterface::FAILED)
-				)
+				),
+				$query->lessThanOrEqual('startDate', time())
+			)
+				
 		);
 		$query->setLimit($limit);
 		
@@ -57,6 +66,30 @@ class TaskRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 		
 		$query->setOrderings($orderings);
 		
+		return $query->execute();
+	}
+	
+	/**
+	 * Find all finished tasks
+	 * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+	 */
+	public function findFinished(){
+		$query = $this->createQuery();
+		$query->matching(
+				$query->equals('status',Undkonsorten\Taskqueue\Domain\Model\TaskInterface::FINISHED)
+		);
+		return $query->execute();
+	}
+	
+	/**
+	 * Finds all failed tasks
+	 * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+	 */
+	public function findFailed(){
+		$query = $this->createQuery();
+		$query->matching(
+				$query->equals('status',Undkonsorten\Taskqueue\Domain\Model\TaskInterface::FAILED)
+		);
 		return $query->execute();
 	}
 	

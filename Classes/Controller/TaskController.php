@@ -116,6 +116,36 @@ class TaskController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 	public function deleteAction(\Undkonsorten\Taskqueue\Domain\Model\Task $task) {
 		$this->addFlashMessage('The object was deleted. Please be aware that this action is publicly accessible unless you implement an access check. See <a href="http://wiki.typo3.org/T3Doc/Extension_Builder/Using_the_Extension_Builder#1._Model_the_domain" target="_blank">Wiki</a>', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
 		$this->taskRepository->remove($task);
+		$task->
+		$this->redirect('list');
+	}
+	
+	/**
+	 * action delete failed tasks
+	 *
+	 * @param \Undkonsorten\Taskqueue\Domain\Model\Task $task
+	 * @return void
+	 */
+	public function deleteFailedAction() {
+		$this->addFlashMessage('The object was deleted. Please be aware that this action is publicly accessible unless you implement an access check. See <a href="http://wiki.typo3.org/T3Doc/Extension_Builder/Using_the_Extension_Builder#1._Model_the_domain" target="_blank">Wiki</a>', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+		$tasks = $this->taskRepository->findFailed();
+		foreach($tasks as $task) {
+			$this->taskRepository->remove($task);
+		}
+		$this->redirect('list');
+	}
+	
+	/**
+	 * action delete finished tasks
+	 *
+	 * @return void
+	 */
+	public function deleteFinishedAction() {
+		$this->addFlashMessage('The object was deleted. Please be aware that this action is publicly accessible unless you implement an access check. See <a href="http://wiki.typo3.org/T3Doc/Extension_Builder/Using_the_Extension_Builder#1._Model_the_domain" target="_blank">Wiki</a>', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
+		$tasks = $this->taskRepository->findFinished();
+		foreach($tasks as $task) {
+			$this->taskRepository->remove($task);
+		}
 		$this->redirect('list');
 	}
 	
