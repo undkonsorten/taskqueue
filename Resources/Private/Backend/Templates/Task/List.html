@@ -16,7 +16,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
 <h1>Listing for Task</h1>
 
 <f:flashMessages />
-
+<f:if condition="{tasks}">
 <table  class="tx_taskqueue" >
 	<col width="25">
 	<col width="100">
@@ -63,9 +63,8 @@ Otherwise your changes will be overwritten the next time you save the extension 
 		</tr>
 	</f:for>
 </table>
-
-Delete all finished
-
-Delete all failed
+<f:link.action action="deleteFinished">Delete finished</f:link.action>
+<f:link.action action="deleteFailed">Delete failed</f:link.action>
+</f:if>
 
 </f:section>

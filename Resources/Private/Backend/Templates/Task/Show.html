@@ -16,7 +16,8 @@ Otherwise your changes will be overwritten the next time you save the extension 
 <h1>Single View for Task</h1>
 
 <f:flashMessages />
+<f:be.buttons.icon uri="{f:uri.action(action:'run', arguments:{task : task})}" icon="actions-move-right" title="Run Task"/>
+<f:be.buttons.icon uri="{f:uri.action(action:'delete', arguments:{task : task})}" icon="actions-edit-delete" title="Delete Task"/>
+<f:be.buttons.icon uri="{f:uri.action(action:'list')}" icon="actions-document-close" title="Close"/>
 <f:render partial="Task/Properties" arguments="{task:task}" />
-<f:link.action action="list">Back to list</f:link.action><br />
-<f:link.action action="create">New Task</f:link.action>
 </f:section>

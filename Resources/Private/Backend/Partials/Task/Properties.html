@@ -13,7 +13,10 @@
 			<f:translate key="tx_taskqueue_domain_model_task.data" />
 		</td>
 		<td>
-			{task.data}
+			<f:for each="{task.data}" as="value" key="property">
+				{property}:{value} </br>
+			</f:for>
+			
 		</td>
 	</tr>
 	<tr>
@@ -21,7 +24,18 @@
 			<f:translate key="tx_taskqueue_domain_model_task.status" />
 		</td>
 		<td>
-			{task.status}
+			<f:if condition="{task.status}==3">
+					<f:image src="EXT:taskqueue/Resources/Public/Icons/red.png" title="FAILED"/>
+				</f:if>
+				<f:if condition="{task.status}==2">
+					<f:image src="EXT:taskqueue/Resources/Public/Icons/green.png" title="FINISHED"/>
+				</f:if>
+				<f:if condition="{task.status}==0">
+					<f:image src="EXT:taskqueue/Resources/Public/Icons/blue.png" title="WAITING"/>
+				</f:if>
+				<f:if condition="{task.status}==1">
+					<f:image src="EXT:taskqueue/Resources/Public/Icons/blue.png" title="RUNNING"/>
+				</f:if>
 		</td>
 	</tr>
 	<tr>
@@ -29,7 +43,7 @@
 			<f:translate key="tx_taskqueue_domain_model_task.start_date" />
 		</td>
 		<td>
-			{task.startDate}
+			  <f:format.date format="d.m.Y - H:i:s">@{task.startDate}</f:format.date>
 		</td>
 	</tr>
 	<tr>
