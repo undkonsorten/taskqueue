@@ -46,7 +46,7 @@ class TaskRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	 * @param integer $limit
 	 * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
 	 */
-	public function findRunableTasks($limit){
+	public function findRunableTasks($limit = 10){
 		$query = $this->createQuery();
 		$query->matching(
 			$query->logicalAnd(
@@ -58,8 +58,9 @@ class TaskRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 			)
 				
 		);
+	
 		$query->setLimit($limit);
-		
+	
 		$orderings = array(
 	  		'priority' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING,
 	 	);
