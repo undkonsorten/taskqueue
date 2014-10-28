@@ -42,7 +42,7 @@ class TaskQueueCommandController extends CommandController{
 	 * Runs Tasks
 	 * @param integer $limit
 	 */
-	public function runTasksCommand($limit){
+	public function runTasksCommand($limit = 10){
 		$tasks = $this->taskRepository->findRunableTasks($limit);
 		
 		foreach ($tasks as $task){
