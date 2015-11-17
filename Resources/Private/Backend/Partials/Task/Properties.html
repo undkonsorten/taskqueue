@@ -14,9 +14,18 @@
 		</td>
 		<td>
 			<f:for each="{task.data}" as="value" key="property">
-				{property}:{value} </br>
-			</f:for>
-			
+				<f:if condition="{property} == 'mail'">
+					<f:then>
+						<f:for each="{value}" as="mailValue" key="mailProperty">
+							mail.{mailProperty}:{mailValue} </br>
+						</f:for>
+
+					</f:then>
+					<f:else>
+						{property}:{value} </br>
+					</f:else>
+				</f:if>
+			</f:for>	
 		</td>
 	</tr>
 	<tr>
