@@ -7,7 +7,7 @@ CREATE TABLE tx_taskqueue_domain_model_task (
 	pid int(11) DEFAULT '0' NOT NULL,
 
 	name varchar(255) DEFAULT '' NOT NULL,
-	data longtext DEFAULT '' NOT NULL,
+	data longtext NOT NULL,
 	status int(11) DEFAULT '0' NOT NULL,
 	start_date int(11) DEFAULT '0' NOT NULL,
 	message varchar(255) DEFAULT '' NOT NULL,
