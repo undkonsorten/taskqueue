@@ -123,7 +123,7 @@ abstract class Task extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity imple
 		if(is_array($value)){
 			array_walk_recursive($value, function ($element){
 			    if (!is_scalar($element) && !is_array($element)) {
-			    	throw new \Exception('Dont put complex types to a task, it might not be serialisable.',1452100147);
+			    	throw new \Exception('The given array contains a complex type. Dont put complex types to a task, it might not be serializable.',1452100147);
 			    }
   			});
 			
@@ -131,11 +131,11 @@ abstract class Task extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity imple
 			$data[$property] = $value;
 			$this->setData($data);
 		}elseif(is_scalar($value)){
-		$data = $this->getData();
-		$data[$property] = $value;
-		$this->setData($data);
+			$data = $this->getData();
+			$data[$property] = $value;
+			$this->setData($data);
 		}else{
-			throw new \Exception('Dont put complex types to a task, it might not be serialisable',1452100146);
+			throw new \Exception('Dont put complex types to a task, it might not be serializable',1452100146);
 		}
 		
 	}
