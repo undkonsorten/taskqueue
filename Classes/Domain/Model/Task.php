@@ -120,10 +120,20 @@ abstract class Task extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity imple
 	 * @return void
 	 */
 	protected function setProperty($property, $value) {
-		if(is_scalar($value) || is_array($value)){
+		if(is_array($value)){
+			array_walk_recursive($value, function ($element){
+			    if (!is_scalar($element) && !is_array($element)) {
+			    	throw new \Exception('Dont put complex types to a task, it might not be serialisable.',1452100147);
+			    }
+  			});
+			
 			$data = $this->getData();
 			$data[$property] = $value;
 			$this->setData($data);
+		}elseif(is_scalar($value)){
+		$data = $this->getData();
+		$data[$property] = $value;
+		$this->setData($data);
 		}else{
 			throw new \Exception('Dont put complex types to a task, it might not be serialisable',1452100146);
 		}
