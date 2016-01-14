@@ -122,7 +122,7 @@ abstract class Task extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity imple
 	protected function setProperty($property, $value) {
 		if(is_array($value)){
 			array_walk_recursive($value, function ($element){
-			    if (!is_scalar($element) && !is_array($element)) {
+			    if (!self::isScalarOrNull($element) && !is_array($element)) {
 			    	throw new \Exception('The given array contains a complex type. Dont put complex types to a task, it might not be serializable.',1452100147);
 			    }
   			});
@@ -130,7 +130,7 @@ abstract class Task extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity imple
 			$data = $this->getData();
 			$data[$property] = $value;
 			$this->setData($data);
-		}elseif(is_scalar($value)){
+		}elseif(self::isScalarOrNull($value)){
 			$data = $this->getData();
 			$data[$property] = $value;
 			$this->setData($data);
@@ -138,6 +138,10 @@ abstract class Task extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity imple
 			throw new \Exception('Dont put complex types to a task, it might not be serializable',1452100146);
 		}
 		
+	}
+	
+	static protected function isScalarOrNull($value){
+		return is_scalar($value)|| is_null($val);
 	}
 	
 	/**
