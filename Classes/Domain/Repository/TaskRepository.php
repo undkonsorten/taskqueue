@@ -33,6 +33,10 @@ use Undkonsorten;
  */
 class TaskRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 	
+	protected $defaultOrderings = [
+		'startDate' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING,
+	];
+	
   // Example for repository wide settings
     public function initializeObject() {
         /** @var $defaultQuerySettings \TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings */
@@ -93,6 +97,5 @@ class TaskRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 		);
 		return $query->execute();
 	}
-	
-	
+		
 }

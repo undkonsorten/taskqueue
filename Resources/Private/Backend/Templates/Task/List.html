@@ -40,7 +40,8 @@ Otherwise your changes will be overwritten the next time you save the extension 
 		<th>  </th>
 	</tr>
 
-	<f:for each="{tasks}" as="task">
+	<f:widget.paginate objects="{tasks}" as="paginatedTasks" configuration="{itemsPerPage:50}">
+	<f:for each="{paginatedTasks}" as="task">
 		<tr style="border-top:dotted 1px black;">
 			<td>	
 				<f:if condition="{task.status}==3">
@@ -66,6 +67,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
 			<td><f:be.buttons.icon uri="{f:uri.action(action:'delete', arguments:{task : task})}" icon="actions-edit-delete" title="Delete Task"/></td>
 		</tr>
 	</f:for>
+	</f:widget.paginate>
 </table>
 <f:link.action action="deleteFinished">Delete finished</f:link.action>
 <f:link.action action="deleteFailed">Delete failed</f:link.action>
