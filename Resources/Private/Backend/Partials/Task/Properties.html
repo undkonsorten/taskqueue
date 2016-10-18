@@ -22,7 +22,11 @@
 
 					</f:then>
 					<f:else>
-						{property}:{value} </br>
+						<f:if condition="{property} == 'passphrase'">
+							<f:else>
+								{property}:{value} </br>
+							</f:else>
+						</f:if>
 					</f:else>
 				</f:if>
 			</f:for>	
