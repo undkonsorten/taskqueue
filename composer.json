@@ -1,0 +1,44 @@
+{
+  "name": "undkonsorten/taskqueue",
+  "type": "typo3-cms-extension",
+  "description": "Provides a task queue for other extensions to use.",
+  "homepage": "https://www.undkonsorten.com",
+  "authors": [
+    {
+      "name": "Eike Starkmann",
+      "email": "starkmann@undkonsorten.com",
+      "homepage": "http://undkonsorten.com",
+      "role": "Developer"
+    },
+    {
+      "name": "Thomas Alboth",
+      "email": "alboth@undkonsorten.com",
+      "homepage": "http://undkonsorten.com",
+      "role": "Product Owner"
+    }
+  ],
+  "license": [
+    "GPL-2.0+"
+  ],
+  "keywords": [
+    "email",
+    "TYPO3"
+  ],
+  "support": {
+    "issues": ""
+  },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": ""
+    }
+  ],
+  "require": {
+    "typo3/cms": ">=8.7"
+  },
+  "autoload": {
+    "psr-4": {
+      "Undkonsorten\\Taskqueue\\": "Classes/"
+    }
+  }
+}
