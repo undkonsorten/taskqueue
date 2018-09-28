@@ -1,78 +1,80 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      data-namespace-typo3-fluid="true">
 
-<table class="tx-taskqueue" >
-	<tr>
-		<td>
-			<f:translate key="tx_taskqueue_domain_model_task.name" />
-		</td>
-		<td>
-			{task.name}
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<f:translate key="tx_taskqueue_domain_model_task.data" />
-		</td>
-		<td>
-			<f:for each="{task.data}" as="value" key="property">
-				<f:if condition="{property} == 'mail'">
-					<f:then>
-						<f:for each="{value}" as="mailValue" key="mailProperty">
-							mail.{mailProperty}:{mailValue} </br>
-						</f:for>
-
-					</f:then>
-					<f:else>
-						<f:if condition="{property} == 'passphrase'">
-							<f:else>
-								{property}:{value} </br>
-							</f:else>
-						</f:if>
-					</f:else>
-				</f:if>
-			</f:for>	
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<f:translate key="tx_taskqueue_domain_model_task.status" />
-		</td>
-		<td>
-			<f:if condition="{task.status}==3">
-					<f:image src="EXT:taskqueue/Resources/Public/Icons/red.png" title="FAILED"/>
-				</f:if>
-				<f:if condition="{task.status}==2">
-					<f:image src="EXT:taskqueue/Resources/Public/Icons/green.png" title="FINISHED"/>
-				</f:if>
-				<f:if condition="{task.status}==0">
-					<f:image src="EXT:taskqueue/Resources/Public/Icons/blue.png" title="WAITING"/>
-				</f:if>
-				<f:if condition="{task.status}==1">
-					<f:image src="EXT:taskqueue/Resources/Public/Icons/blue.png" title="RUNNING"/>
-				</f:if>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<f:translate key="tx_taskqueue_domain_model_task.start_date" />
-		</td>
-		<td>
-			  <f:format.date format="d.m.Y - H:i:s">@{task.startDate}</f:format.date>
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<f:translate key="tx_taskqueue_domain_model_task.message" />
-		</td>
-		<td>
-			{task.message}
-		</td>
-	</tr>
-	<tr>
-		<td>
-			<f:translate key="tx_taskqueue_domain_model_task.priority" />
-		</td>
-		<td>
-			{task.priority}
-		</td>
-	</tr>
-</table>
+<tr>
+    <td>
+        <f:translate key="tx_taskqueue_domain_model_task.status"/>
+    </td>
+    <td>
+        <f:if condition="{task.status}==3">
+            <f:image src="EXT:taskqueue/Resources/Public/Icons/red.png" title="FAILED"/>
+            failed
+        </f:if>
+        <f:if condition="{task.status}==2">
+            <f:image src="EXT:taskqueue/Resources/Public/Icons/green.png" title="FINISHED"/>
+            finished
+        </f:if>
+        <f:if condition="{task.status}==0">
+            <f:image src="EXT:taskqueue/Resources/Public/Icons/blue.png" title="WAITING"/>
+            waiting
+        </f:if>
+        <f:if condition="{task.status}==1">
+            <f:image src="EXT:taskqueue/Resources/Public/Icons/blue.png" title="RUNNING"/>
+            running
+        </f:if>
+    </td>
+</tr>
+<tr>
+    <td>
+        <f:translate key="tx_taskqueue_domain_model_task.start_date"/>
+    </td>
+    <td>
+        <f:format.date format="d.m.Y - H:i:s">@{task.startDate}</f:format.date>
+    </td>
+</tr>
+<f:if condition="{task.message}">
+    <tr>
+        <td>
+            <f:translate key="tx_taskqueue_domain_model_task.message"/>
+        </td>
+        <td>
+            {task.message}
+        </td>
+    </tr>
+</f:if>
+<tr>
+    <td>
+        <f:translate key="tx_taskqueue_domain_model_task.priority"/>
+    </td>
+    <td>
+        {task.priority}
+    </td>
+</tr>
+<tr>
+    <th colspan="2" class="t3-row-header">
+        <f:translate key="tx_taskqueue_domain_model_task.data"/>
+    </th>
+</tr>
+<f:for each="{task.data}" as="value" key="property">
+    <f:if condition="{property} == 'mail'">
+        <f:then>
+            <f:for each="{value}" as="mailValue" key="mailProperty">
+                <tr>
+                    <td>mail.{mailProperty}</td>
+                    <td>{mailValue}</td>
+                </tr>
+            </f:for>
+        </f:then>
+        <f:else>
+            <f:if condition="{property} == 'passphrase'">
+                <f:else>
+                    <tr>
+                        <td>{property}</td>
+                        <td>{value}</td>
+                    </tr>
+                </f:else>
+            </f:if>
+        </f:else>
+    </f:if>
+</f:for>
+</html>

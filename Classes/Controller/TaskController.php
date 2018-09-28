@@ -1,8 +1,6 @@
 <?php
 namespace Undkonsorten\Taskqueue\Controller;
 
-
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
 /***************************************************************
  *
  *  Copyright notice
@@ -72,12 +70,15 @@ class TaskController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 		$this->view->assign('newTask', $newTask);
 	}
 
-	/**
-	 * action create
-	 *
-	 * @param \Undkonsorten\Taskqueue\Domain\Model\TaskInterface $newTask
-	 * @return void
-	 */
+    /**
+     * action create
+     *
+     * @param \Undkonsorten\Taskqueue\Domain\Model\TaskInterface $newTask
+     * @return void
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     */
 	public function createAction(\Undkonsorten\Taskqueue\Domain\Model\TaskInterface $newTask) {
 		$this->addFlashMessage('The object was created. Please be aware that this action is publicly accessible unless you implement an access check. See <a href="http://wiki.typo3.org/T3Doc/Extension_Builder/Using_the_Extension_Builder#1._Model_the_domain" target="_blank">Wiki</a>', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
 		$this->taskRepository->add($newTask);
@@ -95,36 +96,45 @@ class TaskController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 		$this->view->assign('task', $task);
 	}
 
-	/**
-	 * action update
-	 *
-	 * @param \Undkonsorten\Taskqueue\Domain\Model\Task $task
-	 * @return void
-	 */
+    /**
+     * action update
+     *
+     * @param \Undkonsorten\Taskqueue\Domain\Model\Task $task
+     * @return void
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
+     */
 	public function updateAction(\Undkonsorten\Taskqueue\Domain\Model\Task $task) {
 		$this->addFlashMessage('The object was updated. Please be aware that this action is publicly accessible unless you implement an access check. See <a href="http://wiki.typo3.org/T3Doc/Extension_Builder/Using_the_Extension_Builder#1._Model_the_domain" target="_blank">Wiki</a>', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
 		$this->taskRepository->update($task);
 		$this->redirect('list');
 	}
 
-	/**
-	 * action delete
-	 *
-	 * @param \Undkonsorten\Taskqueue\Domain\Model\Task $task
-	 * @return void
-	 */
+    /**
+     * action delete
+     *
+     * @param \Undkonsorten\Taskqueue\Domain\Model\Task $task
+     * @return void
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     */
 	public function deleteAction(\Undkonsorten\Taskqueue\Domain\Model\Task $task) {
 		$this->addFlashMessage('The object was deleted. Please be aware that this action is publicly accessible unless you implement an access check. See <a href="http://wiki.typo3.org/T3Doc/Extension_Builder/Using_the_Extension_Builder#1._Model_the_domain" target="_blank">Wiki</a>', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
 		$this->taskRepository->remove($task);
 		$this->redirect('list');
 	}
-	
-	/**
-	 * action delete failed tasks
-	 *
-	 * @param \Undkonsorten\Taskqueue\Domain\Model\Task $task
-	 * @return void
-	 */
+
+    /**
+     * action delete failed tasks
+     *
+     * @return void
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     */
 	public function deleteFailedAction() {
 		$this->addFlashMessage('The object was deleted. Please be aware that this action is publicly accessible unless you implement an access check. See <a href="http://wiki.typo3.org/T3Doc/Extension_Builder/Using_the_Extension_Builder#1._Model_the_domain" target="_blank">Wiki</a>', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
 		$tasks = $this->taskRepository->findFailed();
@@ -133,12 +143,15 @@ class TaskController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 		}
 		$this->redirect('list');
 	}
-	
-	/**
-	 * action delete finished tasks
-	 *
-	 * @return void
-	 */
+
+    /**
+     * action delete finished tasks
+     *
+     * @return void
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     */
 	public function deleteFinishedAction() {
 		$this->addFlashMessage('The object was deleted. Please be aware that this action is publicly accessible unless you implement an access check. See <a href="http://wiki.typo3.org/T3Doc/Extension_Builder/Using_the_Extension_Builder#1._Model_the_domain" target="_blank">Wiki</a>', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
 		$tasks = $this->taskRepository->findFinished();
@@ -147,40 +160,23 @@ class TaskController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 		}
 		$this->redirect('list');
 	}
-	
-	/**
-	 * runs an task
-	 *
-	 * @param \Undkonsorten\Taskqueue\Domain\Model\Task $task
-	 * @return void
-	 */
+
+    /**
+     * runs an task
+     *
+     * @param \Undkonsorten\Taskqueue\Domain\Model\Task $task
+     * @return void
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
+     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
+     */
 	public function runAction(\Undkonsorten\Taskqueue\Domain\Model\Task $task) {
-		$task = $this->taskRepository->findByIdentifier($task);
+		$task = $this->taskRepository->findByIdentifier($task->getUid());
 		$task->run();
 		$this->addFlashMessage('Task has been executed', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::INFO);
 		$this->taskRepository->update($task);
 		$this->redirect('list');
-	}
-	
-	/**
-	 * Debugs a SQL query from a QueryResult
-	 *
-	 * @param \TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $queryResult
-	 * @param boolean $explainOutput
-	 * @return void
-	 */
-	public function debugQuery(\TYPO3\CMS\Extbase\Persistence\Generic\QueryResult $queryResult, $explainOutput = FALSE){
-		$GLOBALS['TYPO3_DB']->debugOuput = 2;
-		if($explainOutput){
-			$GLOBALS['TYPO3_DB']->explainOutput = true;
-		}
-		$GLOBALS['TYPO3_DB']->store_lastBuiltQuery = true;
-		$queryResult->toArray();
-		DebuggerUtility::var_dump($GLOBALS['TYPO3_DB']->debug_lastBuiltQuery);
-	
-		$GLOBALS['TYPO3_DB']->store_lastBuiltQuery = false;
-		$GLOBALS['TYPO3_DB']->explainOutput = false;
-		$GLOBALS['TYPO3_DB']->debugOuput = false;
 	}
 
 }

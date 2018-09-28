@@ -1,4 +1,6 @@
-
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+      xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+      data-namespace-typo3-fluid="true">
 <f:layout name="Default" />
 
 This Template is responsible for displaying a single view for a domain object
@@ -16,8 +18,28 @@ Otherwise your changes will be overwritten the next time you save the extension 
 <h1>Single View for Task</h1>
 
 <f:flashMessages />
-<f:be.buttons.icon uri="{f:uri.action(action:'run', arguments:{task : task})}" icon="actions-move-right" title="Run Task"/>
-<f:be.buttons.icon uri="{f:uri.action(action:'delete', arguments:{task : task})}" icon="actions-edit-delete" title="Delete Task"/>
-<f:be.buttons.icon uri="{f:uri.action(action:'list')}" icon="actions-document-close" title="Close"/>
-<f:render partial="Task/Properties" arguments="{task:task}" />
+  <div class="panel panel-space panel-default">
+    <div class="panel-heading">
+      {task.name}
+    </div>
+    <div class="table-fit">
+      <table class="table table-striped table-hover">
+        <tr>
+          <td colspan="3">
+            <f:link.action class="btn btn-default" action="run" arguments="{task:task}" title="Run Task">
+              <core:icon identifier="actions-move-right"/> Run task
+            </f:link.action>
+            <f:link.action class="btn btn-default" action="delete" arguments="{task:task}" title="Delete Task">
+              <core:icon identifier="actions-edit-delete"/> Delete task
+            </f:link.action>
+            <f:link.action class="btn btn-default" action="list" title="Close">
+              <core:icon identifier="actions-document-close"/> Close
+            </f:link.action>
+          </td>
+        </tr>
+        <f:render partial="Task/Properties" arguments="{task:task}"/>
+      </table>
+  </div>
+  </div>
 </f:section>
+</html>

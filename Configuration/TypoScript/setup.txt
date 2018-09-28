@@ -5,8 +5,13 @@ module.tx_taskqueue {
 		storagePid = {$module.tx_taskqueue.persistence.storagePid}
 	}
 	view {
-		templateRootPath = {$module.tx_taskqueue.view.templateRootPath}
-		partialRootPath = {$module.tx_taskqueue.view.partialRootPath}
-		layoutRootPath = {$module.tx_taskqueue.view.layoutRootPath}
+		templateRootPaths.0 = {$module.tx_taskqueue.view.templateRootPath}
+		partialRootPaths.0 = {$module.tx_taskqueue.view.partialRootPath}
+		layoutRootPaths.0 = {$module.tx_taskqueue.view.layoutRootPath}
+	}
+	settings.pagination {
+		itemsPerPage = 50
+		insertAbove = 1
+		insertBelow = 0
 	}
 }
