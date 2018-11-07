@@ -32,11 +32,11 @@ use Undkonsorten;
  * The repository for Tasks
  */
 class TaskRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
-	
+
 	protected $defaultOrderings = [
 		'startDate' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING,
 	];
-	
+
   // Example for repository wide settings
     public function initializeObject() {
         /** @var $defaultQuerySettings \TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings */
@@ -44,7 +44,7 @@ class TaskRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
         $defaultQuerySettings->setRespectStoragePage(FALSE);
         $this->setDefaultQuerySettings($defaultQuerySettings);
 	}
-	
+
 	/**
 	 * Finds all runnabel tasks
 	 * @param integer $limit
@@ -54,26 +54,23 @@ class TaskRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 		$query = $this->createQuery();
 		$query->matching(
 			$query->logicalAnd(
-					$query->logicalOr(
-					$query->equals('status',Undkonsorten\Taskqueue\Domain\Model\TaskInterface::WAITING),
-					$query->equals('status',Undkonsorten\Taskqueue\Domain\Model\TaskInterface::FAILED)
-				),
+                $query->equals('status',Undkonsorten\Taskqueue\Domain\Model\TaskInterface::WAITING),
 				$query->lessThanOrEqual('startDate', time())
 			)
-				
+
 		);
-	
+
 		$query->setLimit($limit);
-	
+
 		$orderings = array(
 	  		'priority' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING,
 	 	);
-		
+
 		$query->setOrderings($orderings);
-		
+
 		return $query->execute();
 	}
-	
+
 	/**
 	 * Find all finished tasks
 	 * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
@@ -85,7 +82,7 @@ class TaskRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 		);
 		return $query->execute();
 	}
-	
+
 	/**
 	 * Finds all failed tasks
 	 * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
@@ -97,5 +94,5 @@ class TaskRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 		);
 		return $query->execute();
 	}
-		
+
 }
