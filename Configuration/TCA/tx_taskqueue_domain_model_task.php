@@ -116,7 +116,6 @@ return [
                 ),
             ),
         ),
-
         'name' => array(
             'exclude' => 1,
             'label' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang_db.xlf:tx_taskqueue_domain_model_task.name',

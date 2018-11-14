@@ -99,7 +99,7 @@ abstract class Task extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity imple
 	 * @return array $data
 	 */
 	public function getData() {
-		return unserialize($this->data);
+        return json_decode($this->data,true);
 	}
 
 	/**
@@ -109,7 +109,7 @@ abstract class Task extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity imple
 	 * @return void
 	 */
 	public function setData($data) {
-		$this->data = serialize($data);
+		$this->data = json_encode($data);
 	}
 
 	/**
