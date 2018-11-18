@@ -22,6 +22,11 @@
             <f:image src="EXT:taskqueue/Resources/Public/Icons/blue.png" title="RUNNING"/>
             running
         </f:if>
+			<f:if condition="{task.status}==4">
+				<f:image src="EXT:taskqueue/Resources/Public/Icons/yellow.png"
+								 title="RETRY"/>
+					retry
+			</f:if>
     </td>
 </tr>
 <tr>
@@ -44,10 +49,10 @@
 </f:if>
 <tr>
     <td>
-        <f:translate key="tx_taskqueue_domain_model_task.priority"/>
+        <f:translate key="tx_taskqueue_domain_model_task.retries"/>
     </td>
     <td>
-        {task.priority}
+        {task.retries}
     </td>
 </tr>
 <tr>

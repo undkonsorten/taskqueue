@@ -54,10 +54,12 @@ class TaskRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
 		$query = $this->createQuery();
 		$query->matching(
 			$query->logicalAnd(
-                $query->equals('status',Undkonsorten\Taskqueue\Domain\Model\TaskInterface::WAITING),
+			    $query->logicalOr(
+                    $query->equals('status',Undkonsorten\Taskqueue\Domain\Model\TaskInterface::WAITING),
+                    $query->equals('status',Undkonsorten\Taskqueue\Domain\Model\TaskInterface::RETRY)
+                ),
 				$query->lessThanOrEqual('startDate', time())
 			)
-
 		);
 
 		$query->setLimit($limit);

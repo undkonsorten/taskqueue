@@ -2,8 +2,11 @@
 namespace Undkonsorten\Taskqueue\Controller;
 
 
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
+use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\CommandController;
+use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
+use Undkonsorten\Taskqueue\Domain\Repository\TaskRepository;
+
 /***************************************************************
  *
  *  Copyright notice
@@ -29,25 +32,51 @@ use TYPO3\CMS\Extbase\Mvc\Controller\CommandController;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 class TaskQueueCommandController extends CommandController{
-	
+
 	/**
 	 * taskRepository
 	 *
 	 * @var \Undkonsorten\Taskqueue\Domain\Repository\TaskRepository
-	 * @inject
 	 */
 	protected $taskRepository = NULL;
-	
+
+    /**
+     * @var PersistenceManagerInterface
+     */
+	protected $persitenceManager;
+
+
+	public function injectTaskRepository(TaskRepository $taskRepository)
+    {
+	    $this->taskRepository = $taskRepository;
+    }
+
+    public function injectPersistenceManager(PersistenceManagerInterface $persistenceManager){
+	    $this->persitenceManager = $persistenceManager;
+    }
+
 	/**
 	 * Runs Tasks
 	 * @param integer $limit
 	 */
 	public function runTasksCommand($limit = 10){
 		$tasks = $this->taskRepository->findRunableTasks($limit);
-		
 		foreach ($tasks as $task){
-			$task->run();
+		    try{
+                $task->setRetries($task->getRetries()-1);
+		        /**@var \Undkonsorten\Taskqueue\Domain\Model\Task $task **/
+                $task->run();
+                $task->setStatus(TaskInterface::FINISHED);
+            }catch(\Exception $exception){
+                $task->setMessage($exception->getMessage());
+                if($task->getRetries() === 0){
+                    $task->setStatus(TaskInterface::FAILED);
+                }else{
+                    $task->setStatus(TaskInterface::RETRY);
+                }
+            }
 			$this->taskRepository->update($task);
+            $this->persitenceManager->persistAll();
 		}
 	}
 }

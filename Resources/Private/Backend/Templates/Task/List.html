@@ -48,7 +48,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
                                     <f:translate key="tx_taskqueue_domain_model_task.message"/>
                                 </th>
                                 <th align="left">
-                                    <f:translate key="tx_taskqueue_domain_model_task.priority"/>
+                                    <f:translate key="tx_taskqueue_domain_model_task.retries"/>
                                 </th>
                                 <th></th>
                             </tr>
@@ -70,6 +70,10 @@ Otherwise your changes will be overwritten the next time you save the extension 
                                             <f:image src="EXT:taskqueue/Resources/Public/Icons/blue.png"
                                                      title="RUNNING"/>
                                         </f:if>
+																			<f:if condition="{task.status}==4">
+																				<f:image src="EXT:taskqueue/Resources/Public/Icons/yellow.png"
+																								 title="RETRY"/>
+																			</f:if>
                                     </td>
                                     <td>
 
@@ -80,7 +84,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
                                         <f:format.date format="d.m.Y - H:i:s">@{task.startDate}</f:format.date>
                                     </td>
                                     <td>{task.message}</td>
-                                    <td>{task.priority}</td>
+                                    <td>{task.retries}</td>
                                     <td>
                                         <f:link.action class="btn btn-default" action="run" arguments="{task:task}" title="Run Task">
                                             <core:icon identifier="actions-move-right"/>
