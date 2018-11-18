@@ -24,6 +24,9 @@
 			<trans-unit id="tx_taskqueue_domain_model_task.priority">
 				<source>Priority</source>
 			</trans-unit>
+			<trans-unit id="tx_taskqueue_domain_model_task.retries">
+				<source>Retries</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

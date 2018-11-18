@@ -31,27 +31,32 @@ namespace Undkonsorten\Taskqueue\Domain\Model;
  * A Task
  */
 interface TaskInterface {
-	
+
 	/**
 	 * The job is waiting to be executed
 	 */
 	const WAITING = 0;
-	
+
 	/**
 	 * The job is running
 	 */
 	const RUNNING = 1;
-	
+
 	/**
 	 * The job is finished
 	 */
 	const FINISHED = 2;
-	
+
 	/**
 	 * The job failed
 	 */
 	const FAILED = 3;
-	
+
+    /**
+     *  The job needs to be rerun
+     */
+	const RETRY = 4;
+
 	/**
 	 * Returns the name
 	 *
@@ -141,7 +146,7 @@ interface TaskInterface {
 	 * @return void
 	 */
 	public function setPriority($priority);
-	
+
 	/**
 	 * Runs the Task
 	 */

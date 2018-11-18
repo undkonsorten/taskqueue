@@ -39,7 +39,7 @@ abstract class Task extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity imple
 
 	/**
 	 * data
-	 * 
+	 *
 	 * Don't store serialized objects here, use UIDs instead
 	 *
 	 * @var string
@@ -74,7 +74,12 @@ abstract class Task extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity imple
 	 */
 	protected $priority = 0;
 
-	/**
+    /**
+     * @var int
+     */
+	protected $retries = 3;
+
+    /**
 	 * Returns the name
 	 *
 	 * @return string $name
@@ -113,8 +118,6 @@ abstract class Task extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity imple
 	}
 
 	/**
-	 * @TODO move to abstract class
-	 *
 	 * @param \string $property
 	 * @param \mixed $value
 	 * @return void
@@ -126,7 +129,7 @@ abstract class Task extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity imple
 			    	throw new \Exception('The given array contains a complex type. Dont put complex types to a task, it might not be serializable.',1452100147);
 			    }
   			});
-			
+
 			$data = $this->getData();
 			$data[$property] = $value;
 			$this->setData($data);
@@ -137,13 +140,13 @@ abstract class Task extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity imple
 		}else{
 			throw new \Exception('Dont put complex types to a task, it might not be serializable',1452100146);
 		}
-		
+
 	}
-	
+
 	static protected function isScalarOrNull($value){
 		return is_scalar($value)|| is_null($val);
 	}
-	
+
 	/**
 	 * @TODO move to abstract class
 	 *
@@ -154,7 +157,7 @@ abstract class Task extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity imple
 		$data = $this->getData();
 		return $data[$property];
 	}
-	
+
 	/**
 	 * Returns the status
 	 *
@@ -230,5 +233,23 @@ abstract class Task extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity imple
 	public function setPriority($priority) {
 		$this->priority = $priority;
 	}
+
+    /**
+     * @return int
+     */
+    public function getRetries(): int
+    {
+        return $this->retries;
+    }
+
+    /**
+     * @param int $retries
+     */
+    public function setRetries(int $retries)
+    {
+        $this->retries = $retries;
+    }
+
+
 
 }

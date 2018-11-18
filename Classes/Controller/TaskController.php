@@ -25,6 +25,9 @@ namespace Undkonsorten\Taskqueue\Controller;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
+use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
+use Undkonsorten\Taskqueue\Domain\Repository\TaskRepository;
 
 /**
  * TaskController
@@ -34,10 +37,21 @@ class TaskController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
 	/**
 	 * taskRepository
 	 *
-	 * @var \Undkonsorten\Taskqueue\Domain\Repository\TaskRepository
-	 * @inject
+	 * @var TaskRepository
 	 */
 	protected $taskRepository = NULL;
+    /**
+     * @var PersistenceManagerInterface
+     */
+    protected $persitenceManager;
+
+    public function injectTaskrepository(TaskRepository $taskRepository){
+        $this->taskRepository = $taskRepository;
+    }
+
+    public function injectPersistenceManager(PersistenceManagerInterface $persistenceManager){
+        $this->persitenceManager = $persistenceManager;
+    }
 
 	/**
 	 * action list
@@ -173,7 +187,25 @@ class TaskController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
      */
 	public function runAction(\Undkonsorten\Taskqueue\Domain\Model\Task $task) {
 		$task = $this->taskRepository->findByIdentifier($task->getUid());
-		$task->run();
+        try{
+            if($task->getRetries() !== 0) {
+                $task->setRetries($task->getRetries() - 1);
+            }
+            /**@var \Undkonsorten\Taskqueue\Domain\Model\Task $task **/
+            $task->run();
+            $task->setStatus(TaskInterface::FINISHED);
+        }catch(\Exception $exception){
+            $task->setMessage($exception->getMessage());
+            if($task->getRetries() === 0){
+                $task->setStatus(TaskInterface::FAILED);
+            }else{
+                $task->setStatus(TaskInterface::RETRY);
+            }
+            $this->taskRepository->update($task);
+            $this->persitenceManager->persistAll();
+            throw $exception;
+        }
+
 		$this->addFlashMessage('Task has been executed', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::INFO);
 		$this->taskRepository->update($task);
 		$this->redirect('list');

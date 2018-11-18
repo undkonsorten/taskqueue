@@ -12,6 +12,7 @@ CREATE TABLE tx_taskqueue_domain_model_task (
 	start_date int(11) DEFAULT '0' NOT NULL,
 	message varchar(255) DEFAULT '' NOT NULL,
 	priority int(11) DEFAULT '0' NOT NULL,
+	retries int(11) DEFAULT '0' NOT NULL,
 
 	tstamp int(11) unsigned DEFAULT '0' NOT NULL,
 	crdate int(11) unsigned DEFAULT '0' NOT NULL,
