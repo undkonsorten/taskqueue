@@ -81,7 +81,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
                                         </f:link.action>
                                     </td>
                                     <td>
-                                        <f:format.date format="d.m.Y - H:i:s">@{task.startDate}</f:format.date>
+                                        <f:if condition="{task.startDate}"><f:format.date format="d.m.Y - H:i:s">@{task.startDate}</f:format.date></f:if>
                                     </td>
                                     <td>{task.message}</td>
                                     <td>{task.retries}</td>
