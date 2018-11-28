@@ -20,7 +20,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
 <f:flashMessages />
   <div class="panel panel-space panel-default">
     <div class="panel-heading">
-      {task.name}
+			{task.name}
     </div>
     <div class="table-fit">
       <table class="table table-striped table-hover">
@@ -41,5 +41,8 @@ Otherwise your changes will be overwritten the next time you save the extension 
       </table>
   </div>
   </div>
+	<div class="help-block text-right">
+		<strong>{task.name}</strong>  <span class="typo3-TCEforms-recUid">[{task.uid}]</span>
+	</div>
 </f:section>
 </html>
