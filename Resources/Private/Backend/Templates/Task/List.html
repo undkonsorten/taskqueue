@@ -100,9 +100,14 @@ Otherwise your changes will be overwritten the next time you save the extension 
                 </div>
             </div>
         </div>
-
-        <f:link.action action="deleteFinished">Delete finished</f:link.action>
-        <f:link.action action="deleteFailed">Delete failed</f:link.action>
+			<f:link.action class="btn btn-default" action="deleteFinished" title="Delete finished tasks">
+				<core:icon identifier="actions-edit-delete"/> Delete finished
+				<f:image src="EXT:taskqueue/Resources/Public/Icons/green.png" />
+			</f:link.action>
+			<f:link.action class="btn btn-default" action="deleteFailed" title="Delete failed tasks">
+				<core:icon identifier="actions-edit-delete"/> Delete failed
+				<f:image src="EXT:taskqueue/Resources/Public/Icons/red.png" />
+			</f:link.action>
     </f:if>
 
 </f:section>
