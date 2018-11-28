@@ -25,7 +25,10 @@ namespace Undkonsorten\Taskqueue\Controller;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
+use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
 use Undkonsorten\Taskqueue\Domain\Repository\TaskRepository;
 
@@ -150,8 +153,8 @@ class TaskController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      */
 	public function deleteFailedAction() {
-		$this->addFlashMessage('The object was deleted. Please be aware that this action is publicly accessible unless you implement an access check. See <a href="http://wiki.typo3.org/T3Doc/Extension_Builder/Using_the_Extension_Builder#1._Model_the_domain" target="_blank">Wiki</a>', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
 		$tasks = $this->taskRepository->findFailed();
+        $this->addFlashMessageForDeletion($tasks);
 		foreach($tasks as $task) {
 			$this->taskRepository->remove($task);
 		}
@@ -167,13 +170,23 @@ class TaskController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      */
 	public function deleteFinishedAction() {
-		$this->addFlashMessage('The object was deleted. Please be aware that this action is publicly accessible unless you implement an access check. See <a href="http://wiki.typo3.org/T3Doc/Extension_Builder/Using_the_Extension_Builder#1._Model_the_domain" target="_blank">Wiki</a>', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
 		$tasks = $this->taskRepository->findFinished();
+        $this->addFlashMessageForDeletion($tasks);
 		foreach($tasks as $task) {
 			$this->taskRepository->remove($task);
 		}
 		$this->redirect('list');
 	}
+
+    protected function addFlashMessageForDeletion(QueryResultInterface $tasks)
+    {
+        $title = 'Delete tasks';
+        if ($tasks->count() === 0) {
+            $this->addFlashMessage('Nothing to delete', $title, FlashMessage::INFO);
+        } else {
+            $this->addFlashMessage(sprintf('%d task(s) deleted.', $tasks->count()), $title, FlashMessage::OK);
+        }
+    }
 
     /**
      * runs an task
