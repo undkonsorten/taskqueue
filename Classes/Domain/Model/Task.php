@@ -1,5 +1,9 @@
 <?php
+declare(strict_types=1);
 namespace Undkonsorten\Taskqueue\Domain\Model;
+
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
+
 /***************************************************************
  *
  *  Copyright notice
@@ -28,70 +32,72 @@ namespace Undkonsorten\Taskqueue\Domain\Model;
 /**
  * A Task
  */
-abstract class Task extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity implements TaskInterface {
+abstract class Task extends AbstractEntity implements TaskInterface
+{
 
-	/**
-	 * name
-	 *
-	 * @var string
-	 */
-	protected $name = '';
+    /**
+     * name
+     *
+     * @var string
+     */
+    protected $name = '';
 
-	/**
-	 * data
-	 *
-	 * Don't store serialized objects here, use UIDs instead
-	 *
-	 * @var string
-	 */
-	protected $data = '';
+    /**
+     * data
+     *
+     * Don't store serialized objects here, use UIDs instead
+     *
+     * @var string
+     */
+    protected $data = '';
 
-	/**
-	 * status
-	 *
-	 * @var integer
-	 */
-	protected $status = 0;
+    /**
+     * status
+     *
+     * @var int
+     */
+    protected $status = 0;
 
-	/**
-	 * startDate
-	 *
-	 * @var integer
-	 */
-	protected $startDate = 0;
+    /**
+     * startDate
+     *
+     * @var int
+     */
+    protected $startDate = 0;
 
-	/**
-	 * message
-	 *
-	 * @var string
-	 */
-	protected $message = '';
+    /**
+     * message
+     *
+     * @var string
+     */
+    protected $message = '';
 
-	/**
-	 * priority
-	 *
-	 * @var integer
-	 */
-	protected $priority = 0;
+    /**
+     * priority
+     *
+     * @var int
+     */
+    protected $priority = 0;
 
     /**
      * @var int
      */
-	protected $retries = 3;
+    protected $retries = 3;
 
-	public function __construct()
+    public function __construct()
     {
         $this->name = static::class;
     }
 
     /**
-	 * Returns the name
-	 *
-	 * @return string $name
-	 */
-	public function getName() {
-		return $this->name;
-	}
+     * Returns the name
+     *
+     * @return string $name
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
 
     /**
      * Override this function to have a different short name in lists
@@ -113,151 +119,158 @@ abstract class Task extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity imple
         return '';
     }
 
-	/**
-	 * Sets the name
-	 *
-	 * @param string $name
-	 * @return void
-	 */
-	public function setName($name) {
-		$this->name = $name;
-	}
+    /**
+     * Sets the name
+     *
+     * @param string $name
+     */
+    public function setName($name): void
+    {
+        $this->name = $name;
+    }
 
-	/**
-	 * Returns the data
-	 *
-	 * @return array $data
-	 */
-	public function getData() {
-        return json_decode($this->data,true);
-	}
+    /**
+     * Returns the data
+     *
+     * @return array $data
+     */
+    public function getData(): array
+    {
+        /** @noinspection PhpComposerExtensionStubsInspection */
+        return json_decode($this->data, true);
+    }
 
-	/**
-	 * Sets the data
-	 *
-	 * @param array $data
-	 * @return void
-	 */
-	public function setData($data) {
-		$this->data = json_encode($data);
-	}
+    /**
+     * Sets the data
+     *
+     * @param array $data
+     */
+    public function setData(array $data): void
+    {
+        /** @noinspection PhpComposerExtensionStubsInspection */
+        $this->data = json_encode($data);
+    }
 
-	/**
-	 * @param \string $property
-	 * @param \mixed $value
-	 * @return void
-	 */
-	protected function setProperty($property, $value) {
-		if(is_array($value)){
-			array_walk_recursive($value, function ($element){
-			    if (!self::isScalarOrNull($element) && !is_array($element)) {
-			    	throw new \Exception('The given array contains a complex type. Dont put complex types to a task, it might not be serializable.',1452100147);
-			    }
-  			});
+    /**
+     * @param string $property
+     * @param mixed $value
+     * @throws \InvalidArgumentException
+     */
+    protected function setProperty($property, $value): void
+    {
+        if (is_array($value)) {
+            array_walk_recursive($value, function ($element) {
+                if (!is_array($element) && !self::isScalarOrNull($element)) {
+                    throw new \InvalidArgumentException('The given array contains a complex type. Dont put complex types to a task, it might not be serializable.', 1452100147);
+                }
+            });
 
-			$data = $this->getData();
-			$data[$property] = $value;
-			$this->setData($data);
-		}elseif(self::isScalarOrNull($value)){
-			$data = $this->getData();
-			$data[$property] = $value;
-			$this->setData($data);
-		}else{
-			throw new \Exception('Dont put complex types to a task, it might not be serializable',1452100146);
-		}
+            $data = $this->getData();
+            $data[$property] = $value;
+            $this->setData($data);
+        } elseif (self::isScalarOrNull($value)) {
+            $data = $this->getData();
+            $data[$property] = $value;
+            $this->setData($data);
+        } else {
+            throw new \InvalidArgumentException('Dont put complex types to a task, it might not be serializable', 1452100146);
+        }
+    }
 
-	}
+    protected static function isScalarOrNull($value): bool
+    {
+        return is_scalar($value) || $value === null;
+    }
 
-	static protected function isScalarOrNull($value){
-		return is_scalar($value)|| is_null($value);
-	}
+    /**
+     * @param string $property
+     * @return mixed
+     */
+    protected function getProperty($property)
+    {
+        $data = $this->getData();
+        return $data[$property];
+    }
 
-	/**
-	 * @TODO move to abstract class
-	 *
-	 * @param \string $property
-	 * @return \mixed
-	 */
-	protected function getProperty($property) {
-		$data = $this->getData();
-		return $data[$property];
-	}
+    /**
+     * Returns the status
+     *
+     * @return int $status
+     */
+    public function getStatus(): int
+    {
+        return $this->status;
+    }
 
-	/**
-	 * Returns the status
-	 *
-	 * @return integer $status
-	 */
-	public function getStatus() {
-		return $this->status;
-	}
+    /**
+     * Sets the status
+     *
+     * @param int $status
+     */
+    public function setStatus($status): void
+    {
+        $this->status = $status;
+    }
 
-	/**
-	 * Sets the status
-	 *
-	 * @param integer $status
-	 * @return void
-	 */
-	public function setStatus($status) {
-		$this->status = $status;
-	}
+    /**
+     * Returns the startDate
+     *
+     * @return int $startDate
+     */
+    public function getStartDate(): int
+    {
+        return $this->startDate;
+    }
 
-	/**
-	 * Returns the startDate
-	 *
-	 * @return integer $startDate
-	 */
-	public function getStartDate() {
-		return $this->startDate;
-	}
+    /**
+     * Sets the startDate
+     *
+     * @param int $startDate
+     */
+    public function setStartDate($startDate): void
+    {
+        $this->startDate = $startDate;
+    }
 
-	/**
-	 * Sets the startDate
-	 *
-	 * @param integer $startDate
-	 * @return void
-	 */
-	public function setStartDate($startDate) {
-		$this->startDate = $startDate;
-	}
+    /**
+     * Returns the message
+     *
+     * @return string $message
+     */
+    public function getMessage(): string
+    {
+        return $this->message;
+    }
 
-	/**
-	 * Returns the message
-	 *
-	 * @return string $message
-	 */
-	public function getMessage() {
-		return $this->message;
-	}
+    /**
+     * Sets the message
+     *
+     * @param string $message
+     */
+    public function setMessage($message): void
+    {
+        $this->message = $message;
+    }
 
-	/**
-	 * Sets the message
-	 *
-	 * @param string $message
-	 * @return void
-	 */
-	public function setMessage($message) {
-		$this->message = $message;
-	}
+    /**
+     * Returns the priority
+     *
+     * @return int $priority
+     */
+    public function getPriority(): int
+    {
+        return $this->priority;
+    }
 
-	/**
-	 * Returns the priority
-	 *
-	 * @return integer $priority
-	 */
-	public function getPriority() {
-		return $this->priority;
-	}
-
-	/**
-	 * Sets the priority
-	 *
-	 * @param integer $priority
-	 * @return void
-	 */
-	public function setPriority($priority) {
-		$this->priority = $priority;
-	}
+    /**
+     * Sets the priority
+     *
+     * @param int $priority
+     */
+    public function setPriority($priority): void
+    {
+        $this->priority = $priority;
+    }
 
     /**
      * @return int
@@ -270,7 +283,7 @@ abstract class Task extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity imple
     /**
      * @param int $retries
      */
-    public function setRetries(int $retries)
+    public function setRetries(int $retries): void
     {
         $this->retries = $retries;
     }
@@ -280,5 +293,4 @@ abstract class Task extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity imple
         $nameParts = explode('\\', $className);
         return array_pop($nameParts);
     }
-
 }

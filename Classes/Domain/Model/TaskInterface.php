@@ -1,6 +1,6 @@
 <?php
+declare(strict_types=1);
 namespace Undkonsorten\Taskqueue\Domain\Model;
-
 
 /***************************************************************
  *
@@ -30,126 +30,120 @@ namespace Undkonsorten\Taskqueue\Domain\Model;
 /**
  * A Task
  */
-interface TaskInterface {
+interface TaskInterface
+{
 
-	/**
-	 * The job is waiting to be executed
-	 */
-	const WAITING = 0;
+    /**
+     * The job is waiting to be executed
+     */
+    public const WAITING = 0;
 
-	/**
-	 * The job is running
-	 */
-	const RUNNING = 1;
+    /**
+     * The job is running
+     */
+    public const RUNNING = 1;
 
-	/**
-	 * The job is finished
-	 */
-	const FINISHED = 2;
+    /**
+     * The job is finished
+     */
+    public const FINISHED = 2;
 
-	/**
-	 * The job failed
-	 */
-	const FAILED = 3;
+    /**
+     * The job failed
+     */
+    public const FAILED = 3;
 
     /**
      *  The job needs to be rerun
      */
-	const RETRY = 4;
+    public const RETRY = 4;
 
-	/**
-	 * Returns the name
-	 *
-	 * @return string $name
-	 */
-	public function getName();
+    /**
+     * Returns the name
+     *
+     * @return string $name
+     */
+    public function getName(): string;
 
-	/**
-	 * Sets the name
-	 *
-	 * @param string $name
-	 * @return void
-	 */
-	public function setName($name);
+    /**
+     * Sets the name
+     *
+     * @param string $name
+     */
+    public function setName(string $name): void;
 
-	/**
-	 * Returns the data
-	 *
-	 * @return string $data
-	 */
-	public function getData();
+    /**
+     * Returns the data
+     *
+     * @return array $data
+     */
+    public function getData(): array;
 
-	/**
-	 * Sets the data
-	 *
-	 * @param string $data
-	 * @return void
-	 */
-	public function setData($data);
+    /**
+     * Sets the data
+     *
+     * @param array $data
+     */
+    public function setData(array $data): void;
 
-	/**
-	 * Returns the status
-	 *
-	 * @return integer $status
-	 */
-	public function getStatus();
+    /**
+     * Returns the status
+     *
+     * @return int $status
+     */
+    public function getStatus(): int;
 
-	/**
-	 * Sets the status
-	 *
-	 * @param integer $status
-	 * @return void
-	 */
-	public function setStatus($status);
+    /**
+     * Sets the status
+     *
+     * @param int $status
+     */
+    public function setStatus(int $status): void;
 
-	/**
-	 * Returns the startDate
-	 *
-	 * @return integer $startDate
-	 */
-	public function getStartDate();
+    /**
+     * Returns the startDate
+     *
+     * @return int $startDate
+     */
+    public function getStartDate(): int;
 
-	/**
-	 * Sets the startDate
-	 *
-	 * @param integer $startDate
-	 * @return void
-	 */
-	public function setStartDate($startDate);
+    /**
+     * Sets the startDate
+     *
+     * @param int $startDate
+     */
+    public function setStartDate(int $startDate): void;
 
-	/**
-	 * Returns the message
-	 *
-	 * @return string $message
-	 */
-	public function getMessage();
+    /**
+     * Returns the message
+     *
+     * @return string $message
+     */
+    public function getMessage(): string;
 
-	/**
-	 * Sets the message
-	 *
-	 * @param string $message
-	 * @return void
-	 */
-	public function setMessage($message);
+    /**
+     * Sets the message
+     *
+     * @param string $message
+     */
+    public function setMessage(string $message): void;
 
-	/**
-	 * Returns the priority
-	 *
-	 * @return integer $priority
-	 */
-	public function getPriority();
+    /**
+     * Returns the priority
+     *
+     * @return int $priority
+     */
+    public function getPriority(): int;
 
-	/**
-	 * Sets the priority
-	 *
-	 * @param integer $priority
-	 * @return void
-	 */
-	public function setPriority($priority);
+    /**
+     * Sets the priority
+     *
+     * @param int $priority
+     */
+    public function setPriority(int $priority): void;
 
-	/**
-	 * Runs the Task
-	 */
-	public function run();
-
+    /**
+     * Runs the Task
+     */
+    public function run(): void;
 }

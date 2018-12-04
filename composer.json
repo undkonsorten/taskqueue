@@ -35,6 +35,7 @@
   ],
   "require": {
     "ext-json": "*",
+    "php": "^7.2",
     "typo3/cms": ">=8.7"
   },
   "autoload": {

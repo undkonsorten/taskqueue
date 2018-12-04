@@ -1,8 +1,13 @@
 <?php
+declare(strict_types=1);
 namespace Undkonsorten\Taskqueue\Domain\Repository;
 
+use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+use TYPO3\CMS\Extbase\Persistence\Repository;
+use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
 
-use Undkonsorten;
 /***************************************************************
  *
  *  Copyright notice
@@ -31,70 +36,73 @@ use Undkonsorten;
 /**
  * The repository for Tasks
  */
-class TaskRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
+class TaskRepository extends Repository
+{
+    protected $defaultOrderings = [
+        'startDate' => QueryInterface::ORDER_DESCENDING,
+    ];
 
-	protected $defaultOrderings = [
-		'startDate' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING,
-	];
-
-  // Example for repository wide settings
-    public function initializeObject() {
-        /** @var $defaultQuerySettings \TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings */
-        $defaultQuerySettings = $this->objectManager->get('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\Typo3QuerySettings');
-        $defaultQuerySettings->setRespectStoragePage(FALSE);
+    // Example for repository wide settings
+    public function initializeObject(): void
+    {
+        $defaultQuerySettings = $this->objectManager->get(Typo3QuerySettings::class);
+        $defaultQuerySettings->setRespectStoragePage(false);
         $this->setDefaultQuerySettings($defaultQuerySettings);
-	}
+    }
 
-	/**
-	 * Finds all runnabel tasks
-	 * @param integer $limit
-	 * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-	 */
-	public function findRunableTasks($limit = 10){
-		$query = $this->createQuery();
-		$query->matching(
-			$query->logicalAnd(
-			    $query->logicalOr(
-                    $query->equals('status',Undkonsorten\Taskqueue\Domain\Model\TaskInterface::WAITING),
-                    $query->equals('status',Undkonsorten\Taskqueue\Domain\Model\TaskInterface::RETRY)
-                ),
-				$query->lessThanOrEqual('startDate', time())
-			)
-		);
+    /**
+     * Finds all runnabel tasks
+     * @param int $limit
+     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     */
+    public function findRunableTasks($limit = 10): QueryResultInterface
+    {
+        $query = $this->createQuery();
+        $query->matching(
+            $query->logicalAnd([
+                $query->logicalOr([
+                    $query->equals('status', TaskInterface::WAITING),
+                    $query->equals('status', TaskInterface::RETRY),
+                ]),
+                $query->lessThanOrEqual('startDate', time()),
+            ])
+        );
 
-		$query->setLimit($limit);
+        $query->setLimit($limit);
 
-		$orderings = array(
-	  		'priority' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING,
-	 	);
+        $orderings = [
+            'priority' => QueryInterface::ORDER_DESCENDING,
+        ];
 
-		$query->setOrderings($orderings);
+        $query->setOrderings($orderings);
 
-		return $query->execute();
-	}
+        return $query->execute();
+    }
 
-	/**
-	 * Find all finished tasks
-	 * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-	 */
-	public function findFinished(){
-		$query = $this->createQuery();
-		$query->matching(
-				$query->equals('status',Undkonsorten\Taskqueue\Domain\Model\TaskInterface::FINISHED)
-		);
-		return $query->execute();
-	}
+    /**
+     * Find all finished tasks
+     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     */
+    public function findFinished(): QueryResultInterface
+    {
+        $query = $this->createQuery();
+        $query->matching(
+                $query->equals('status', TaskInterface::FINISHED)
+        );
+        return $query->execute();
+    }
 
-	/**
-	 * Finds all failed tasks
-	 * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-	 */
-	public function findFailed(){
-		$query = $this->createQuery();
-		$query->matching(
-				$query->equals('status',Undkonsorten\Taskqueue\Domain\Model\TaskInterface::FAILED)
-		);
-		return $query->execute();
-	}
-
+    /**
+     * Finds all failed tasks
+     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     */
+    public function findFailed(): QueryResultInterface
+    {
+        $query = $this->createQuery();
+        $query->matching(
+                $query->equals('status', TaskInterface::FAILED)
+        );
+        return $query->execute();
+    }
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 namespace Undkonsorten\Taskqueue\Controller;
 
 /***************************************************************
@@ -26,159 +27,111 @@ namespace Undkonsorten\Taskqueue\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+use Undkonsorten\Taskqueue\Domain\Model\Task;
 use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
 use Undkonsorten\Taskqueue\Domain\Repository\TaskRepository;
 
 /**
  * TaskController
  */
-class TaskController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController {
+class TaskController extends ActionController
+{
 
-	/**
-	 * taskRepository
-	 *
-	 * @var TaskRepository
-	 */
-	protected $taskRepository = NULL;
+    /**
+     * taskRepository
+     *
+     * @var TaskRepository
+     */
+    protected $taskRepository;
     /**
      * @var PersistenceManagerInterface
      */
     protected $persitenceManager;
 
-    public function injectTaskrepository(TaskRepository $taskRepository){
+    public function injectTaskrepository(TaskRepository $taskRepository): void
+    {
         $this->taskRepository = $taskRepository;
     }
 
-    public function injectPersistenceManager(PersistenceManagerInterface $persistenceManager){
+    public function injectPersistenceManager(PersistenceManagerInterface $persistenceManager): void
+    {
         $this->persitenceManager = $persistenceManager;
     }
 
-	/**
-	 * action list
-	 *
-	 * @return void
-	 */
-	public function listAction() {
-		$tasks = $this->taskRepository->findAll();
-		$this->view->assign('tasks', $tasks);
-	}
-
-	/**
-	 * action show
-	 *
-	 * @param \Undkonsorten\Taskqueue\Domain\Model\Task $task
-	 * @return void
-	 */
-	public function showAction(\Undkonsorten\Taskqueue\Domain\Model\Task $task) {
-		$this->view->assign('task', $task);
-	}
-
-	/**
-	 * action new
-	 *
-	 * @param \Undkonsorten\Taskqueue\Domain\Model\TaskInterface $newTask
-	 * @ignorevalidation $newTask
-	 * @return void
-	 */
-	public function newAction(\Undkonsorten\Taskqueue\Domain\Model\TaskInterface $newTask = NULL) {
-		$this->view->assign('newTask', $newTask);
-	}
+    /**
+     * action list
+     */
+    public function listAction(): void
+    {
+        $tasks = $this->taskRepository->findAll();
+        $this->view->assign('tasks', $tasks);
+    }
 
     /**
-     * action create
+     * action show
      *
-     * @param \Undkonsorten\Taskqueue\Domain\Model\TaskInterface $newTask
-     * @return void
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @param Task $task
      */
-	public function createAction(\Undkonsorten\Taskqueue\Domain\Model\TaskInterface $newTask) {
-		$this->addFlashMessage('The object was created. Please be aware that this action is publicly accessible unless you implement an access check. See <a href="http://wiki.typo3.org/T3Doc/Extension_Builder/Using_the_Extension_Builder#1._Model_the_domain" target="_blank">Wiki</a>', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
-		$this->taskRepository->add($newTask);
-		$this->redirect('list');
-	}
-
-	/**
-	 * action edit
-	 *
-	 * @param \Undkonsorten\Taskqueue\Domain\Model\Task $task
-	 * @ignorevalidation $task
-	 * @return void
-	 */
-	public function editAction(\Undkonsorten\Taskqueue\Domain\Model\Task $task) {
-		$this->view->assign('task', $task);
-	}
-
-    /**
-     * action update
-     *
-     * @param \Undkonsorten\Taskqueue\Domain\Model\Task $task
-     * @return void
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
-     */
-	public function updateAction(\Undkonsorten\Taskqueue\Domain\Model\Task $task) {
-		$this->addFlashMessage('The object was updated. Please be aware that this action is publicly accessible unless you implement an access check. See <a href="http://wiki.typo3.org/T3Doc/Extension_Builder/Using_the_Extension_Builder#1._Model_the_domain" target="_blank">Wiki</a>', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
-		$this->taskRepository->update($task);
-		$this->redirect('list');
-	}
+    public function showAction(Task $task): void
+    {
+        $this->view->assign('task', $task);
+    }
 
     /**
      * action delete
      *
-     * @param \Undkonsorten\Taskqueue\Domain\Model\Task $task
-     * @return void
+     * @param Task $task
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      */
-	public function deleteAction(\Undkonsorten\Taskqueue\Domain\Model\Task $task) {
-		$this->addFlashMessage('The object was deleted. Please be aware that this action is publicly accessible unless you implement an access check. See <a href="http://wiki.typo3.org/T3Doc/Extension_Builder/Using_the_Extension_Builder#1._Model_the_domain" target="_blank">Wiki</a>', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::ERROR);
-		$this->taskRepository->remove($task);
-		$this->redirect('list');
-	}
+    public function deleteAction(Task $task): void
+    {
+        $this->addFlashMessage(sprintf('%s [%d] was deleted.', $task->getShortName(), $task->getUid()), 'Task deleted', AbstractMessage::OK);
+        $this->taskRepository->remove($task);
+        $this->redirect('list');
+    }
 
     /**
      * action delete failed tasks
      *
-     * @return void
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      */
-	public function deleteFailedAction() {
-		$tasks = $this->taskRepository->findFailed();
+    public function deleteFailedAction(): void
+    {
+        $tasks = $this->taskRepository->findFailed();
         $this->addFlashMessageForDeletion($tasks);
-		foreach($tasks as $task) {
-			$this->taskRepository->remove($task);
-		}
-		$this->redirect('list');
-	}
+        foreach ($tasks as $task) {
+            $this->taskRepository->remove($task);
+        }
+        $this->redirect('list');
+    }
 
     /**
      * action delete finished tasks
      *
-     * @return void
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      */
-	public function deleteFinishedAction() {
-		$tasks = $this->taskRepository->findFinished();
+    public function deleteFinishedAction(): void
+    {
+        $tasks = $this->taskRepository->findFinished();
         $this->addFlashMessageForDeletion($tasks);
-		foreach($tasks as $task) {
-			$this->taskRepository->remove($task);
-		}
-		$this->redirect('list');
-	}
+        foreach ($tasks as $task) {
+            $this->taskRepository->remove($task);
+        }
+        $this->redirect('list');
+    }
 
-    protected function addFlashMessageForDeletion(QueryResultInterface $tasks)
+    protected function addFlashMessageForDeletion(QueryResultInterface $tasks): void
     {
         $title = 'Delete tasks';
         if ($tasks->count() === 0) {
@@ -191,27 +144,28 @@ class TaskController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
     /**
      * runs an task
      *
-     * @param \Undkonsorten\Taskqueue\Domain\Model\Task $task
-     * @return void
+     * @param Task $task
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
      * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
+     * @throws \Exception
      */
-	public function runAction(\Undkonsorten\Taskqueue\Domain\Model\Task $task) {
-		$task = $this->taskRepository->findByIdentifier($task->getUid());
-        try{
-            if($task->getRetries() !== 0) {
+    public function runAction(Task $task): void
+    {
+        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+        $task = $this->taskRepository->findByIdentifier($task->getUid());
+        try {
+            if ($task->getRetries() !== 0) {
                 $task->setRetries($task->getRetries() - 1);
             }
-            /**@var \Undkonsorten\Taskqueue\Domain\Model\Task $task **/
             $task->run();
             $task->setStatus(TaskInterface::FINISHED);
-        }catch(\Exception $exception){
+        } catch (\Exception $exception) {
             $task->setMessage($exception->getMessage());
-            if($task->getRetries() === 0){
+            if ($task->getRetries() === 0) {
                 $task->setStatus(TaskInterface::FAILED);
-            }else{
+            } else {
                 $task->setStatus(TaskInterface::RETRY);
             }
             $this->taskRepository->update($task);
@@ -219,9 +173,8 @@ class TaskController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController 
             throw $exception;
         }
 
-		$this->addFlashMessage('Task has been executed', '', \TYPO3\CMS\Core\Messaging\AbstractMessage::INFO);
-		$this->taskRepository->update($task);
-		$this->redirect('list');
-	}
-
+        $this->addFlashMessage('Task has been executed', '', AbstractMessage::INFO);
+        $this->taskRepository->update($task);
+        $this->redirect('list');
+    }
 }

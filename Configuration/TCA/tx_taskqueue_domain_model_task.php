@@ -1,186 +1,190 @@
 <?php
+declare(strict_types=1);
+if (!defined('TYPO3_MODE')) {
+    die('Access denied.');
+}
 
 return [
-    'ctrl' => array(
+    'ctrl' => [
         'title'	=> 'LLL:EXT:taskqueue/Resources/Private/Language/locallang_db.xlf:tx_taskqueue_domain_model_task',
         'label' => 'name',
         'tstamp' => 'tstamp',
         'crdate' => 'crdate',
         'cruser_id' => 'cruser_id',
-        'dividers2tabs' => TRUE,
+        'dividers2tabs' => true,
 
         'versioningWS' => 2,
-        'versioning_followPages' => TRUE,
+        'versioning_followPages' => true,
 
         'languageField' => 'sys_language_uid',
         'transOrigPointerField' => 'l10n_parent',
         'transOrigDiffSourceField' => 'l10n_diffsource',
         'delete' => 'deleted',
         'type' => 'type',
-        'enablecolumns' => array(
+        'enablecolumns' => [
             'disabled' => 'hidden',
             'starttime' => 'starttime',
             'endtime' => 'endtime',
-        ),
+        ],
         'searchFields' => 'name,data,status,start_date,message,priority,',
         'iconfile' => 'EXT:taskqueue/Resources/Public/Icons/tx_taskqueue_domain_model_task.gif'
-    ),
-    'interface' => array(
+    ],
+    'interface' => [
         'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name, data, status, start_date, message, priority, retries',
-    ),
-    'types' => array(
-        '1' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden;;1, name, data, status, start_date, message, priority, retries, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, starttime, endtime'),
-    ),
-    'palettes' => array(
-        '1' => array('showitem' => ''),
-    ),
-    'columns' => array(
+    ],
+    'types' => [
+        '1' => ['showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden;;1, name, data, status, start_date, message, priority, retries, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, starttime, endtime'],
+    ],
+    'palettes' => [
+        '1' => ['showitem' => ''],
+    ],
+    'columns' => [
 
-        'sys_language_uid' => array(
+        'sys_language_uid' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.language',
-            'config' => array(
+            'config' => [
                 'type' => 'select',
                 'foreign_table' => 'sys_language',
                 'foreign_table_where' => 'ORDER BY sys_language.title',
-                'items' => array(
-                    array('LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.allLanguages', -1),
-                    array('LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.default_value', 0)
-                ),
-            ),
-        ),
-        'l10n_parent' => array(
+                'items' => [
+                    ['LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.allLanguages', -1],
+                    ['LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.default_value', 0]
+                ],
+            ],
+        ],
+        'l10n_parent' => [
             'displayCond' => 'FIELD:sys_language_uid:>:0',
             'exclude' => 1,
             'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.l18n_parent',
-            'config' => array(
+            'config' => [
                 'type' => 'select',
-                'items' => array(
-                    array('', 0),
-                ),
+                'items' => [
+                    ['', 0],
+                ],
                 'foreign_table' => 'tx_taskqueue_domain_model_task',
                 'foreign_table_where' => 'AND tx_taskqueue_domain_model_task.pid=###CURRENT_PID### AND tx_taskqueue_domain_model_task.sys_language_uid IN (-1,0)',
-            ),
-        ),
-        'l10n_diffsource' => array(
-            'config' => array(
+            ],
+        ],
+        'l10n_diffsource' => [
+            'config' => [
                 'type' => 'passthrough',
-            ),
-        ),
+            ],
+        ],
 
-        't3ver_label' => array(
+        't3ver_label' => [
             'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.versionLabel',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'size' => 30,
                 'max' => 255,
-            )
-        ),
+            ]
+        ],
 
-        'hidden' => array(
+        'hidden' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
-            'config' => array(
+            'config' => [
                 'type' => 'check',
-            ),
-        ),
-        'starttime' => array(
+            ],
+        ],
+        'starttime' => [
             'exclude' => 1,
             'l10n_mode' => 'mergeIfNotBlank',
             'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.starttime',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'size' => 13,
                 'max' => 20,
                 'eval' => 'datetime',
                 'checkbox' => 0,
                 'default' => 0,
-                'range' => array(
-                    'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
-                ),
-            ),
-        ),
-        'endtime' => array(
+                'range' => [
+                    'lower' => mktime(0, 0, 0, (int)date('m'), (int)date('d'), (int)date('Y'))
+                ],
+            ],
+        ],
+        'endtime' => [
             'exclude' => 1,
             'l10n_mode' => 'mergeIfNotBlank',
             'label' => 'LLL:EXT:lang/Resources/Private/Language/locallang_general.xlf:LGL.endtime',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'size' => 13,
                 'max' => 20,
                 'eval' => 'datetime',
                 'checkbox' => 0,
                 'default' => 0,
-                'range' => array(
-                    'lower' => mktime(0, 0, 0, date('m'), date('d'), date('Y'))
-                ),
-            ),
-        ),
-        'name' => array(
+                'range' => [
+                    'lower' => mktime(0, 0, 0, (int)date('m'), (int)date('d'), (int)date('Y'))
+                ],
+            ],
+        ],
+        'name' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang_db.xlf:tx_taskqueue_domain_model_task.name',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim'
-            ),
-        ),
-        'data' => array(
+            ],
+        ],
+        'data' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang_db.xlf:tx_taskqueue_domain_model_task.data',
-            'config' => array(
+            'config' => [
                 'type' => 'text',
                 'cols' => 40,
                 'rows' => 6
-            ),
-        ),
-        'status' => array(
+            ],
+        ],
+        'status' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang_db.xlf:tx_taskqueue_domain_model_task.status',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'size' => 4,
                 'eval' => 'int'
-            )
-        ),
-        'start_date' => array(
+            ]
+        ],
+        'start_date' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang_db.xlf:tx_taskqueue_domain_model_task.start_date',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'size' => 6,
                 'eval' => 'timesec',
                 'checkbox' => 1,
                 'default' => time()
-            )
-        ),
-        'message' => array(
+            ]
+        ],
+        'message' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang_db.xlf:tx_taskqueue_domain_model_task.message',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'size' => 30,
                 'eval' => 'trim'
-            ),
-        ),
-        'priority' => array(
+            ],
+        ],
+        'priority' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang_db.xlf:tx_taskqueue_domain_model_task.priority',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'size' => 4,
                 'eval' => 'int'
-            )
-        ),
-        'retries' => array(
+            ]
+        ],
+        'retries' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang_db.xlf:tx_taskqueue_domain_model_task.retries',
-            'config' => array(
+            'config' => [
                 'type' => 'input',
                 'size' => 4,
                 'eval' => 'int'
-            )
-        ),
+            ]
+        ],
 
-    ),
+    ],
 ];

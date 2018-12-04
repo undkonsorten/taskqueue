@@ -1,9 +1,10 @@
 <?php
+declare(strict_types=1);
 namespace Undkonsorten\Taskqueue\Controller;
 
-
-use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 use TYPO3\CMS\Extbase\Mvc\Controller\CommandController;
+use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
+use Undkonsorten\Taskqueue\Domain\Model\Task;
 use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
 use Undkonsorten\Taskqueue\Domain\Repository\TaskRepository;
 
@@ -31,53 +32,58 @@ use Undkonsorten\Taskqueue\Domain\Repository\TaskRepository;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-class TaskQueueCommandController extends CommandController{
+class TaskQueueCommandController extends CommandController
+{
 
-	/**
-	 * taskRepository
-	 *
-	 * @var \Undkonsorten\Taskqueue\Domain\Repository\TaskRepository
-	 */
-	protected $taskRepository = NULL;
+    /**
+     * taskRepository
+     *
+     * @var \Undkonsorten\Taskqueue\Domain\Repository\TaskRepository
+     */
+    protected $taskRepository;
 
     /**
      * @var PersistenceManagerInterface
      */
-	protected $persitenceManager;
+    protected $persistenceManager;
 
-
-	public function injectTaskRepository(TaskRepository $taskRepository)
+    public function injectTaskRepository(TaskRepository $taskRepository): void
     {
-	    $this->taskRepository = $taskRepository;
+        $this->taskRepository = $taskRepository;
     }
 
-    public function injectPersistenceManager(PersistenceManagerInterface $persistenceManager){
-	    $this->persitenceManager = $persistenceManager;
+    public function injectPersistenceManager(PersistenceManagerInterface $persistenceManager): void
+    {
+        $this->persistenceManager = $persistenceManager;
     }
 
-	/**
-	 * Runs Tasks
-	 * @param integer $limit
-	 */
-	public function runTasksCommand($limit = 10){
-		$tasks = $this->taskRepository->findRunableTasks($limit);
-		foreach ($tasks as $task){
-		    try{
+    /**
+     * Runs Tasks
+     * @param int $limit
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     */
+    public function runTasksCommand($limit = 10): void
+    {
+        $tasks = $this->taskRepository->findRunableTasks($limit);
+        foreach ($tasks as $task) {
+            try {
+                /**@var Task $task **/
                 $task->setRetries($task->getRetries()-1);
-		        /**@var \Undkonsorten\Taskqueue\Domain\Model\Task $task **/
                 $task->run();
                 $task->setStatus(TaskInterface::FINISHED);
-            }catch(\Exception $exception){
+            } catch (\Exception $exception) {
                 $task->setMessage($exception->getMessage());
-                if($task->getRetries() === 0){
+                if ($task->getRetries() === 0) {
                     $task->setStatus(TaskInterface::FAILED);
-                }else{
+                } else {
                     $task->setStatus(TaskInterface::RETRY);
                 }
             }
-			$this->taskRepository->update($task);
-            $this->persitenceManager->persistAll();
-		}
-	}
+            $this->taskRepository->update($task);
+            /** @noinspection DisconnectedForeachInstructionInspection */
+            $this->persistenceManager->persistAll();
+        }
+    }
 }
-
