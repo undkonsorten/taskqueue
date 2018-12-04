@@ -77,7 +77,7 @@ interface TaskInterface
      *
      * @return array $data
      */
-    public function getData(): array;
+    public function getData(): ?array;
 
     /**
      * Sets the data

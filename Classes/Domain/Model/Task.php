@@ -134,7 +134,7 @@ abstract class Task extends AbstractEntity implements TaskInterface
      *
      * @return array $data
      */
-    public function getData(): array
+    public function getData(): ?array
     {
         /** @noinspection PhpComposerExtensionStubsInspection */
         return json_decode($this->data, true);
