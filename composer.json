@@ -34,6 +34,7 @@
     }
   ],
   "require": {
+    "ext-json": "*",
     "typo3/cms": ">=8.7"
   },
   "autoload": {

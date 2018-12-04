@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes" ?>
 <xliff version="1.0">
-	<file source-language="en" datatype="plaintext" original="messages" date="2014-10-09T12:38:21Z" product-name="taskqueue">
+	<file source-language="en" datatype="plaintext" original="messages" date="2014-10-09T12:38:21Z"
+		  product-name="taskqueue">
 		<header/>
 		<body>
 			<trans-unit id="tx_taskqueue_domain_model_task">
@@ -26,6 +27,30 @@
 			</trans-unit>
 			<trans-unit id="tx_taskqueue_domain_model_task.retries">
 				<source>Retries</source>
+			</trans-unit>
+			<trans-unit id="tx_taskqueue_domain_model_task.actions">
+				<source>Actions</source>
+			</trans-unit>
+			<trans-unit id="tx_taskqueue_domain_model_task.additionalInformation">
+				<source>Additional Information</source>
+			</trans-unit>
+			<trans-unit id="actions.deleteFinished">
+				<source>Delete finished</source>
+			</trans-unit>
+			<trans-unit id="actions.deleteFailed">
+				<source>Delete failed</source>
+			</trans-unit>
+			<trans-unit id="actions.runTask">
+				<source>Run Task</source>
+			</trans-unit>
+			<trans-unit id="actions.deleteTask">
+				<source>Delete Task</source>
+			</trans-unit>
+			<trans-unit id="tableHeader">
+				<source>Tasks</source>
+			</trans-unit>
+			<trans-unit id="headline">
+				<source>Listing for Task</source>
 			</trans-unit>
 		</body>
 	</file>

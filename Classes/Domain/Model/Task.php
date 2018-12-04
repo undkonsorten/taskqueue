@@ -79,6 +79,11 @@ abstract class Task extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity imple
      */
 	protected $retries = 3;
 
+	public function __construct()
+    {
+        $this->name = static::class;
+    }
+
     /**
 	 * Returns the name
 	 *
@@ -87,6 +92,26 @@ abstract class Task extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity imple
 	public function getName() {
 		return $this->name;
 	}
+
+    /**
+     * Override this function to have a different short name in lists
+     *
+     * @return string
+     */
+    public function getShortName(): string
+    {
+        return $this->getLastPartOfNamespacedClassName($this->getName());
+    }
+
+    /**
+     * Override this to add custom information to the task list
+     *
+     * @return string
+     */
+    public function getAdditionalInformation(): string
+    {
+        return '';
+    }
 
 	/**
 	 * Sets the name
@@ -144,7 +169,7 @@ abstract class Task extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity imple
 	}
 
 	static protected function isScalarOrNull($value){
-		return is_scalar($value)|| is_null($val);
+		return is_scalar($value)|| is_null($value);
 	}
 
 	/**
@@ -250,6 +275,10 @@ abstract class Task extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity imple
         $this->retries = $retries;
     }
 
-
+    protected function getLastPartOfNamespacedClassName(string $className): string
+    {
+        $nameParts = explode('\\', $className);
+        return array_pop($nameParts);
+    }
 
 }
