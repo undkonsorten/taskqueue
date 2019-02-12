@@ -124,7 +124,7 @@ abstract class Task extends AbstractEntity implements TaskInterface
      *
      * @param string $name
      */
-    public function setName($name): void
+    public function setName(string $name): void
     {
         $this->name = $name;
     }
@@ -207,7 +207,7 @@ abstract class Task extends AbstractEntity implements TaskInterface
      *
      * @param int $status
      */
-    public function setStatus($status): void
+    public function setStatus(int $status): void
     {
         $this->status = $status;
     }
@@ -227,7 +227,7 @@ abstract class Task extends AbstractEntity implements TaskInterface
      *
      * @param int $startDate
      */
-    public function setStartDate($startDate): void
+    public function setStartDate(int $startDate): void
     {
         $this->startDate = $startDate;
     }
@@ -247,7 +247,7 @@ abstract class Task extends AbstractEntity implements TaskInterface
      *
      * @param string $message
      */
-    public function setMessage($message): void
+    public function setMessage(string $message): void
     {
         $this->message = $message;
     }
@@ -267,7 +267,7 @@ abstract class Task extends AbstractEntity implements TaskInterface
      *
      * @param int $priority
      */
-    public function setPriority($priority): void
+    public function setPriority(int $priority): void
     {
         $this->priority = $priority;
     }
