@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Undkonsorten\Taskqueue\Domain\Repository;
 
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
@@ -53,20 +54,34 @@ class TaskRepository extends Repository
     /**
      * Finds all runnabel tasks
      * @param int $limit
+     * @param string $whitelist
+     * @param string $blacklist
      * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
-    public function findRunableTasks($limit = 10): QueryResultInterface
+    public function findRunableTasks($limit = 10, $whitelist = '', $blacklist = ''): QueryResultInterface
     {
         $query = $this->createQuery();
+        $whitelist = GeneralUtility::trimExplode(',', $whitelist, true);
+        $blacklist = GeneralUtility::trimExplode(',', $blacklist, true);
+        $constraints = [
+            $query->logicalOr([
+                $query->equals('status', TaskInterface::WAITING),
+                $query->equals('status', TaskInterface::RETRY),
+            ]),
+            $query->lessThanOrEqual('startDate', time()),
+        ];
+        if ($whitelist) {
+            $constraints[] = $query->in('name', $whitelist);
+        }
+        if ($blacklist) {
+            $constraints[] = $query->logicalNot(
+                $query->in('name', $blacklist)
+            );
+        }
+
         $query->matching(
-            $query->logicalAnd([
-                $query->logicalOr([
-                    $query->equals('status', TaskInterface::WAITING),
-                    $query->equals('status', TaskInterface::RETRY),
-                ]),
-                $query->lessThanOrEqual('startDate', time()),
-            ])
+            $query->logicalAnd($constraints)
         );
 
         $query->setLimit($limit);

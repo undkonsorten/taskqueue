@@ -58,15 +58,16 @@ class TaskQueueCommandController extends CommandController
     }
 
     /**
-     * Runs Tasks
      * @param int $limit
+     * @param string $whitelist
+     * @param string $blacklist
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
      */
-    public function runTasksCommand($limit = 10): void
+    public function runTasksCommand($limit = 10, $whitelist = '', $blacklist = ''): void
     {
-        $tasks = $this->taskRepository->findRunableTasks($limit);
+        $tasks = $this->taskRepository->findRunableTasks($limit, $whitelist, $blacklist);
         foreach ($tasks as $task) {
             try {
                 /**@var Task $task **/
