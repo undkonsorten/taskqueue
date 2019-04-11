@@ -87,4 +87,25 @@ class TaskQueueCommandController extends CommandController
             $this->persistenceManager->persistAll();
         }
     }
+
+    /**
+     * @param string $keepDateInterval
+     * See https://en.wikipedia.org/wiki/ISO_8601#Durations
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     */
+    public function deleteTasksCommand($keepDateInterval = 'P3M')
+    {
+        $tasks = $this->taskRepository->findOutOfInterval(new \DateInterval($keepDateInterval));
+        if($tasks->count() === 0){
+            $this->outputLine("<info>No tasks found older than ".$keepDateInterval."</info>");
+        }
+        foreach($tasks as $task){
+            $this->taskRepository->remove($task);
+            $this->outputLine("<info>Task ".$task->getName()." has been deteted.</info>");
+        }
+        /** @noinspection DisconnectedForeachInstructionInspection */
+        $this->persistenceManager->persistAll();
+
+    }
 }

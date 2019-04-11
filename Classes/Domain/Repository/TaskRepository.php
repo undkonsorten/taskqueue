@@ -120,4 +120,28 @@ class TaskRepository extends Repository
         );
         return $query->execute();
     }
+
+    /**
+     * @param \DateInterval $dateInterval
+     * @return array|QueryResultInterface
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     */
+    public function findOutOfInterval(\DateInterval $dateInterval)
+    {
+        $now = new \DateTime('now');
+        $now->sub($dateInterval);
+        $query = $this->createQuery();
+        $query->matching(
+            $query->logicalAnd([
+                    $query->lessThan('tstamp', $now->getTimestamp()),
+                    $query->logicalOr([
+                        $query->equals('status', TaskInterface::FAILED),
+                        $query->equals('status', TaskInterface::FINISHED)
+                    ])
+            ])
+
+        );
+        return $query->execute();
+
+    }
 }
