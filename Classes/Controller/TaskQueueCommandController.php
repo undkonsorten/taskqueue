@@ -5,7 +5,6 @@ namespace Undkonsorten\Taskqueue\Controller;
 use TYPO3\CMS\Extbase\Mvc\Controller\CommandController;
 use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 use Undkonsorten\Taskqueue\Domain\Model\Task;
-use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
 use Undkonsorten\Taskqueue\Domain\Repository\TaskRepository;
 
 /***************************************************************
@@ -72,14 +71,17 @@ class TaskQueueCommandController extends CommandController
             try {
                 /**@var Task $task **/
                 $task->setRetries($task->getRetries()-1);
+                $task->markRunning();
+                $this->taskRepository->update($task);
+                $this->persistenceManager->persistAll();
                 $task->run();
-                $task->setStatus(TaskInterface::FINISHED);
+                $task->markFinished();
             } catch (\Exception $exception) {
                 $task->setMessage($exception->getMessage());
                 if ($task->getRetries() === 0) {
-                    $task->setStatus(TaskInterface::FAILED);
+                    $task->markFailed();
                 } else {
-                    $task->setStatus(TaskInterface::RETRY);
+                    $task->markRetry();
                 }
             }
             $this->taskRepository->update($task);
@@ -93,16 +95,17 @@ class TaskQueueCommandController extends CommandController
      * See https://en.wikipedia.org/wiki/ISO_8601#Durations
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @throws \Exception
      */
     public function deleteTasksCommand($keepDateInterval = 'P3M')
     {
         $tasks = $this->taskRepository->findOutOfInterval(new \DateInterval($keepDateInterval));
-        if($tasks->count() === 0){
-            $this->outputLine("<info>No tasks found older than ".$keepDateInterval."</info>");
+        if ($tasks->count() === 0) {
+            $this->outputLine("<info>No tasks found older than " . $keepDateInterval . "</info>");
         }
-        foreach($tasks as $task){
+        foreach ($tasks as $task) {
             $this->taskRepository->remove($task);
-            $this->outputLine("<info>Task ".$task->getName()." has been deteted.</info>");
+            $this->outputLine("<info>Task " . $task->getName() . " has been deteted.</info>");
         }
         /** @noinspection DisconnectedForeachInstructionInspection */
         $this->persistenceManager->persistAll();

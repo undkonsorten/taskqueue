@@ -146,4 +146,24 @@ interface TaskInterface
      * Runs the Task
      */
     public function run(): void;
+
+    /**
+     * Marks the task as running
+     */
+    public function markRunning(): void;
+
+    /**
+     * Marks the task as finished
+     */
+    public function markFinished(): void;
+
+    /**
+     * Marks the task as finished
+     */
+    public function markRetry(): void;
+
+    /**
+     * Marks the task as failed
+     */
+    public function markFailed(): void;
 }

@@ -322,4 +322,24 @@ abstract class Task extends AbstractEntity implements TaskInterface
     {
         return null;
     }
+
+    public function markRunning(): void
+    {
+        $this->setStatus(TaskInterface::RUNNING);
+    }
+
+    public function markFinished(): void
+    {
+        $this->setStatus(TaskInterface::FINISHED);
+    }
+
+    public function markFailed(): void
+    {
+        $this->setStatus(TaskInterface::FAILED);
+    }
+
+    public function markRetry(): void
+    {
+        $this->setStatus(TaskInterface::RETRY);
+    }
 }

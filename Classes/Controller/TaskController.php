@@ -33,7 +33,6 @@ use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use Undkonsorten\Taskqueue\Domain\Model\Task;
-use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
 use Undkonsorten\Taskqueue\Domain\Repository\TaskRepository;
 
 /**
@@ -154,19 +153,24 @@ class TaskController extends ActionController
     public function runAction(Task $task): void
     {
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
+        /* @TODO this code duplicates in \Undkonsorten\Taskqueue\Controller\TaskQueueCommandController, maybe move to service class */
+        /** @var Task $task */
         $task = $this->taskRepository->findByIdentifier($task->getUid());
         try {
             if ($task->getRetries() !== 0) {
                 $task->setRetries($task->getRetries() - 1);
             }
+            $task->markRunning();
+            $this->taskRepository->update($task);
+            $this->persitenceManager->persistAll();
             $task->run();
-            $task->setStatus(TaskInterface::FINISHED);
+            $task->markFinished();
         } catch (\Exception $exception) {
             $task->setMessage($exception->getMessage());
             if ($task->getRetries() === 0) {
-                $task->setStatus(TaskInterface::FAILED);
+                $task->markFailed();
             } else {
-                $task->setStatus(TaskInterface::RETRY);
+                $task->markRetry();
             }
             $this->taskRepository->update($task);
             $this->persitenceManager->persistAll();
