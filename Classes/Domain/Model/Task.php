@@ -293,4 +293,33 @@ abstract class Task extends AbstractEntity implements TaskInterface
         $nameParts = explode('\\', $className);
         return array_pop($nameParts);
     }
+
+    /**
+     * Override this function and let it return an array
+     * <pre>
+     * [
+     *   "tableName" => "tx_myext_table",
+     *   "uid" => "34",
+     * ]
+     * </pre>
+     * to create a backend link to the record in the single view of a task.
+     *
+     * @return array|null
+     */
+    public function getRecord(): ?array
+    {
+        return null;
+    }
+
+    /**
+     * Override this function to modify the linked text of a record link. The link
+     * text will be "tx_myext_table:34" otherwise
+     *
+     * @see \Undkonsorten\Taskqueue\Domain\Model\Task::getRecord
+     * @return string|null
+     */
+    public function getRecordLabel(): ?string
+    {
+        return null;
+    }
 }

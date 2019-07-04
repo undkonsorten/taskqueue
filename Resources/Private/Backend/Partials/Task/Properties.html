@@ -1,5 +1,7 @@
 <html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			xmlns:be="http://typo3.org/ns/Undkonsorten/Taskqueue/ViewHelpers"
       data-namespace-typo3-fluid="true">
+<f:comment><!-- @TODO remove VH and namespace declaration xmlns:be after upgrade to TYPO3 9 --></f:comment>
 
 <tr>
     <td>
@@ -29,6 +31,17 @@
 			</f:if>
     </td>
 </tr>
+<f:if condition="{task.record}">
+	<tr>
+		<td>
+			<f:translate key="tx_taskqueue_domain_model_task.record"/>
+		</td>
+		<td>
+			<be:link.editRecord uid="{task.record.uid}" table="{task.record.tableName}"><f:or alternative="{task.record.tableName}:{task.record.uid}">{task.recordLabel}</f:or></be:link.editRecord>
+		</td>
+	</tr>
+</f:if>
+<f:if condition="{task.startDate}">
 <tr>
     <td>
         <f:translate key="tx_taskqueue_domain_model_task.start_date"/>
@@ -37,6 +50,7 @@
         <f:format.date format="d.m.Y - H:i:s">@{task.startDate}</f:format.date>
     </td>
 </tr>
+</f:if>
 <f:if condition="{task.message}">
     <tr>
         <td>
@@ -55,6 +69,16 @@
         {task.retries}
     </td>
 </tr>
+<f:if condition="{task.status} == 3">
+	<tr>
+		<td>
+			<f:translate key="tx_taskqueue_domain_model_task.lastTry">last try</f:translate>
+		</td>
+		<td>
+			{task.tstamp}
+		</td>
+	</tr>
+</f:if>
 <tr>
     <th colspan="2" class="t3-row-header">
         <f:translate key="tx_taskqueue_domain_model_task.data"/>
