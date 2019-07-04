@@ -30,6 +30,10 @@ namespace Undkonsorten\Taskqueue\Controller;
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
+use TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException;
+use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
+use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
 use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use Undkonsorten\Taskqueue\Domain\Model\Task;
@@ -85,9 +89,9 @@ class TaskController extends ActionController
      * action delete
      *
      * @param Task $task
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws StopActionException
+     * @throws UnsupportedRequestTypeException
+     * @throws IllegalObjectTypeException
      */
     public function deleteAction(Task $task): void
     {
@@ -97,11 +101,27 @@ class TaskController extends ActionController
     }
 
     /**
+     * @param Task $task
+     * @param int $retries
+     * @throws StopActionException
+     * @throws UnsupportedRequestTypeException
+     * @throws IllegalObjectTypeException
+     * @throws UnknownObjectException
+     */
+    public function reactivateAction(Task $task, int $retries = 3)
+    {
+        $this->addFlashMessage(sprintf('%s [%d] was reactivated with %d retries.', $task->getShortName(), $task->getUid(), $retries), 'Task reactivated', AbstractMessage::OK);
+        $task->reactivate($retries);
+        $this->taskRepository->update($task);
+        $this->redirect('list');
+    }
+
+    /**
      * action delete failed tasks
      *
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws StopActionException
+     * @throws UnsupportedRequestTypeException
+     * @throws IllegalObjectTypeException
      */
     public function deleteFailedAction(): void
     {
@@ -116,9 +136,9 @@ class TaskController extends ActionController
     /**
      * action delete finished tasks
      *
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
+     * @throws StopActionException
+     * @throws UnsupportedRequestTypeException
+     * @throws IllegalObjectTypeException
      */
     public function deleteFinishedAction(): void
     {
@@ -144,10 +164,10 @@ class TaskController extends ActionController
      * runs an task
      *
      * @param Task $task
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\StopActionException
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException
+     * @throws StopActionException
+     * @throws UnsupportedRequestTypeException
+     * @throws IllegalObjectTypeException
+     * @throws UnknownObjectException
      * @throws \Exception
      */
     public function runAction(Task $task): void

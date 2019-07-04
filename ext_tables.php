@@ -14,7 +14,7 @@ if (!defined('TYPO3_MODE')) {
             'taskqueue',    // Submodule key
             '',                        // Position
             [
-                'Task' => 'list, show, delete, run, deleteFinished, deleteFailed',
+                'Task' => 'list, show, delete, run, deleteFinished, deleteFailed, reactivate',
 
             ],
             [

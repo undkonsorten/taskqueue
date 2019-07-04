@@ -166,4 +166,10 @@ interface TaskInterface
      * Marks the task as failed
      */
     public function markFailed(): void;
+
+    /**
+     * @param int $retries
+     * @return mixed
+     */
+    public function reactivate(int $retries = 3);
 }

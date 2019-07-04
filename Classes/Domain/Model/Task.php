@@ -342,4 +342,16 @@ abstract class Task extends AbstractEntity implements TaskInterface
     {
         $this->setStatus(TaskInterface::RETRY);
     }
+
+    /**
+     * Reactivates a failed task
+     *
+     * @param int $retries
+     * @return mixed|void
+     */
+    public function reactivate(int $retries = 3)
+    {
+        $this->setStatus(TaskInterface::RETRY);
+        $this->setRetries($retries);
+    }
 }
