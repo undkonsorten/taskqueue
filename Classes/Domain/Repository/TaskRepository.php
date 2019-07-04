@@ -40,7 +40,7 @@ use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
 class TaskRepository extends Repository
 {
     protected $defaultOrderings = [
-        'startDate' => QueryInterface::ORDER_DESCENDING,
+        'crdate' => QueryInterface::ORDER_DESCENDING,
     ];
 
     // Example for repository wide settings
