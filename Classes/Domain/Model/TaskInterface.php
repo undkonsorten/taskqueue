@@ -172,4 +172,15 @@ interface TaskInterface
      * @return mixed
      */
     public function reactivate(int $retries = 3);
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getLastRun(): ?\DateTime;
+
+    /**
+     * @param \DateTime|null $lastRun
+     */
+    public function setLastRun(?\DateTime $lastRun): void;
+
 }

@@ -34,7 +34,7 @@
 							</th>
 							<th colspan="2"><f:translate key="tx_taskqueue_domain_model_task.actions" /></th>
 							<th align="left">
-								<f:translate key="tx_taskqueue_domain_model_task.start_date"/>
+								<f:translate key="tx_taskqueue_domain_model_task.last_run"/>
 							</th>
 							<th align="left">
 								<f:translate key="tx_taskqueue_domain_model_task.message"/>
@@ -92,8 +92,9 @@
 									</f:link.action>
 								</td>
 								<td>
-									<f:if condition="{task.startDate}">
-										<f:format.date format="d.m.Y - H:i:s">@{task.startDate}</f:format.date>
+									<f:if condition="{task.lastRun}">
+										<f:debug>{task]</f:debug>
+										<f:format.date format="d.m.Y - H:i:s">{task.lastRun}</f:format.date>
 									</f:if>
 								</td>
 								<td>

@@ -66,6 +66,11 @@ abstract class Task extends AbstractEntity implements TaskInterface
     protected $startDate = 0;
 
     /**
+     * @var \DateTime|null
+     */
+    protected $lastRun;
+
+    /**
      * message
      *
      * @var string
@@ -326,6 +331,7 @@ abstract class Task extends AbstractEntity implements TaskInterface
     public function markRunning(): void
     {
         $this->setStatus(TaskInterface::RUNNING);
+        $this->setLastRun(new \DateTime('now'));
     }
 
     public function markFinished(): void
@@ -354,4 +360,24 @@ abstract class Task extends AbstractEntity implements TaskInterface
         $this->setStatus(TaskInterface::RETRY);
         $this->setRetries($retries);
     }
+
+    /**
+     * @return \DateTime|null
+     */
+    public function getLastRun(): ?\DateTime
+    {
+        return $this->lastRun;
+    }
+
+    /**
+     * @param \DateTime|null $lastRun
+     */
+    public function setLastRun(?\DateTime $lastRun): void
+    {
+        $this->lastRun = $lastRun;
+    }
+
+
+
+
 }

@@ -158,6 +158,18 @@ return [
                 'default' => time()
             ]
         ],
+        'last_run' => [
+            'exclude' => 1,
+            'label' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang_db.xlf:tx_taskqueue_domain_model_task.last_run',
+            'config' => [
+                'type' => 'input',
+                'dbType' => 'datetime',
+                'renderType' => 'inputDateTime',
+                'size' => 7,
+                'eval' => 'datetime',
+                'default' => '0000-00-00 00:00:00',
+            ],
+        ],
         'message' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang_db.xlf:tx_taskqueue_domain_model_task.message',
