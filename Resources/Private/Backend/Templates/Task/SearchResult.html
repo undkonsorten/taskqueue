@@ -9,18 +9,44 @@
 </f:section>
 
 <f:section name="content">
-	<h1><f:translate key="headline" /></h1>
+	<h1><f:translate key="headline.searchResults" /></h1>
 
 	<f:flashMessages/>
-	<f:link.action action="search" class="btn btn-default"><core:icon identifier="actions-search" /> <f:translate key="searchActionLink" /></f:link.action>
+
+	<div class="callout callout-info">
+		<div class="media">
+			<div class="media-left">
+						<span class="fa-stack fa-lg callout-icon"> <i class="fa fa-circle fa-stack-2x"></i>
+							<i class="fa fa-info fa-stack-1x"></i> </span>
+			</div>
+			<div class="media-body">
+						<h4 class="callout-title">
+							<f:if condition="{tasks -> f:count()}">
+								<f:then>
+									<f:translate key="callout.searchResults" arguments="{0:'{tasks -> f:count()}'}" />
+								</f:then>
+								<f:else>
+									<f:translate key="callout.noSearchResults" />
+								</f:else>
+							</f:if>
+						</h4>
+						<div class="callout-body">
+							<p>
+								<f:translate key="callout.searchWords" arguments="{0:searchWords}" />
+							</p>
+						</div>
+
+			</div>
+		</div>
+	</div>
 
 	<f:if condition="{tasks}">
-		<div class="panel panel-space panel-default recordlist">
-			<div class="panel-heading">
-				<f:translate key="tableHeader" />
-			</div>
-			<div id="task-list">
-				<f:be.widget.paginate as="paginatedTasks" objects="{tasks}" configuration="{settings.pagination}">
+		<f:then>
+			<div class="panel panel-space panel-default recordlist">
+				<div class="panel-heading">
+					<f:translate key="tableHeader"/>
+				</div>
+				<div id="task-list">
 					<table data-table="tx_taskqueue" class="table table-striped table-hover">
 						<tr>
 							<th></th>
@@ -28,20 +54,22 @@
 								<f:translate key="tx_taskqueue_domain_model_task.name"/>
 							</th>
 							<th align="left">
-								<f:translate key="tx_taskqueue_domain_model_task.additionalInformation" />
+								<f:translate key="tx_taskqueue_domain_model_task.additionalInformation"/>
 							</th>
 							<th align="left">
 								<f:translate key="tx_taskqueue_domain_model_task.retries"/>
 							</th>
-							<th colspan="2"><f:translate key="tx_taskqueue_domain_model_task.actions" /></th>
+							<th colspan="2">
+								<f:translate key="tx_taskqueue_domain_model_task.actions"/>
+							</th>
 							<th align="left">
-								<f:translate key="tx_taskqueue_domain_model_task.last_run"/>
+								<f:translate key="tx_taskqueue_domain_model_task.start_date"/>
 							</th>
 							<th align="left">
 								<f:translate key="tx_taskqueue_domain_model_task.message"/>
 							</th>
 						</tr>
-						<f:for each="{paginatedTasks}" as="task">
+						<f:for each="{tasks}" as="task">
 							<tr>
 								<td>
 									<f:if condition="{task.status}==3">
@@ -83,19 +111,20 @@
 									</f:if>
 								</td>
 								<td>
-									<f:link.action class="btn btn-default" action="run" arguments="{task:task}" title="{f:translate(key:'actions.runTask')}">
+									<f:link.action class="btn btn-default" action="run" arguments="{task:task}"
+																 title="{f:translate(key:'actions.runTask')}">
 										<core:icon identifier="actions-move-right"/>
 									</f:link.action>
 								</td>
 								<td>
-									<f:link.action class="btn btn-default" action="delete" arguments="{task:task}" title="{f:translate(key:'actions.deleteTask')}">
+									<f:link.action class="btn btn-default" action="delete" arguments="{task:task}"
+																 title="{f:translate(key:'actions.deleteTask')}">
 										<core:icon identifier="actions-edit-delete"/>
 									</f:link.action>
 								</td>
 								<td>
-									<f:if condition="{task.lastRun}">
-										<f:debug>{task]</f:debug>
-										<f:format.date format="d.m.Y - H:i:s">{task.lastRun}</f:format.date>
+									<f:if condition="{task.startDate}">
+										<f:format.date format="d.m.Y - H:i:s">@{task.startDate}</f:format.date>
 									</f:if>
 								</td>
 								<td>
@@ -113,19 +142,21 @@
 							</tr>
 						</f:for>
 					</table>
-				</f:be.widget.paginate>
+				</div>
 			</div>
-		</div>
-		<f:link.action class="btn btn-default" action="deleteFinished" title="Delete finished tasks">
-			<core:icon identifier="actions-edit-delete"/>
-			<f:translate key="actions.deleteFinished" />
-			<f:image src="EXT:taskqueue/Resources/Public/Icons/green.png"/>
-		</f:link.action>
-		<f:link.action class="btn btn-default" action="deleteFailed" title="Delete failed tasks">
-			<core:icon identifier="actions-edit-delete"/>
-			<f:translate key="actions.deleteFailed" />
-			<f:image src="EXT:taskqueue/Resources/Public/Icons/red.png"/>
-		</f:link.action>
+		</f:then>
+		<f:else>
+			<div class="panel panel-space panel-default recordlist">
+				<div class="panel-heading">
+					<f:translate key="tableHeader" />
+				</div>
+				<table class="table table-striped table-hover">
+					<tr>
+						<td>No tasks found.</td>
+					</tr>
+				</table>
+			</div>
+		</f:else>
 	</f:if>
 
 </f:section>

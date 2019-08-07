@@ -79,10 +79,40 @@ class TaskController extends ActionController
      * action show
      *
      * @param Task $task
+     * @validate $task notEmpty
      */
     public function showAction(Task $task): void
     {
         $this->view->assign('task', $task);
+    }
+
+    public function searchAction(): void
+    {
+    }
+
+    /**
+     * @param int $uid
+     * @throws StopActionException
+     */
+    public function searchUidAction(?int $uid = null): void
+    {
+        $task = $this->taskRepository->findByUid($uid);
+        if (!$task) {
+            $this->addFlashMessage(sprintf('Task with uid %d could not be found.', $uid), 'Task not found', FlashMessage::WARNING);
+            $this->forwardToReferringRequest();
+        }
+        $this->forward('show', null, null, ['task' => $task]);
+    }
+
+    /**
+     * @param string $wordsInData
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     */
+    public function searchResultAction(string $wordsInData = ''): void
+    {
+        $tasks = $this->taskRepository->findByWordsInData($wordsInData);
+        $this->view->assign('tasks', $tasks);
+        $this->view->assign('searchWords', $wordsInData);
     }
 
     /**

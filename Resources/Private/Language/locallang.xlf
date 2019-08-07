@@ -55,6 +55,42 @@
 			<trans-unit id="headline">
 				<source>Listing for Task</source>
 			</trans-unit>
+			<trans-unit id="headline.searchByUid">
+				<source>Search task by uid</source>
+			</trans-unit>
+			<trans-unit id="headline.searchByString">
+				<source>Search task by string in data</source>
+			</trans-unit>
+			<trans-unit id="headline.searchResults">
+				<source>Search results</source>
+			</trans-unit>
+			<trans-unit id="callout.searchResults">
+				<source>Your search yielded %d results.</source>
+			</trans-unit>
+			<trans-unit id="callout.noSearchResults">
+				<source>No tasks found.</source>
+			</trans-unit>
+			<trans-unit id="callout.searchWords">
+				<source>You were searching for "%s".</source>
+			</trans-unit>
+			<trans-unit id="taskId">
+				<source>Uid of the task</source>
+			</trans-unit>
+			<trans-unit id="wordsInData">
+				<source>Search string</source>
+			</trans-unit>
+			<trans-unit id="submit">
+				<source>Submit search</source>
+			</trans-unit>
+			<trans-unit id="showActionShortcut">
+				<source>Use this if you have the uid of a task you want to show.</source>
+			</trans-unit>
+			<trans-unit id="searchForWordsInData">
+				<source>Use this field to search for a string in the data field of the task. Useful to find e.g. the uid of a connected object.</source>
+			</trans-unit>
+			<trans-unit id="searchActionLink">
+				<source>Search for tasks</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

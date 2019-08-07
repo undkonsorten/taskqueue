@@ -62,7 +62,9 @@ class TaskRepository extends Repository
     public function findRunableTasks($limit = 10, $whitelist = '', $blacklist = ''): QueryResultInterface
     {
         $query = $this->createQuery();
+        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
         $whitelist = GeneralUtility::trimExplode(',', $whitelist, true);
+        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
         $blacklist = GeneralUtility::trimExplode(',', $blacklist, true);
         $constraints = [
             $query->logicalOr([
@@ -144,4 +146,18 @@ class TaskRepository extends Repository
         return $query->execute();
 
     }
+
+    /**
+     * @param string $wordsInData
+     * @return QueryResultInterface
+     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     */
+    public function findByWordsInData(string $wordsInData): QueryResultInterface
+    {
+        $query = $this->createQuery();
+        return $query->matching($query->like('data', sprintf('%%%s%%', $wordsInData)))
+            ->execute();
+
+    }
+
 }

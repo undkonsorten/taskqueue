@@ -1,0 +1,47 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+			data-namespace-typo3-fluid="true">
+<f:layout name="Default"/>
+<f:section name="additionalDocheaderButtons">
+</f:section>
+
+<f:section name="content">
+	<h1><f:translate key="headline.searchByUid" /></h1>
+
+	<f:flashMessages/>
+
+	<f:form action="searchUid">
+		<div class="callout">
+			<f:translate key="showActionShortcut" />
+		</div>
+		<div class="row">
+			<div class="form-group col-xs-12 col-sm-6">
+				<label for="taskId">
+					<f:translate key="taskId" />
+				</label>
+				<f:form.textfield class="form-control" type="number" id="taskId" name="uid" />
+				<div class="form-control-wrap">
+					<button class="btn"><core:icon identifier="actions-search" /> <f:translate key="submit" /></button>
+				</div>
+			</div>
+		</div>
+	</f:form>
+	<h1><f:translate key="headline.searchByString" /></h1>
+	<f:form action="searchResult">
+		<div class="callout">
+			<f:translate key="searchForWordsInData" />
+		</div>
+		<div class="row">
+			<div class="form-group col-xs-12 col-sm-6">
+				<label for="wordsInData">
+					<f:translate key="wordsInData" />
+				</label>
+				<f:form.textfield  class="form-control" type="text" id="wordsInData" name="wordsInData" />
+				<div class="form-control-wrap">
+					<button class="btn"><core:icon identifier="actions-search" /> <f:translate key="submit" /></button>
+				</div>
+			</div>
+		</div>
+	</f:form>
+</f:section>
+</html>
