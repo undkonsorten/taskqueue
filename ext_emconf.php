@@ -1,7 +1,7 @@
 <?php
 
 $EM_CONF[$_EXTKEY] = [
-    'title' => 'task',
+    'title' => 'Taskqueue',
     'description' => 'Provides a task queue for other extensions to use.',
     'category' => 'module',
     'author' => 'Eike Starkmann',
