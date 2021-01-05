@@ -45,7 +45,8 @@ abstract class Task extends AbstractEntity implements TaskInterface
     /**
      * data
      *
-     * Don't store serialized objects here, use UIDs instead
+     * Key-value json is expected here
+     * Example: {'TaskClass': 1}
      *
      * @var string
      */
