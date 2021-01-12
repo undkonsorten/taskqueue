@@ -79,7 +79,6 @@ class TaskController extends ActionController
      * action show
      *
      * @param Task $task
-     * @validate $task notEmpty
      */
     public function showAction(Task $task): void
     {
