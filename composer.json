@@ -44,5 +44,10 @@
     "psr-4": {
       "Undkonsorten\\Taskqueue\\": "Classes/"
     }
-  }
+  },
+	"extra": {
+		"typo3/cms":{
+			"extension-key": "taskqueue"
+		}
+	}
 }
