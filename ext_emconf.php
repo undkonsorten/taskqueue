@@ -1,5 +1,6 @@
 <?php
 
+/** @noinspection PhpUndefinedVariableInspection */
 $EM_CONF[$_EXTKEY] = [
     'title' => 'Taskqueue',
     'description' => 'Provides a task queue for other extensions to use.',
@@ -11,7 +12,7 @@ $EM_CONF[$_EXTKEY] = [
     'uploadfolder' => '0',
     'createDirs' => '',
     'clearCacheOnLoad' => 0,
-    'version' => '7.0.0',
+    'version' => '7.0.1',
     'constraints' => [
         'depends' => [
             'typo3' => '9.5.0-10.99.99',
