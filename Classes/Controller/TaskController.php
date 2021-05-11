@@ -202,7 +202,7 @@ class TaskController extends ActionController
     public function runAction(Task $task): void
     {
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
-        /* @TODO this code duplicates in \Undkonsorten\Taskqueue\Controller\TaskQueueCommandController, maybe move to service class */
+        /* @TODO this code duplicates in \Undkonsorten\Taskqueue\Controller\RunTasksCommand, maybe move to service class */
         /** @var Task $task */
         $task = $this->taskRepository->findByIdentifier($task->getUid());
         try {

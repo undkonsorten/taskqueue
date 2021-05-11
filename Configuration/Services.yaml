@@ -1,0 +1,20 @@
+services:
+  _defaults:
+    autowire: true
+    autoconfigure: true
+    public: false
+
+  Undkonsorten\Taskqueue\:
+    resource: '../Classes/*'
+
+  Undkonsorten\Taskqueue\Command\RunTasksCommand:
+    tags:
+      - name: 'console.command'
+        command: 'taskqueue:run-tasks'
+        description: 'Runs the tasks stored in database'
+
+  Undkonsorten\Taskqueue\Command\DeleteTasksCommand:
+    tags:
+      - name: 'console.command'
+        command: 'taskqueue:delete-tasks'
+        description: 'Deletes tasks older than given date interval.'
