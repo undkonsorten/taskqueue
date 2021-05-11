@@ -79,14 +79,15 @@ class DeleteTasksCommand extends Command
         } else {
             foreach ($tasks as $task) {
                 $this->taskRepository->remove($task);
-                $output->writeln("<info>Task " . $task->getName() . " has been deleted.</info>", OutputInterface::VERBOSITY_VERBOSE);
+                $output->writeln("<info>Task " . $task->getName() . " has been deleted.</info>", OutputInterface::VERBOSITY_VERY_VERBOSE);
             }
             $output->writeln(
                 sprintf(
                     "<info>%d tasks found older than %s were deleted</info>",
                     $tasks->count(),
                     $input->getArgument('keepDateInterval')
-                )
+                ),
+                OutputInterface::VERBOSITY_VERBOSE
             );
         }
         $this->persistenceManager->persistAll();
