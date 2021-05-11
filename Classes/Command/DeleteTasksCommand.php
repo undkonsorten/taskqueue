@@ -76,12 +76,19 @@ class DeleteTasksCommand extends Command
         $tasks = $this->taskRepository->findOutOfInterval(new \DateInterval($input->getArgument('keepDateInterval')));
         if ($tasks->count() === 0) {
             $output->writeln("<info>No tasks found older than " . $input->getArgument('keepDateInterval') . "</info>");
+        } else {
+            foreach ($tasks as $task) {
+                $this->taskRepository->remove($task);
+                $output->writeln("<info>Task " . $task->getName() . " has been deleted.</info>", OutputInterface::VERBOSITY_VERBOSE);
+            }
+            $output->writeln(
+                sprintf(
+                    "<info>%d tasks found older than %s were deleted</info>",
+                    $tasks->count(),
+                    $input->getArgument('keepDateInterval')
+                )
+            );
         }
-        foreach ($tasks as $task) {
-            $this->taskRepository->remove($task);
-            $output->writeln("<info>Task " . $task->getName() . " has been deleted.</info>");
-        }
-        /** @noinspection DisconnectedForeachInstructionInspection */
         $this->persistenceManager->persistAll();
         return 0;
     }
