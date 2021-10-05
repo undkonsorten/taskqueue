@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Undkonsorten\Taskqueue\Controller;
 
+use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Extbase\Http\ForwardResponse;
 /***************************************************************
  *
  *  Copyright notice
@@ -69,10 +71,11 @@ class TaskController extends ActionController
     /**
      * action list
      */
-    public function listAction(): void
+    public function listAction(): ResponseInterface
     {
         $tasks = $this->taskRepository->findAll();
         $this->view->assign('tasks', $tasks);
+        return $this->htmlResponse();
     }
 
     /**
@@ -80,38 +83,42 @@ class TaskController extends ActionController
      *
      * @param Task $task
      */
-    public function showAction(Task $task): void
+    public function showAction(Task $task): ResponseInterface
     {
         $this->view->assign('task', $task);
+        return $this->htmlResponse();
     }
 
-    public function searchAction(): void
+    public function searchAction(): ResponseInterface
     {
+        return $this->htmlResponse();
     }
 
     /**
      * @param int $uid
      * @throws StopActionException
      */
-    public function searchUidAction(?int $uid = null): void
+    public function searchUidAction(?int $uid = null): ResponseInterface
     {
         $task = $this->taskRepository->findByUid($uid);
         if (!$task) {
             $this->addFlashMessage(sprintf('Task with uid %d could not be found.', $uid), 'Task not found', FlashMessage::WARNING);
             $this->forwardToReferringRequest();
         }
-        $this->forward('show', null, null, ['task' => $task]);
+        return (new ForwardResponse('show'))->withArguments(['task' => $task]);
+        return $this->htmlResponse();
     }
 
     /**
      * @param string $wordsInData
      * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
      */
-    public function searchResultAction(string $wordsInData = ''): void
+    public function searchResultAction(string $wordsInData = ''): ResponseInterface
     {
         $tasks = $this->taskRepository->findByWordsInData($wordsInData);
         $this->view->assign('tasks', $tasks);
         $this->view->assign('searchWords', $wordsInData);
+        return $this->htmlResponse();
     }
 
     /**
