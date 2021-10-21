@@ -20,99 +20,98 @@
 				<f:translate key="tableHeader" />
 			</div>
 			<div id="task-list">
-				<f:be.widget.paginate as="paginatedTasks" objects="{tasks}" configuration="{settings.pagination}">
-					<table data-table="tx_taskqueue" class="table table-striped table-hover">
+				<table data-table="tx_taskqueue" class="table table-striped table-hover">
+					<tr>
+						<th></th>
+						<th align="left">
+							<f:translate key="tx_taskqueue_domain_model_task.name"/>
+						</th>
+						<th align="left">
+							<f:translate key="tx_taskqueue_domain_model_task.additionalInformation" />
+						</th>
+						<th align="left">
+							<f:translate key="tx_taskqueue_domain_model_task.retries"/>
+						</th>
+						<th colspan="2"><f:translate key="tx_taskqueue_domain_model_task.actions" /></th>
+						<th align="left">
+							<f:translate key="tx_taskqueue_domain_model_task.last_run"/>
+						</th>
+						<th align="left">
+							<f:translate key="tx_taskqueue_domain_model_task.message"/>
+						</th>
+					</tr>
+					<f:for each="{tasks}" as="task">
 						<tr>
-							<th></th>
-							<th align="left">
-								<f:translate key="tx_taskqueue_domain_model_task.name"/>
-							</th>
-							<th align="left">
-								<f:translate key="tx_taskqueue_domain_model_task.additionalInformation" />
-							</th>
-							<th align="left">
-								<f:translate key="tx_taskqueue_domain_model_task.retries"/>
-							</th>
-							<th colspan="2"><f:translate key="tx_taskqueue_domain_model_task.actions" /></th>
-							<th align="left">
-								<f:translate key="tx_taskqueue_domain_model_task.last_run"/>
-							</th>
-							<th align="left">
-								<f:translate key="tx_taskqueue_domain_model_task.message"/>
-							</th>
-						</tr>
-						<f:for each="{paginatedTasks}" as="task">
-							<tr>
-								<td>
-									<f:if condition="{task.status}==3">
-										<f:image src="EXT:taskqueue/Resources/Public/Icons/red.png" title="{task.uid}: FAILED"/>
-									</f:if>
-									<f:if condition="{task.status}==2">
-										<f:image src="EXT:taskqueue/Resources/Public/Icons/green.png"
-														 title="{task.uid}: FINISHED"/>
-									</f:if>
-									<f:if condition="{task.status}==0">
-										<f:image src="EXT:taskqueue/Resources/Public/Icons/blue.png"
-														 title="{task.uid}: WAITING"/>
-									</f:if>
-									<f:if condition="{task.status}==1">
-										<f:image src="EXT:taskqueue/Resources/Public/Icons/blue.png"
-														 title="{task.uid}: RUNNING"/>
-									</f:if>
-									<f:if condition="{task.status}==4">
-										<f:image src="EXT:taskqueue/Resources/Public/Icons/yellow.png"
-														 title="{task.uid}: RETRY"/>
-									</f:if>
-								</td>
-								<td>
-									<f:link.action action="show" title="[{task.uid}] {task.name}" arguments="{task : task}">
-										{task.shortName -> f:or(alternative:task.name)}
-									</f:link.action>
-								</td>
-								<td>
-									{task.additionalInformation}
-								</td>
-								<td>
-									<f:if condition="{task.status} !== 2">
-										<f:if condition="{task.retries}">
-											<f:then>{task.retries}
-											</f:then>
-											<f:else><span style="opacity: 0.3">0</span>
-											</f:else>
-										</f:if>
-									</f:if>
-								</td>
-								<td>
-									<f:link.action class="btn btn-default" action="run" arguments="{task:task}" title="{f:translate(key:'actions.runTask')}">
-										<core:icon identifier="actions-move-right"/>
-									</f:link.action>
-								</td>
-								<td>
-									<f:link.action class="btn btn-default" action="delete" arguments="{task:task}" title="{f:translate(key:'actions.deleteTask')}">
-										<core:icon identifier="actions-edit-delete"/>
-									</f:link.action>
-								</td>
-								<td>
-									<f:if condition="{task.lastRun}">
-										<f:format.date format="d.m.Y - H:i:s">{task.lastRun}</f:format.date>
-									</f:if>
-								</td>
-								<td>
-									<f:if condition="{task.status} == 2">
-										<f:then>
-											<span style="opacity:0.3">
-												{task.message}
-											</span>
+							<td>
+								<f:if condition="{task.status}==3">
+									<f:image src="EXT:taskqueue/Resources/Public/Icons/red.png" title="{task.uid}: FAILED"/>
+								</f:if>
+								<f:if condition="{task.status}==2">
+									<f:image src="EXT:taskqueue/Resources/Public/Icons/green.png"
+													 title="{task.uid}: FINISHED"/>
+								</f:if>
+								<f:if condition="{task.status}==0">
+									<f:image src="EXT:taskqueue/Resources/Public/Icons/blue.png"
+													 title="{task.uid}: WAITING"/>
+								</f:if>
+								<f:if condition="{task.status}==1">
+									<f:image src="EXT:taskqueue/Resources/Public/Icons/blue.png"
+													 title="{task.uid}: RUNNING"/>
+								</f:if>
+								<f:if condition="{task.status}==4">
+									<f:image src="EXT:taskqueue/Resources/Public/Icons/yellow.png"
+													 title="{task.uid}: RETRY"/>
+								</f:if>
+							</td>
+							<td>
+								<f:link.action action="show" title="[{task.uid}] {task.name}" arguments="{task : task}">
+									{task.shortName -> f:or(alternative:task.name)}
+								</f:link.action>
+							</td>
+							<td>
+								{task.additionalInformation}
+							</td>
+							<td>
+								<f:if condition="{task.status} !== 2">
+									<f:if condition="{task.retries}">
+										<f:then>{task.retries}
 										</f:then>
-										<f:else>
-											{task.message}
+										<f:else><span style="opacity: 0.3">0</span>
 										</f:else>
 									</f:if>
-								</td>
-							</tr>
-						</f:for>
-					</table>
-				</f:be.widget.paginate>
+								</f:if>
+							</td>
+							<td>
+								<f:link.action class="btn btn-default" action="run" arguments="{task:task}" title="{f:translate(key:'actions.runTask')}">
+									<core:icon identifier="actions-move-right"/>
+								</f:link.action>
+							</td>
+							<td>
+								<f:link.action class="btn btn-default" action="delete" arguments="{task:task}" title="{f:translate(key:'actions.deleteTask')}">
+									<core:icon identifier="actions-edit-delete"/>
+								</f:link.action>
+							</td>
+							<td>
+								<f:if condition="{task.lastRun}">
+									<f:format.date format="d.m.Y - H:i:s">{task.lastRun}</f:format.date>
+								</f:if>
+							</td>
+							<td>
+								<f:if condition="{task.status} == 2">
+									<f:then>
+										<span style="opacity:0.3">
+											{task.message}
+										</span>
+									</f:then>
+									<f:else>
+										{task.message}
+									</f:else>
+								</f:if>
+							</td>
+						</tr>
+					</f:for>
+				</table>
+				<f:render partial="Pagination" arguments="{pagination:pagination, action:'list'}" />
 			</div>
 		</div>
 		<f:link.action class="btn btn-default" action="deleteFinished" title="Delete finished tasks">

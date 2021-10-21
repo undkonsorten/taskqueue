@@ -3,6 +3,8 @@ declare(strict_types=1);
 namespace Undkonsorten\Taskqueue\Controller;
 
 use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Core\Pagination\SimplePagination;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
 /***************************************************************
  *
@@ -34,10 +36,12 @@ use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException;
+use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
 use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+use Undkonsorten\Taskqueue\Domain\Model\Demand;
 use Undkonsorten\Taskqueue\Domain\Model\Task;
 use Undkonsorten\Taskqueue\Domain\Repository\TaskRepository;
 
@@ -71,10 +75,15 @@ class TaskController extends ActionController
     /**
      * action list
      */
-    public function listAction(): ResponseInterface
+    public function listAction(int $currentPage = 1): ResponseInterface
     {
         $tasks = $this->taskRepository->findAll();
-        $this->view->assign('tasks', $tasks);
+        $currentPage = $this->request->hasArgument('currentPage') ? $this->request->getArgument('currentPage') : $currentPage;
+        $paginator = new QueryResultPaginator($tasks, $currentPage, (integer)$this->settings['pagination']['itemsPerPage']);
+        $simplePagination = new SimplePagination($paginator);
+        $pagination = $this->buildSimplePagination($simplePagination, $paginator);
+        $this->view->assign('tasks', $paginator->getPaginatedItems());
+        $this->view->assign('pagination', $pagination);
         return $this->htmlResponse();
     }
 
@@ -237,4 +246,29 @@ class TaskController extends ActionController
         $this->taskRepository->update($task);
         $this->redirect('list');
     }
+
+    /**
+     * build simple pagination
+     *
+     * @param SimplePagination $simplePagination
+     * @param QueryResultPaginator $paginator
+     * @return array
+     */
+    protected function buildSimplePagination(SimplePagination $simplePagination, QueryResultPaginator $paginator)
+    {
+        $firstPage = $simplePagination->getFirstPageNumber();
+        $lastPage = $simplePagination->getLastPageNumber();
+        return [
+            'lastPageNumber' => $lastPage,
+            'firstPageNumber' => $firstPage,
+            'nextPageNumber' => $simplePagination->getNextPageNumber(),
+            'previousPageNumber' => $simplePagination->getPreviousPageNumber(),
+            'startRecordNumber' => $simplePagination->getStartRecordNumber(),
+            'endRecordNumber' => $simplePagination->getEndRecordNumber(),
+            'currentPageNumber' => $paginator->getCurrentPageNumber(),
+            'pages' => range($firstPage, $lastPage)
+        ];
+    }
+
+
 }
