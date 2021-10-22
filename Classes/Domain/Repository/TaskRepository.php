@@ -86,7 +86,7 @@ class TaskRepository extends Repository
             $query->logicalAnd($constraints)
         );
 
-        $query->setLimit($limit);
+        $query->setLimit((integer)$limit);
 
         $orderings = [
             'priority' => QueryInterface::ORDER_DESCENDING,
