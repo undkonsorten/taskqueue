@@ -79,7 +79,7 @@ class TaskController extends ActionController
     {
         $tasks = $this->taskRepository->findAll();
         $currentPage = $this->request->hasArgument('currentPage') ? $this->request->getArgument('currentPage') : $currentPage;
-        $paginator = new QueryResultPaginator($tasks, $currentPage, (integer)$this->settings['pagination']['itemsPerPage']);
+        $paginator = new QueryResultPaginator($tasks, (integer)$currentPage, (integer)$this->settings['pagination']['itemsPerPage']);
         $simplePagination = new SimplePagination($paginator);
         $pagination = $this->buildSimplePagination($simplePagination, $paginator);
         $this->view->assign('tasks', $paginator->getPaginatedItems());
