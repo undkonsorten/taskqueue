@@ -2,8 +2,6 @@
 			xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
 			data-namespace-typo3-fluid="true">
 <f:layout name="Default"/>
-<f:section name="additionalDocheaderButtons">
-</f:section>
 
 <f:section name="content">
 	<h1><f:translate key="headline.searchByUid" /></h1>
@@ -21,7 +19,7 @@
 				</label>
 				<f:form.textfield class="form-control" type="number" id="taskId" name="uid" />
 				<div class="form-control-wrap">
-					<button class="btn"><core:icon identifier="actions-search" /> <f:translate key="submit" /></button>
+					<button class="btn btn-primary"><core:icon identifier="actions-search" /> <f:translate key="submit" /></button>
 				</div>
 			</div>
 		</div>
@@ -38,7 +36,7 @@
 				</label>
 				<f:form.textfield  class="form-control" type="text" id="wordsInData" name="wordsInData" />
 				<div class="form-control-wrap">
-					<button class="btn"><core:icon identifier="actions-search" /> <f:translate key="submit" /></button>
+					<button class="btn btn-primary"><core:icon identifier="actions-search" /> <f:translate key="submit" /></button>
 				</div>
 			</div>
 		</div>

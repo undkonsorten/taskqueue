@@ -103,6 +103,12 @@
 			<trans-unit id="pagination.last">
 				<source>Last</source>
 			</trans-unit>
+			<trans-unit id="module.list">
+				<source>List</source>
+			</trans-unit>
+			<trans-unit id="module.search">
+				<source>Search</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
