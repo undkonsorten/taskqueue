@@ -124,6 +124,9 @@
 			<trans-unit id="module.filter">
 				<source>Filter</source>
 			</trans-unit>
+			<trans-unit id="module.filter.label">
+				<source>Choose a status</source>
+			</trans-unit>
 			<trans-unit id="button.deleteFailed">
 				<source>Delete failed</source>
 			</trans-unit>

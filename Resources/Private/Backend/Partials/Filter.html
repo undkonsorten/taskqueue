@@ -4,21 +4,27 @@
 <div class="search-form">
 	<f:form object="{demand}" controller="Task" action="list" name="demand">
 		<fieldset>
-			<div class="filter clearfix">
-				<f:if condition="{status}">
-					<div class="form-field-wrap">
+			<div class="row row-cols-auto align-items-end g-3 mb-4">
+				<div class="col">
+
 						<label for="status">
 							<f:translate key="tx_taskqueue_domain_model_task.status"/>
 						</label>
-						<f:form.select class="form-select" prependOptionLabel=""
-													 prependOptionValue="" id="status" name="status" property="status" options="{status}"
-													 optionValueField="uid" optionLabelField="title"/>
+					<div class="input-group">
+						<f:form.select prependOptionLabel="{f:translate(key: 'module.filter.label')}"
+													 prependOptionValue=""
+													 id="status"
+													 name="status"
+													 class="form-select"
+													 property="status"
+													 options="{status}"
+													 optionValueField="uid"
+													 optionLabelField="title"/>
+						<f:form.button class="btn btn-default">
+							<f:translate key='module.filter'></f:translate>
+						</f:form.button>
+
 					</div>
-				</f:if>
-				<div class="form-field-wrap">
-					<f:form.button class="btn btn-primary">
-						<f:translate key='module.filter'></f:translate>
-					</f:form.button>
 				</div>
 			</div>
 		</fieldset>
