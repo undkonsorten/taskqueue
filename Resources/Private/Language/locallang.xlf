@@ -16,6 +16,18 @@
 			<trans-unit id="tx_taskqueue_domain_model_task.status">
 				<source>Status</source>
 			</trans-unit>
+			<trans-unit id="tx_taskqueue_domain_model_task.status.waiting">
+				<source>Waiting</source>
+			</trans-unit>
+			<trans-unit id="tx_taskqueue_domain_model_task.status.failed">
+				<source>Failed</source>
+			</trans-unit>
+			<trans-unit id="tx_taskqueue_domain_model_task.status.finished">
+				<source>Finished</source>
+			</trans-unit>
+			<trans-unit id="tx_taskqueue_domain_model_task.status.running">
+				<source>Running</source>
+			</trans-unit>
 			<trans-unit id="tx_taskqueue_domain_model_task.record">
 				<source>Record</source>
 			</trans-unit>
@@ -108,6 +120,15 @@
 			</trans-unit>
 			<trans-unit id="module.search">
 				<source>Search</source>
+			</trans-unit>
+			<trans-unit id="module.filter">
+				<source>Filter</source>
+			</trans-unit>
+			<trans-unit id="button.deleteFailed">
+				<source>Delete failed</source>
+			</trans-unit>
+			<trans-unit id="button.deleteFinished">
+				<source>Delete finished</source>
 			</trans-unit>
 		</body>
 	</file>

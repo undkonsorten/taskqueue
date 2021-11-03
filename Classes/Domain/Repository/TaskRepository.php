@@ -7,6 +7,7 @@ use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
+use Undkonsorten\Taskqueue\Domain\Model\Demand;
 use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
 
 /***************************************************************
@@ -158,6 +159,21 @@ class TaskRepository extends Repository
         return $query->matching($query->like('data', sprintf('%%%s%%', $wordsInData)))
             ->execute();
 
+    }
+
+    public function findByDemand(Demand $demand)
+    {
+        $query = $this->createQuery();
+        $constraints = [];
+        if(!is_null($demand->getStatus())){
+            $constraints[] = $query->equals('status', $demand->getStatus());
+        }
+        if (!empty($constraints)) {
+            $query->matching(
+                $query->logicalAnd($constraints)
+            );
+        }
+        return $query->execute();
     }
 
 }

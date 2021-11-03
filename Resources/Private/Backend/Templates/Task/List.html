@@ -5,17 +5,8 @@
 <f:section name="content">
 	<h1><f:translate key="headline" /></h1>
 	<f:flashMessages/>
+	<f:render partial="Filter" arguments="{demand:demand,status:status}"/>
 	<f:if condition="{tasks}">
-		<f:link.action class="btn btn-default" action="deleteFinished" title="Delete finished tasks">
-			<core:icon identifier="actions-edit-delete"/>
-			<f:translate key="actions.deleteFinished" />
-			<f:image src="EXT:taskqueue/Resources/Public/Icons/green.png"/>
-		</f:link.action>
-		<f:link.action class="btn btn-default" action="deleteFailed" title="Delete failed tasks">
-			<core:icon identifier="actions-edit-delete"/>
-			<f:translate key="actions.deleteFailed" />
-			<f:image src="EXT:taskqueue/Resources/Public/Icons/red.png"/>
-		</f:link.action>
 			<div class="recordlist mb-5 mt-4 border">
 				<div class="recordlist-heading row m-0 p-2 g-0 gap-1 align-items-center ">
 					<f:translate key="tableHeader" />
@@ -113,20 +104,10 @@
 							</tr>
 						</f:for>
 					</table>
-					<f:render partial="SimplePagination" arguments="{paginator:paginator,pagination:pagination,action:'list'}" />
+					<f:render partial="SimplePagination" arguments="{paginator:paginator,pagination:pagination,action:'list',demand:demand}" />
 				</div>
 			</div>
 		</div>
-		<f:link.action class="btn btn-default" action="deleteFinished" title="Delete finished tasks">
-			<core:icon identifier="actions-edit-delete"/>
-			<f:translate key="actions.deleteFinished" />
-			<f:image src="EXT:taskqueue/Resources/Public/Icons/green.png"/>
-		</f:link.action>
-		<f:link.action class="btn btn-default" action="deleteFailed" title="Delete failed tasks">
-			<core:icon identifier="actions-edit-delete"/>
-			<f:translate key="actions.deleteFailed" />
-			<f:image src="EXT:taskqueue/Resources/Public/Icons/red.png"/>
-		</f:link.action>
 	</f:if>
 
 </f:section>
