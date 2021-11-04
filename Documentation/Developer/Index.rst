@@ -1,116 +1,116 @@
-.. ==================================================
-.. FOR YOUR INFORMATION
-.. --------------------------------------------------
-.. -*- coding: utf-8 -*- with BOM.
+.. include:: /Includes.rst.txt
+.. highlight:: php
 
-.. include:: ../Includes.txt
+.. _developer:
 
-
-.. _dev-manual:
-
-Developer Manual
+================
+Developer corner
 ================
 
-This chapter explains how a developer can use this extension.
+Use this section to provide examples of code or detail any information that would be deemed relevant to a developer.
 
-Extending a task
-----------------
 
-Fist of all create an extension that extends the task model. Lets call our new model **MailTask**.
 
-MailTask:
+Extending a tsak
+----------
 
-::
+First create an extension that extends the task model. Lets call our new model **MailTask**.
+
+.. php:namespace:: Undkonsorten\Taskqueue\Domain
+
+
+.. php:class:: Task
+
+   Has to be extended.
+
+
+
+Examples
+--------
+
+MailTask::
 
    class MailTask extends \Undkonsorten\Taskqueue\Domain\Model\Task{
    ...
    }
 
+Configure the subclass.
 
-ext_typoscript_setup.txt:
+Classes::
 
-::
-
-   config.tx_extbase {
-    persistence {
-        classes {
-         Undkonsorten\Wall\Domain\Model\MailTask {
-            mapping {
-               tableName = tx_taskqueue_domain_model_task
-               recordType = tx_wall_domain_model_task
-            }
-         }
-         Undkonsorten\Taskqueue\Domain\Model\Task {
-            subclasses {
-                  tx_wall_domain_model_task = Undkonsorten\Wall\Domain\Model\MailTask
-               }
-         }      
-      }
-   }
+   \Undkonsorten\Wall\Domain\Model\Task\MailTask::class => [
+           'tableName' => 'tx_taskqueue_domain_model_task',
+           'recordType' => 'tx_wall_domain_model_task'
+       ],
+       \Undkonsorten\Taskqueue\Domain\Model\Task::class => [
+           'subclasses' => [
+               'tx_wall_domain_model_task' => \Undkonsorten\Wall\Domain\Model\MailTask::class
+           ]
+       ],
 
 You can also add your own setter and getter here. But to make the date accessible for the taskqueue extension all data needs to be stored in the
 data array via the set/getProperty.
 
 We add an user, a post, a comment and a mail to the task:
 
-::
+MailTask::
 
-   /**
-    * 
+ /**
+    *
     * @param integer $user
     */
    public function setUser($user) {
       $this->setProperty('user', $user);
    }
-   
+
    /**
-    * 
+    *
     * @return integer
     */
    public function getUser() {
       return $this->getProperty('user');
    }
-   
+
    /**
-    * 
+    *
     * @return integer
     */
    public function getPost() {
       return $this->getProperty('post');
    }
    /**
-    * 
+    *
     * @param integer $post
     */
    public function setPost($post) {
       $this->setProperty('post', $post);
    }
    /**
-    * 
+    *
     * @return integer
     */
    public function getComment() {
       return $this->getProperty('comment');
    }
-   
+
    /**
-    * 
+    *
     * @param integer $comment
     */
    public function setComment($comment) {
       $this->setProperty('comment', $comment);
    }
-   
+
    /**
-    * 
+    *
     * @param array $mail
     */
    public function setMail($mail) {
       $this->setProperty('mail', $mail);
    }
-   
+
    /**
-    * 
+    *
     * @return array
     */
    public function getMail() {
@@ -126,78 +126,70 @@ Implementing run()
 Every task has its own run method(). In this method you have to define the actual work that needs to be done. The taskqueue extension does not
 know anything about what the task is doing, it just calls the run() method on every task.
 
-This might be an example:
-
-::
+MailTask::
 
    public function run(){
-      $this->setStatus(\Undkonsorten\Taskqueue\Domain\Model\TaskInterface::RUNNING);
-      
-      $mailVariables = array();
-      $mailVariables['user'] = $this->userRepository->findByUid($this->getUser());
-      $mailVariables['post'] = $this->postRepository->findByUid($this->getPost());
-      $mailVariables['comment'] = $this->commentRepository->findByUid($this->getComment());
-      
-      //Update the mail
-      $mail = $this->getMail();
-      if($mailVariables['user']->getFirstName() && $mailVariables['user']->getLastName()){
-            $mail['receiverName'] = $mailVariables['user']->getFirstName()." ".$mailVariables['user']->getLastName();
-         }else{
-            $mail['receiverName'] = $mailVariables['user']->getUsername();
-         }
-         
-      $mail['receiverEmail'] = $mailVariables['user']->getEmail();
-      $this->setMail($mail);
-      try {
-         $this->mailManager->sendTemplateEmail($this->getMail(), $mailVariables);
-         $this->setMessage(LocalizationUtility::translate(
-               'tx_wall_task.notification.send',
-               'wall', 
-               array('1' =>$mailVariables['user']->getUsername())
-         ));
-         $this->setStatus(\Undkonsorten\Taskqueue\Domain\Model\TaskInterface::FINISHED);
-      } catch (\Exception $exception) {
-         $this->setMessage($exception->getMessage());
-         $this->setStatus(\Undkonsorten\Taskqueue\Domain\Model\TaskInterface::FAILED);
-      }
+		$mailVariables = array();
+		$mailVariables['user'] = $this->userRepository->findByUid($this->getUser());
+		if(!$mailVariables['user']){
+			throw new Exception('Something') //The task will be marked as failed automatically
+		}
+		$mailVariables['post'] = $this->postRepository->findByUid($this->getPost());
+		$mailVariables['comment'] = $this->commentRepository->findByUid($this->getComment());
+		$mailVariables['link'] = $this->getLink();
+		$mailVariables['editLink'] = $this->getEditLink();
+
+		//Update the mail
+		$mail = $this->getMail();
+		if($mailVariables['user']->getFirstName() && $mailVariables['user']->getLastName()){
+				$mail['receiverName'] = $mailVariables['user']->getFirstName()." ".$mailVariables['user']->getLastName();
+			}else{
+				$mail['receiverName'] = $mailVariables['user']->getUsername();
+			}
+
+		$mail['receiverEmail'] = $mailVariables['user']->getEmail();
+		$this->setMail($mail);
+
+		$this->mailManager->sendTemplateEmail($this->getMail(), $mailVariables);
+		$this->setMessage(LocalizationUtility::translate(
+            'tx_wall_task.notification.send',
+            'wall',
+            array('1' =>$mailVariables['user']->getUsername())
+        ));
    }
 
-Here the run method makes use of the data stored in the task. With this data a mail is generated and then send. 
-
-Also the status of the task is controlled here. As you can see.
+Here the run method makes use of the data stored in the task. With this data a mail is generated and then send.
 
 Adding a task to the taskqueue
 ------------------------------
 
 After you have a ready implemented task you need to add it to the queue so that it can be executed.
 
-::
+MailController::
 
    /**
     * task repository
     * @var \Undkonsorten\Taskqueue\Domain\Repository\TaskRepository
-    * 
-    * @inject
+    *
     */
    protected $taskRepository;
-   
+
    ...
-   
+
    /*@var $task Undkonsorten\Wall\Domain\Model\MailTask */
    $task = $this->objectManager->get('Undkonsorten\Wall\Domain\Model\MailTask');
-   
+
    $task->setPost($newPost->getUid());
    $task->setCommend($newComment->getUid());
    $task->setMail($mail);
    $task->setUser($user->getUid());
    $task->setStartDate(time());
    $this->taskRepository->add($task);
-   
-   ...
-   
-   
+   ....
+
+
 - First you need to inject the task repository.
-- The you get an task object via the object manager (keep in mind to get you own task object, the one from taskqueue is abstract)
+- Then you get an task object via the object manager (keep in mind to get you own task object, the one from taskqueue is abstract)
 - Then you set the needed data.
 
 What is important here is, that it would be good to store only uids in the task object, because these data get serialized and stored in the database.
@@ -206,20 +198,19 @@ When you store complete objects the performance will go down.
 Keep in mind that when you create new objects, for example a post, these objects don't have an uid until they get stored in the database.
 To it might me useful to run a peristAll before add an uid to the task.
 
-::
-   
+MailTask::
+
    ...
    // we need to persist the new object because otherwise it would not have an uid
    // and we want only uids to be saved in task
    $this->persitenceManager->persistAll();
    $task->setPost($newPost->getUid());
    ...
-   
-   
+
 Concrete Example
 ----------------
 
-All the code examples are taken from the extension **wall**. This extension allows feusers to write posts and comment on a wall, a little bit 
+All the code examples are taken from the extension **wall**. This extension allows feusers to write posts and comment on a wall, a little bit
 like facebook. It uses **taskqueue** to notify users on new posts and comments.
 The extension is available here: http://typo3.org/extensions/repository/view/wall
 

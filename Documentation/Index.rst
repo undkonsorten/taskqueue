@@ -1,60 +1,71 @@
-.. ==================================================
-.. FOR YOUR INFORMATION
-.. --------------------------------------------------
-.. -*- coding: utf-8 -*- with BOM.
+.. every .rst file should include Includes.txt
+.. use correct path!
 
-.. include:: Includes.txt
+.. include:: /Includes.rst.txt
 
+.. Every manual should have a start label for cross-referencing to
+.. start page. Do not remove this!
 
 .. _start:
 
-==========
-Task Queue
-==========
+=============================================================
+Taskqueue
+=============================================================
 
-.. only:: html
+:Version:
+   |release|
 
-	:Classification:
-		taskqueue
+:Language:
+   en
 
-	:Version:
-		|release|
+:Authors:
+   Eike Starkmann, Felix Althaus
 
-	:Language:
-		en
+:Email:
+   starkmann@undkonsorten.com, althaus@undkonsorten.com
 
-	:Description:
-		This extension provides a taskqueue for asynchronous tasks. For example sending email or render pdfs
+:License:
+   This extension documentation is published under the
+   `CC BY-NC-SA 4.0 <https://creativecommons.org/licenses/by-nc-sa/4.0/>`__ (Creative Commons)
+   license
 
-	:Keywords:
-		task, taskqueue
+This extension provides a taskqueue for asynchronous tasks. For example sending email or render pdfs
 
-	:Copyright:
-		2014
+**TYPO3**
 
-	:Author:
-		Eike Starkmann
+The content of this document is related to TYPO3 CMS,
+a GNU/GPL CMS/Framework available from `typo3.org <https://typo3.org/>`_ .
 
-	:Email:
-		starkmann@undkonsorten.com
+**Community Documentation**
 
-	:License:
-		This document is published under the Open Content License
-		available from http://www.opencontent.org/opl.shtml
+This documentation is community documentation for the TYPO3 extension {extension.name}
 
-	:Rendered:
-		|today|
+It is maintained as part of this third party extension.
 
-	The content of this document is related to TYPO3,
-	a GNU/GPL CMS/Framework available from `www.typo3.org <http://www.typo3.org/>`_.
+**Extension Manual**
 
-	**Table of Contents**
+This documentation is for the TYPO3 extension <extkey>.
+
+..   Note for editors:
+..   temporarily removed from menu:
+..   Introduction/Index
 
 .. toctree::
-   :maxdepth: 5
-   :titlesonly:
-   :glob:
+   :maxdepth: 1
 
    Introduction/Index
-   AdministratorManual/Index
-   DeveloperManual/Index
+
+.. toctree::
+   :maxdepth: 3
+
+   Editor/Index
+   Installation/Index
+   Configuration/Index
+   Developer/Index
+
+
+.. toctree::
+   :maxdepth: 1
+
+   Sitemap
+   genindex
