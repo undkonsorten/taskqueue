@@ -28,6 +28,9 @@
 			<trans-unit id="tx_taskqueue_domain_model_task.status.running">
 				<source>Running</source>
 			</trans-unit>
+			<trans-unit id="tx_taskqueue_domain_model_task.status.retry">
+				<source>Retry</source>
+			</trans-unit>
 			<trans-unit id="tx_taskqueue_domain_model_task.record">
 				<source>Record</source>
 			</trans-unit>
