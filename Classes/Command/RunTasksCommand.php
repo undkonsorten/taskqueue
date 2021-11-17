@@ -9,6 +9,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 use Undkonsorten\Taskqueue\Domain\Model\Task;
 use Undkonsorten\Taskqueue\Domain\Repository\TaskRepository;
+use Undkonsorten\Taskqueue\Exception\StopRunException;
 
 /***************************************************************
  *
@@ -49,6 +50,11 @@ class RunTasksCommand extends Command
      */
     protected $persistenceManager;
 
+    /**
+     * @var string
+     */
+    protected $skipTaskname = "";
+
     public function injectTaskRepository(TaskRepository $taskRepository): void
     {
         $this->taskRepository = $taskRepository;
@@ -83,25 +89,37 @@ class RunTasksCommand extends Command
             $input->getArgument('blacklist')
         );
         foreach ($tasks as $task) {
-            try {
-                /**@var Task $task **/
-                $task->setRetries($task->getRetries()-1);
-                $task->markRunning();
-                $this->taskRepository->update($task);
-                $this->persistenceManager->persistAll();
-                $task->run();
-                $task->markFinished();
-            } catch (\Exception $exception) {
-                $task->setMessage($exception->getMessage());
-                if ($task->getRetries() === 0) {
-                    $task->markFailed();
-                } else {
-                    $task->markRetry();
+            /**@var $task Task* */
+            if($task->getName() !== $this->skipTaskname) {
+                try {
+                    $task->setRetries($task->getRetries() - 1);
+                    $task->markRunning();
+                    $this->taskRepository->update($task);
+                    $this->persistenceManager->persistAll();
+                    $task->run();
+                    $task->markFinished();
                 }
-            }
+                catch
+                    (StopRunException $exception ){
+                        $task->setMessage($exception->getMessage());
+                        if ($task->getRetries() === 0) {
+                            $task->markFailed();
+                        } else {
+                            $task->markRetry();
+                        }
+                        $this->skipTaskname = $exception->getTaskname();
+                    } catch (\Exception $exception) {
+                        $task->setMessage($exception->getMessage());
+                        if ($task->getRetries() === 0) {
+                            $task->markFailed();
+                        } else {
+                            $task->markRetry();
+                        }
+                    }
             $this->taskRepository->update($task);
             /** @noinspection DisconnectedForeachInstructionInspection */
             $this->persistenceManager->persistAll();
+            }
         }
         $output->writeln(
             sprintf('<info>%d tasks have been processed', $tasks->count()),

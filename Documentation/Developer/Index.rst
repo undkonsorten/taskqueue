@@ -215,3 +215,68 @@ like facebook. It uses **taskqueue** to notify users on new posts and comments.
 The extension is available here: http://typo3.org/extensions/repository/view/wall
 
 It might help you to have a look at the code.
+
+
+Stop all task of certain name
+-----------------------------
+
+Sometimes it is necessary to skip all tasks if a specific error has happened. For example if you run 15 tasks in one run
+and they are working on an api, if the first task gets an timeout if might be usefull to skip the other tasks.
+
+To achieve this you need to throw a StopRunException, which ships with the extension.
+
+StopRunException:
+
+::
+
+   namespace Undkonsorten\Taskqueue\Exception;
+
+   class StopRunException extends Exception
+   {
+       /**
+        * @var string
+        */
+       protected $taskname;
+
+       public function __construct($message = "", $code = 0, Throwable $previous = null, string $taskname)
+       {
+           $this->taskname = $taskname;
+           parent::__construct($message, $code, $previous);
+       }
+
+       /**
+        * @return string
+        */
+       public function getTaskname(): string
+       {
+           return $this->taskname;
+       }
+
+       /**
+        * @param string $taskname
+        */
+       public function setTaskname(string $taskname): void
+       {
+           $this->taskname = $taskname;
+       }
+
+   }
+
+If you can use the task name to only skip certain tasks.
+
+Example:
+
+::
+
+   class MotionTask
+   {
+      public function run(): void
+      {
+      ...
+       try {
+            //Something bad happens here
+        }catch(ConnectException $exception){
+            throw new StopRunException("Consolidate API was not reachable.", "1637171378", $exception , MotionTask::class);
+        }
+      ...
+      }
