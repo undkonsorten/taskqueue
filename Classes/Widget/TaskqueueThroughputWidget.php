@@ -9,14 +9,14 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
 
 
-class TaskqueueFinishedWidget extends AbstractTaskqueueWidget
+class TaskqueueThroughputWidget extends AbstractTaskqueueWidget
 {
     /**
      * @var string
      */
-    protected $title = 'Finished tasks by entry date';
+    protected $title = 'Tasks throughput';
 
-    protected $datefield = 'crdate';
+    protected $datefield = 'tstamp';
 
     protected $status = TaskInterface::FINISHED;
 
