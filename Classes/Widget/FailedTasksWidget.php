@@ -9,15 +9,15 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
 
 
-class TaskqueueFinishedWidget extends AbstractTaskqueueWidget
+class FailedTasksWidget extends AbstractTaskqueueWidget
 {
     /**
      * @var string
      */
-    protected $title = 'Finished tasks by entry date';
+    protected $title = 'Failed by tasks by entry date';
 
     protected $datefield = 'crdate';
 
-    protected $status = TaskInterface::FINISHED;
+    protected $status = TaskInterface::FAILED;
 
 }

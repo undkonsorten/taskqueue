@@ -9,7 +9,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
 
 
-class TaskqueueWaitingWidget extends AbstractTaskqueueWidget
+class WaitingTasksWidget extends AbstractTaskqueueWidget
 {
     /**
      * @var string
