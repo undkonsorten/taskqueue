@@ -18,3 +18,8 @@ services:
       - name: 'console.command'
         command: 'taskqueue:delete-tasks'
         description: 'Deletes tasks older than given date interval.'
+  Undkonsorten\Taskqueue\Command\NotityOnFailureCommand:
+    tags:
+      - name: 'console.command'
+        command: 'taskqueue:notify-on-failure'
+        description: 'Sends notification if there are more than a certain amount of failed tasks.'
