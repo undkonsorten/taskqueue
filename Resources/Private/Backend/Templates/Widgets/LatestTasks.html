@@ -1,0 +1,88 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers"
+			xmlns:core="http://typo3.org/ns/TYPO3/CMS/Core/ViewHelpers"
+			data-namespace-typo3-fluid="true">
+<f:layout name="WidgetWithTitle" />
+
+<f:section name="main">
+	<f:if condition="{items}">
+					<table data-table="tx_taskqueue" class="widget-table">
+						<thead>
+						<tr>
+							<th></th>
+							<th align="left">
+								<f:translate key="tx_taskqueue_domain_model_task.name" extensionName="taskqueue">Name</f:translate>
+							</th>
+							<th align="left">
+								<f:translate key="tx_taskqueue_domain_model_task.message" extensionName="taskqueue">Message</f:translate>
+							</th>
+							<th align="left">
+								<f:translate key="tx_taskqueue_domain_model_task.retries" extensionName="taskqueue">Retries</f:translate>
+							</th>
+							<th align="left">
+								Created
+							</th>
+							<th align="left">
+								Last change
+							</th>
+						</tr>
+						</thead>
+						<f:for each="{items}" as="task">
+							<tr>
+								<td>
+									<f:if condition="{task.status}==3">
+										<f:image src="EXT:taskqueue/Resources/Public/Icons/red.png" title="{task.uid}: FAILED"/>
+									</f:if>
+									<f:if condition="{task.status}==2">
+										<f:image src="EXT:taskqueue/Resources/Public/Icons/green.png"
+														 title="{task.uid}: FINISHED"/>
+									</f:if>
+									<f:if condition="{task.status}==0">
+										<f:image src="EXT:taskqueue/Resources/Public/Icons/blue.png"
+														 title="{task.uid}: WAITING"/>
+									</f:if>
+									<f:if condition="{task.status}==1">
+										<f:image src="EXT:taskqueue/Resources/Public/Icons/blue.png"
+														 title="{task.uid}: RUNNING"/>
+									</f:if>
+									<f:if condition="{task.status}==4">
+										<f:image src="EXT:taskqueue/Resources/Public/Icons/yellow.png"
+														 title="{task.uid}: RETRY"/>
+									</f:if>
+								</td>
+								<td>
+										{task.shortName -> f:or(alternative:task.name)}
+								</td>
+								<td>
+									<f:if condition="{task.status} == 2">
+										<f:then>
+											<span style="opacity:0.3">
+												{task.message}
+											</span>
+										</f:then>
+										<f:else>
+											{task.message}
+										</f:else>
+									</f:if>
+								</td>
+								<td>
+									<f:if condition="{task.status} !== 2">
+										<f:if condition="{task.retries}">
+											<f:then>{task.retries}
+											</f:then>
+											<f:else><span style="opacity: 0.3">0</span>
+											</f:else>
+										</f:if>
+									</f:if>
+								</td>
+								<td>
+										<f:format.date format="d.m.Y - H:i:s">{task.crdate}</f:format.date>
+								</td>
+								<td>
+									<f:format.date format="d.m.Y - H:i:s">{task.tstamp}</f:format.date>
+								</td>
+							</tr>
+						</f:for>
+					</table>
+	</f:if>
+</f:section>
+</html>
