@@ -229,6 +229,7 @@ class TaskController extends ActionController
 
         $this->addFlashMessage('Task has been executed', '', AbstractMessage::INFO);
         $this->taskRepository->update($task);
+        $this->persitenceManager->persistAll();
         $this->redirect('list');
     }
 }
