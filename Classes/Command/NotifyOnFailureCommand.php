@@ -41,12 +41,27 @@ class NotifyOnFailureCommand extends Command
             'Email to send the notification to.'
         );
 
+        $this->addOption(
+            'interval',
+            'i',
+            InputOption::VALUE_OPTIONAL,
+            'Date interval that should be respected.'
+        );
+
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $io = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
+        if(!is_null($input->getOption('interval'))){
+            $minAge = $input->getOption('interval');
+            $expiryDate = (new \DateTimeImmutable())->sub(new \DateInterval($minAge));
+            $maximumTimestamp = $expiryDate->format('U');
+        }else{
+            $maximumTimestamp = 0;
+        }
+
         /** @var QueryBuilder $queryBuilder */
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_taskqueue_domain_model_task');
         $failedTasks = $queryBuilder
@@ -54,9 +69,9 @@ class NotifyOnFailureCommand extends Command
             ->from('tx_taskqueue_domain_model_task')
             ->where(
                 $queryBuilder->expr()->andX(
-
                     $queryBuilder->expr()->eq('name', $queryBuilder->createNamedParameter($input->getOption('name'))),
-                    $queryBuilder->expr()->eq('status', $queryBuilder->createNamedParameter(Task::FAILED))
+                    $queryBuilder->expr()->eq('status', $queryBuilder->createNamedParameter(Task::FAILED)),
+                    $queryBuilder->expr()->gte('tstamp', $queryBuilder->createNamedParameter($maximumTimestamp))
                 )
             )
             ->execute()
@@ -68,7 +83,7 @@ class NotifyOnFailureCommand extends Command
             $mail->setSubject('There are more than '.$input->getOption('count').' failed tasks.');
             $mail->setFrom($from);
             $mail->setTo([$input->getOption('email')]);
-            $mail->setBody('There are '.$failedTasks.' failed tasks, you might want to check that.');
+            $mail->setBody('There are '.$failedTasks.' failed tasks since '.date('Y-m-d H:i',$maximumTimestamp).' , you might want to check that.');
             $mail->send();
         }
         return 0;
