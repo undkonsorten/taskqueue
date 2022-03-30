@@ -76,19 +76,19 @@
 										<f:image src="EXT:taskqueue/Resources/Public/Icons/red.png" title="{task.uid}: FAILED"/>
 									</f:if>
 									<f:if condition="{task.status}==2">
-										<f:image src="EXT:taskqueue/Resources/Public/Icons/green.png"
+										<f:image src="EXT:taskqueue/Resources/Public/Icons/finished.svg"
 														 title="{task.uid}: FINISHED"/>
 									</f:if>
 									<f:if condition="{task.status}==0">
-										<f:image src="EXT:taskqueue/Resources/Public/Icons/blue.png"
+										<f:image src="EXT:taskqueue/Resources/Public/Icons/waiting.svg"
 														 title="{task.uid}: WAITING"/>
 									</f:if>
 									<f:if condition="{task.status}==1">
-										<f:image src="EXT:taskqueue/Resources/Public/Icons/blue.png"
+										<f:image src="EXT:taskqueue/Resources/Public/Icons/running.svg"
 														 title="{task.uid}: RUNNING"/>
 									</f:if>
 									<f:if condition="{task.status}==4">
-										<f:image src="EXT:taskqueue/Resources/Public/Icons/yellow.png"
+										<f:image src="EXT:taskqueue/Resources/Public/Icons/retry.svg"
 														 title="{task.uid}: RETRY"/>
 									</f:if>
 								</td>
