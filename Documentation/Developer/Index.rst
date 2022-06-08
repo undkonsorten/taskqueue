@@ -11,7 +11,7 @@ Use this section to provide examples of code or detail any information that woul
 
 
 
-Extending a tsak
+Extending a task
 ----------
 
 First create an extension that extends the task model. Lets call our new model **MailTask**.
@@ -129,6 +129,7 @@ know anything about what the task is doing, it just calls the run() method on ev
 MailTask::
 
    public function run(){
+
 		$mailVariables = array();
 		$mailVariables['user'] = $this->userRepository->findByUid($this->getUser());
 		if(!$mailVariables['user']){

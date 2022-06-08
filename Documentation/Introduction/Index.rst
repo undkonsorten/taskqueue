@@ -12,9 +12,8 @@ What does it do?
 ================
 
 There are lost's of task that can be done asynchronous in an extension.
-For example: You have a user registration that sends an confirmation email and maybe renders a pdf
-which is attached to the email. The normal way would be that the user has to wait till the pdf was build and
-the email was send and then his registration is finished and he gets redirected or whatever.
+
+**For example:** You have a user registration that sends an confirmation email and maybe renders a pdf which is attached to the email. The normal way would be that the user has to wait till the pdf was build and the email was send and then his registration is finished and he gets redirected or whatever.
 But so what's is done is that the we are using the users time to run a certain task. This results in high page loading times.
 
 
@@ -24,8 +23,8 @@ But so what's is done is that the we are using the users time to run a certain t
    :alt: TaskQueue
 
    Default way of handling (big) tasks
-   Image by http://kamisama.me/2012/10/09/background-jobs-with-php-and-resque-part-1-introduction/
 
+|
 
 A nice way of doing this would be that a task is created and stored in a queue which can later be executed (e.g. cron).
 
@@ -40,9 +39,15 @@ databases or software packages. This extension does not need anything and is a s
 Screenshots
 ===========
 
+.. figure:: /Images/TaskQueue_Backend.png
+   :alt: TaskQueue Backend
+
+|
+
 .. figure:: /Images/TaskQueue.png
    :class: with-shadow
    :alt: task administration
-   :width: 600px
 
-   And this is what it looks like in the backend.
+|
+
+And this is the taskqueue backend module.

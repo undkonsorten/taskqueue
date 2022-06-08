@@ -8,6 +8,11 @@ For Editors
 
 After installation you should see a menu called **Task Queue**. Here all tasks are shown.
 
+.. figure:: /Images/TaskQueue_Backend.png
+   :alt: TaskQueue Backend
+
+|
+
 Tasks can have four different statuses:
 
 - Red: Task failed.
