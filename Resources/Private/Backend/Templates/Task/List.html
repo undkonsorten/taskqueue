@@ -45,22 +45,22 @@
 							<tr>
 								<td>
 									<f:if condition="{task.status}==3">
-										<f:image src="EXT:taskqueue/Resources/Public/Icons/red.png" title="{task.uid}: FAILED"/>
+										<f:image src="EXT:taskqueue/Resources/Public/Icons/failed.svg" title="{task.uid}: FAILED"/>
 									</f:if>
 									<f:if condition="{task.status}==2">
-										<f:image src="EXT:taskqueue/Resources/Public/Icons/green.png"
+										<f:image src="EXT:taskqueue/Resources/Public/Icons/finished.svg"
 														 title="{task.uid}: FINISHED"/>
 									</f:if>
 									<f:if condition="{task.status}==0">
-										<f:image src="EXT:taskqueue/Resources/Public/Icons/blue.png"
+										<f:image src="EXT:taskqueue/Resources/Public/Icons/waiting.svg"
 														 title="{task.uid}: WAITING"/>
 									</f:if>
 									<f:if condition="{task.status}==1">
-										<f:image src="EXT:taskqueue/Resources/Public/Icons/blue.png"
+										<f:image src="EXT:taskqueue/Resources/Public/Icons/running.svg"
 														 title="{task.uid}: RUNNING"/>
 									</f:if>
 									<f:if condition="{task.status}==4">
-										<f:image src="EXT:taskqueue/Resources/Public/Icons/yellow.png"
+										<f:image src="EXT:taskqueue/Resources/Public/Icons/retry.svg"
 														 title="{task.uid}: RETRY"/>
 									</f:if>
 								</td>
@@ -118,12 +118,12 @@
 		<f:link.action class="btn btn-default" action="deleteFinished" title="Delete finished tasks">
 			<core:icon identifier="actions-edit-delete"/>
 			<f:translate key="actions.deleteFinished" />
-			<f:image src="EXT:taskqueue/Resources/Public/Icons/green.png"/>
+			<f:image src="EXT:taskqueue/Resources/Public/Icons/finished.svg"/>
 		</f:link.action>
 		<f:link.action class="btn btn-default" action="deleteFailed" title="Delete failed tasks">
 			<core:icon identifier="actions-edit-delete"/>
 			<f:translate key="actions.deleteFailed" />
-			<f:image src="EXT:taskqueue/Resources/Public/Icons/red.png"/>
+			<f:image src="EXT:taskqueue/Resources/Public/Icons/failed.svg"/>
 		</f:link.action>
 	</f:if>
 
