@@ -157,6 +157,16 @@ abstract class Task extends AbstractEntity implements TaskInterface
         $this->data = json_encode($data);
     }
 
+    public function getAllData(): array
+    {
+        return array_merge($this->getData() ?? [], $this->getAdditionalData());
+    }
+
+    public function getAdditionalData(): array
+    {
+        return [];
+    }
+
     /**
      * @param string $property
      * @param mixed $value
