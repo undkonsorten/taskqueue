@@ -41,7 +41,7 @@
     "typo3/cms-extbase": "^11.4"
   },
   "suggest": {
-		"typo3/cms-dashboard": "11.4"
+		"typo3/cms-dashboard": "Allows more advanced logging of the application flow"
   },
   "autoload": {
     "psr-4": {
