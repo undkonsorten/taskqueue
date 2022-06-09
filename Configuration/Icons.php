@@ -1,19 +1,19 @@
 <?php
 return [
     'tx-taskqueue-status-finished' => [
-        'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
-        'source' => 'EXT:taskqueue/Resources/Public/Icons/green.png',
+        'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+        'source' => 'EXT:taskqueue/Resources/Public/Icons/finished.svg',
     ],
     'tx-taskqueue-status-failed' => [
-        'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
-        'source' => 'EXT:taskqueue/Resources/Public/Icons/red.png',
+        'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+        'source' => 'EXT:taskqueue/Resources/Public/Icons/failed.svg',
     ],
     'tx-taskqueue-status-waiting' => [
-        'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
-        'source' => 'EXT:taskqueue/Resources/Public/Icons/blue.png',
+        'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+        'source' => 'EXT:taskqueue/Resources/Public/Icons/waiting.svg',
     ],
     'tx-taskqueue-status-running' => [
-        'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\BitmapIconProvider::class,
-        'source' => 'EXT:taskqueue/Resources/Public/Icons/yellow.png',
+        'provider' => \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class,
+        'source' => 'EXT:taskqueue/Resources/Public/Icons/running.svg',
     ],
 ];
