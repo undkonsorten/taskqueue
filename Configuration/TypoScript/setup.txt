@@ -14,3 +14,11 @@ module.tx_taskqueue {
 		insertBelow = 0
 	}
 }
+
+module.tx_dashboard {
+    view {
+        templateRootPaths {
+            110 = EXT:taskqueue/Resources/Private/Templates
+        }
+    }
+}

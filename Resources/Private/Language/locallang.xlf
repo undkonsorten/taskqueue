@@ -136,6 +136,42 @@
 			<trans-unit id="button.deleteFinished">
 				<source>Delete finished</source>
 			</trans-unit>
-		</body>
+			<trans-unit id="widgets.taskqueue.failedtasks.title">
+				<source>Failed tasks</source>
+			</trans-unit>
+			<trans-unit id="widgets.taskqueue.failedtasks.description">
+				<source>Shows failed tasks</source>
+			</trans-unit>
+			<trans-unit id="widgets.taskqueue.finishedtasks.title">
+				<source>Finished tasks</source>
+			</trans-unit>
+			<trans-unit id="widgets.taskqueue.finishedtasks.description">
+				<source>Shows finished tasks</source>
+			</trans-unit>
+			<trans-unit id="widgets.taskqueue.incomingtasks.title">
+				<source>Incoming tasks</source>
+			</trans-unit>
+			<trans-unit id="widgets.taskqueue.incomingtasks.description">
+				<source>Shows incoming tasks</source>
+			</trans-unit>
+			<trans-unit id="widgets.taskqueue.latesttasks.title">
+				<source>Latest tasks</source>
+			</trans-unit>
+			<trans-unit id="widgets.taskqueue.latesttasks.description">
+				<source>Shows latest tasks</source>
+			</trans-unit>
+			<trans-unit id="widgets.taskqueue.taskthroughput.title">
+				<source>Task throughput </source>
+			</trans-unit>
+			<trans-unit id="widgets.taskqueue.taskthroughput.description">
+				<source>Shows the task throughput</source>
+			</trans-unit>
+			<trans-unit id="widgets.taskqueue.waitingtasks.title">
+				<source>Waiting tasks</source>
+			</trans-unit>
+			<trans-unit id="widgets.taskqueue.waitingtasks.description">
+				<source>Shows waiting tasks</source>
+			</trans-unit>
+</body>
 	</file>
 </xliff>

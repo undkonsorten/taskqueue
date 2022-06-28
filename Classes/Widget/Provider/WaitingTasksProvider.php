@@ -1,15 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Undkonsorten\Taskqueue\Widget;
+namespace Undkonsorten\Taskqueue\Widget\Provider;
 
-use FriendsOfTYPO3\Dashboard\Widgets\AbstractLineChartWidget;
-use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
 
 
-class WaitingTasksWidget extends AbstractTaskqueueWidget
+class WaitingTasksProvider extends AbstractTaskqueueProvider
 {
     /**
      * @var string

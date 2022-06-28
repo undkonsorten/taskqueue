@@ -1,53 +1,101 @@
 <?php
+
 declare(strict_types=1);
 
-namespace Undkonsorten\Taskqueue\Widget;
+/*
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
 
-use FriendsOfTYPO3\Dashboard\Widgets\AbstractListWidget;
-use TYPO3\CMS\Backend\Utility\BackendUtility;
-use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Database\Query\QueryBuilder;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
+namespace  Undkonsorten\Taskqueue\Widget;
+
+use TYPO3\CMS\Dashboard\Widgets\ButtonProviderInterface;
+use TYPO3\CMS\Dashboard\Widgets\ListDataProviderInterface;
+use TYPO3\CMS\Dashboard\Widgets\WidgetConfigurationInterface;
+use TYPO3\CMS\Dashboard\Widgets\WidgetInterface;
 use TYPO3\CMS\Fluid\View\StandaloneView;
 
-class LatestTasksWidget extends AbstractListWidget
+/**
+ * Concrete List Widget implementation
+ *
+ * The widget will show a simple list with items provided by a data provider. You can add a button to the widget by
+ * defining a button provider.
+ *
+ * There are no options available for this widget
+ *
+ * @see ListDataProviderInterface
+ * @see ButtonProviderInterface
+ */
+class LatestTasksWidget implements WidgetInterface
 {
     /**
-     * @var string
+     * @var WidgetConfigurationInterface
      */
-    protected $templateName = 'LatestTasks';
+    private $configuration;
 
-    public function __construct()
-    {
-        AbstractListWidget::__construct();
-        $this->width = 4;
-        $this->height = 4;
-        $this->title = 'Latest tasks';
-        $this->description = 'Shows the latest incoming tasks';
-        $this->iconIdentifier = 'dashboard-signin';
+    /**
+     * @var StandaloneView
+     */
+    private $view;
+
+    /**
+     * @var array
+     */
+    private $options;
+    /**
+     * @var ButtonProviderInterface|null
+     */
+    private $buttonProvider;
+
+    /**
+     * @var ListDataProviderInterface
+     */
+    private $dataProvider;
+
+    public function __construct(
+        WidgetConfigurationInterface $configuration,
+        ListDataProviderInterface $dataProvider,
+        StandaloneView $view,
+                                     $buttonProvider = null,
+        array $options = []
+    ) {
+        $this->configuration = $configuration;
+        $this->view = $view;
+        $this->options = $options;
+        $this->buttonProvider = $buttonProvider;
+        $this->dataProvider = $dataProvider;
     }
 
-    public function prepareData(): void
+    public function renderWidgetContent(): string
     {
-        /**@var $queryBuilder QueryBuilder**/
-        $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_taskqueue_domain_model_task');
-        $statement = $queryBuilder
-            ->select('*')
-            ->from('tx_taskqueue_domain_model_task')
-            ->orderBy('crdate', 'DESC')
-            ->setMaxResults(7)
-            ->execute();
-        $this->items = $statement->fetchAll();
+        $this->view->setTemplate('Widget/LatestTasks');
+        $this->view->assignMultiple([
+            'items' => $this->getItems(),
+            'options' => $this->options,
+            'button' => $this->buttonProvider,
+            'configuration' => $this->configuration,
+        ]);
+        return $this->view->render();
+    }
+
+    protected function getItems(): array
+    {
+        return $this->dataProvider->getItems();
     }
 
     /**
-     * Sets up the Fluid View.
-     *
-     * @param string $templateName
+     * @return array
      */
-    protected function initializeView(): void
+    public function getOptions(): array
     {
-        parent::initializeView();
-        $this->view->setTemplateRootPaths(['EXT:taskqueue/Resources/Private/Backend/Templates/Widgets']);
+        return $this->options;
     }
 }

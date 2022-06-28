@@ -1,12 +1,12 @@
 <?php
 
-namespace Undkonsorten\Taskqueue\Widget;
+namespace Undkonsorten\Taskqueue\Widget\Provider;
 
-use FriendsOfTYPO3\Dashboard\Widgets\AbstractLineChartWidget;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Dashboard\Widgets\ChartDataProviderInterface;
 
-abstract class AbstractTaskqueueWidget extends AbstractLineChartWidget
+abstract class AbstractTaskqueueProvider implements ChartDataProviderInterface
 {
     /**
      * @var string
@@ -29,9 +29,21 @@ abstract class AbstractTaskqueueWidget extends AbstractLineChartWidget
     protected $datefield;
 
     /**
+     * Number of days to gather information for.
+     *
+     * @var int
+     */
+    protected $days = 31;
+
+    /**
      * @var int
      */
     protected $status = 0;
+
+    public function __construct(int $days = 31)
+    {
+        $this->days = $days;
+    }
 
     public function prepareData(): void
     {
@@ -50,7 +62,7 @@ abstract class AbstractTaskqueueWidget extends AbstractLineChartWidget
     /**
      * @return array
      */
-    protected function getChartData(): array
+    public function getChartData(): array
     {
         $period = 'lastMonth';
 

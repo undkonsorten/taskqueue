@@ -26,3 +26,102 @@ services:
 
   Undkonsorten\Taskqueue\Controller\TaskController:
     tags: [ 'backend.controller' ]
+
+  dashboard.widget.taskqueue.failedTasks:
+    class: 'TYPO3\CMS\Dashboard\Widgets\BarChartWidget'
+    arguments:
+      $dataProvider: '@Undkonsorten\Taskqueue\Widget\Provider\FailedTasksProvider'
+      $view: '@dashboard.views.widget'
+      $options:
+        refreshAvailable: true
+    tags:
+      - name: dashboard.widget
+        identifier: 'failedtasks'
+        groupNames: 'systemInfo'
+        title: 'LLL:EXT:taskqueue/Resources/Private/Language/locallang.xlf:widgets.taskqueue.failedtasks.title'
+        description: 'LLL:EXT:taskqueue/Resources/Private/Language/locallang.xlf:widgets.taskqueue.failedtasks.description'
+        iconIdentifier: 'tx-taskqueue-status-failed'
+        height: 'medium'
+        width: 'medium'
+
+  dashboard.widget.taskqueue.finishedTasks:
+    class: 'TYPO3\CMS\Dashboard\Widgets\BarChartWidget'
+    arguments:
+      $dataProvider: '@Undkonsorten\Taskqueue\Widget\Provider\FinishedTasksProvider'
+      $view: '@dashboard.views.widget'
+      $options:
+        refreshAvailable: true
+    tags:
+      - name: dashboard.widget
+        identifier: 'finishedtasks'
+        groupNames: 'systemInfo'
+        title: 'LLL:EXT:taskqueue/Resources/Private/Language/locallang.xlf:widgets.taskqueue.finishedtasks.title'
+        description: 'LLL:EXT:taskqueue/Resources/Private/Language/locallang.xlf:widgets.taskqueue.finishedtasks.description'
+        iconIdentifier: 'tx-taskqueue-status-finished'
+        height: 'medium'
+        width: 'medium'
+
+  dashboard.widget.taskqueue.icommingTasks:
+    class: 'TYPO3\CMS\Dashboard\Widgets\BarChartWidget'
+    arguments:
+      $dataProvider: '@Undkonsorten\Taskqueue\Widget\Provider\IncomingTasksProvider'
+      $view: '@dashboard.views.widget'
+      $options:
+        refreshAvailable: true
+    tags:
+      - name: dashboard.widget
+        identifier: 'incomingtasks'
+        groupNames: 'systemInfo'
+        title: 'LLL:EXT:taskqueue/Resources/Private/Language/locallang.xlf:widgets.taskqueue.incomingtasks.title'
+        description: 'LLL:EXT:taskqueue/Resources/Private/Language/locallang.xlf:widgets.taskqueue.incomingtasks.description'
+        height: 'medium'
+        width: 'medium'
+
+  dashboard.widget.taskqueue.latestTasks:
+    class: 'Undkonsorten\Taskqueue\Widget\LatestTasksWidget'
+    arguments:
+      $dataProvider: '@Undkonsorten\Taskqueue\Widget\Provider\LatestTasksProvider'
+      $view: '@dashboard.views.widget'
+      $options:
+        refreshAvailable: true
+    tags:
+      - name: dashboard.widget
+        identifier: 'latesttasks'
+        groupNames: 'systemInfo'
+        title: 'LLL:EXT:taskqueue/Resources/Private/Language/locallang.xlf:widgets.taskqueue.latesttasks.title'
+        description: 'LLL:EXT:taskqueue/Resources/Private/Language/locallang.xlf:widgets.taskqueue.latesttasks.description'
+        height: 'medium'
+        width: 'medium'
+
+  dashboard.widget.taskqueue.taskThroughput:
+    class: 'TYPO3\CMS\Dashboard\Widgets\BarChartWidget'
+    arguments:
+      $dataProvider: '@Undkonsorten\Taskqueue\Widget\Provider\TaskThroughputProvider'
+      $view: '@dashboard.views.widget'
+      $options:
+        refreshAvailable: true
+    tags:
+      - name: dashboard.widget
+        identifier: 'tasktthroughput'
+        groupNames: 'systemInfo'
+        title: 'LLL:EXT:taskqueue/Resources/Private/Language/locallang.xlf:widgets.taskqueue.taskthroughput.title'
+        description: 'LLL:EXT:taskqueue/Resources/Private/Language/locallang.xlf:widgets.taskqueue.taskthroughput.description'
+        height: 'medium'
+        width: 'medium'
+
+  dashboard.widget.taskqueue.waitingTasks:
+    class: 'TYPO3\CMS\Dashboard\Widgets\BarChartWidget'
+    arguments:
+      $dataProvider: '@Undkonsorten\Taskqueue\Widget\Provider\WaitingTasksProvider'
+      $view: '@dashboard.views.widget'
+      $options:
+        refreshAvailable: true
+    tags:
+      - name: dashboard.widget
+        identifier: 'waitingtasks'
+        groupNames: 'systemInfo'
+        title: 'LLL:EXT:taskqueue/Resources/Private/Language/locallang.xlf:widgets.taskqueue.waitingtasks.title'
+        description: 'LLL:EXT:taskqueue/Resources/Private/Language/locallang.xlf:widgets.taskqueue.waitingtasks.description'
+        iconIdentifier: 'tx-taskqueue-status-waiting'
+        height: 'medium'
+        width: 'medium'
