@@ -4,6 +4,7 @@ namespace Undkonsorten\Taskqueue\Widget\Provider;
 
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Dashboard\WidgetApi;
 use TYPO3\CMS\Dashboard\Widgets\ChartDataProviderInterface;
 
 abstract class AbstractTaskqueueProvider implements ChartDataProviderInterface
@@ -54,7 +55,7 @@ abstract class AbstractTaskqueueProvider implements ChartDataProviderInterface
      */
     protected function prepareChartData(): void
     {
-        parent::prepareChartData();
+        self::prepareChartData();
 
         $this->chartData = $this->getChartData();
     }
@@ -94,7 +95,7 @@ abstract class AbstractTaskqueueProvider implements ChartDataProviderInterface
             'datasets' => [
                 [
                     'label' => 'Number of tasks',
-                    'borderColor' => $this->chartColors[0],
+                    'borderColor' => WidgetApi::getDefaultChartColors()[0],
                     'fill' => false,
                     'data' => $data
                 ]
