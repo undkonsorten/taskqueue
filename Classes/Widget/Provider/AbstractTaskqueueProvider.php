@@ -54,8 +54,6 @@ abstract class AbstractTaskqueueProvider implements ChartDataProviderInterface
      */
     protected function prepareChartData(): void
     {
-        parent::prepareChartData();
-
         $this->chartData = $this->getChartData();
     }
 
