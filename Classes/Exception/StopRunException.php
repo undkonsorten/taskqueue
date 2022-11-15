@@ -12,7 +12,7 @@ class StopRunException extends Exception
      */
     protected $taskname;
 
-    public function __construct($message = "", $code = 0, Throwable $previous = null, string $taskname)
+    public function __construct(string $taskname, $message = "", $code = 0, Throwable $previous = null)
     {
         $this->taskname = $taskname;
         parent::__construct($message, $code, $previous);

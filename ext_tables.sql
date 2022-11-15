@@ -10,7 +10,7 @@ CREATE TABLE tx_taskqueue_domain_model_task (
 	data longtext NOT NULL,
 	status int(11) DEFAULT '0' NOT NULL,
 	start_date int(11) DEFAULT '0' NOT NULL,
-	last_run datetime DEFAULT '0000-00-00 00:00:00',
+	last_run datetime,
 	message varchar(255) DEFAULT '' NOT NULL,
 	priority int(11) DEFAULT '0' NOT NULL,
 	retries int(11) DEFAULT '0' NOT NULL,
