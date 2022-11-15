@@ -41,16 +41,16 @@
     "typo3/cms-extbase": "^11.5"
   },
   "suggest": {
-		"typo3/cms-dashboard": "Allows more advanced logging of the application flow"
+    "typo3/cms-dashboard": "Allows more advanced logging of the application flow"
   },
   "autoload": {
     "psr-4": {
       "Undkonsorten\\Taskqueue\\": "Classes/"
     }
   },
-	"extra": {
-		"typo3/cms":{
-			"extension-key": "taskqueue"
-		}
-	}
+  "extra": {
+    "typo3/cms": {
+      "extension-key": "taskqueue"
+    }
+  }
 }
