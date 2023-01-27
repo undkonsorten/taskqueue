@@ -3,62 +3,18 @@
   <file source-language="en" datatype="plaintext" original="messages" date="2014-10-09T12:38:21Z" product-name="taskqueue" target-language="de">
     <header/>
     <body>
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-</body>
+      <trans-unit id="tx_taskqueue_domain_model_task.status.waiting" approved="yes">
+        <source>Waiting</source>
+        <target state="final">wartend</target>
+      </trans-unit>
+      <trans-unit id="headline.searchByUid" approved="yes">
+        <source>Search task by uid</source>
+        <target state="final">Suche Aufgabe anhand der Uid</target>
+      </trans-unit>
+      <trans-unit id="headline.searchByString" approved="yes">
+        <source>Search task by string in data</source>
+        <target state="final">Suche nach Aufgaben die den Suchtext enthalten</target>
+      </trans-unit>
+    </body>
   </file>
 </xliff>
