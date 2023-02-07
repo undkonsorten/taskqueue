@@ -205,7 +205,7 @@ abstract class Task extends AbstractEntity implements TaskInterface
     protected function getProperty($property)
     {
         $data = $this->getData();
-        return $data[$property];
+        return $data[$property] ?? null;
     }
 
     /**
