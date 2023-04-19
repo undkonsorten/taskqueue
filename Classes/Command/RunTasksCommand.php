@@ -86,6 +86,7 @@ class RunTasksCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
+        $globalTime = microtime(true);
         $tasks = $this->taskRepository->findRunableTasks(
             $input->getArgument('limit'),
             $input->getArgument('whitelist'),
@@ -95,12 +96,15 @@ class RunTasksCommand extends Command
             /**@var $task Task* */
             if($task->getName() !== $this->skipTaskname) {
                 try {
+                    $start = microtime(true);
                     $task->setRetries($task->getRetries() - 1);
                     $task->markRunning();
                     $this->taskRepository->update($task);
                     $this->persistenceManager->persistAll();
                     $task->run();
                     $task->markFinished();
+                    $usedTime = microtime(true) - $start;
+                    $output->writeln("Task finised in ".$usedTime,OutputInterface::VERBOSITY_VERBOSE);
                 }
                 catch
                     (StopRunException $exception ){
@@ -124,10 +128,12 @@ class RunTasksCommand extends Command
             $this->persistenceManager->persistAll();
             }
         }
+        $globalTimeUsed = microtime(true) - $globalTime;
         $output->writeln(
             sprintf('<info>%d tasks have been processed', $tasks->count()),
             OutputInterface::VERBOSITY_VERBOSE
         );
+        $output->writeln("Time used: ".$globalTimeUsed,OutputInterface::VERBOSITY_VERBOSE);
         return 0;
     }
 }
