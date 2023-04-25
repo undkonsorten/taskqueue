@@ -2,6 +2,7 @@
 
 namespace Undkonsorten\Taskqueue\Command;
 
+use TYPO3\CMS\Core\Utility\MailUtility;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -66,24 +67,16 @@ class NotifyOnFailureCommand extends Command
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_taskqueue_domain_model_task');
         $failedTasks = $queryBuilder
             ->select('*')
-            ->from('tx_taskqueue_domain_model_task')
-            ->where(
-                $queryBuilder->expr()->andX(
-                    $queryBuilder->expr()->eq('name', $queryBuilder->createNamedParameter($input->getOption('name'))),
-                    $queryBuilder->expr()->eq('status', $queryBuilder->createNamedParameter(Task::FAILED)),
-                    $queryBuilder->expr()->gte('tstamp', $queryBuilder->createNamedParameter($maximumTimestamp))
-                )
-            )
-            ->execute()
+            ->from('tx_taskqueue_domain_model_task')->where($queryBuilder->expr()->and($queryBuilder->expr()->eq('name', $queryBuilder->createNamedParameter($input->getOption('name'))), $queryBuilder->expr()->eq('status', $queryBuilder->createNamedParameter(Task::FAILED)), $queryBuilder->expr()->gte('tstamp', $queryBuilder->createNamedParameter($maximumTimestamp))))->executeQuery()
             ->rowCount();
         if($failedTasks >= $input->getOption('count')){
             /** @var MailMessage $mail */
-            $mail = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Mail\MailMessage::class);
-            $from = \TYPO3\CMS\Core\Utility\MailUtility::getSystemFrom();
+            $mail = GeneralUtility::makeInstance(MailMessage::class);
+            $from = MailUtility::getSystemFrom();
             $mail->setSubject('There are more than '.$input->getOption('count').' failed tasks.');
             $mail->setFrom($from);
             $mail->setTo([$input->getOption('email')]);
-            $mail->setBody('There are '.$failedTasks.' failed tasks since '.date('Y-m-d H:i',$maximumTimestamp).' , you might want to check that.');
+            $mail->text('There are '.$failedTasks.' failed tasks since '.date('Y-m-d H:i',$maximumTimestamp).' , you might want to check that.');
             $mail->send();
         }
         return 0;

@@ -106,13 +106,7 @@ abstract class AbstractTaskqueueProvider implements ChartDataProviderInterface
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_taskqueue_domain_model_task');
         return (int)$queryBuilder
             ->select('*')
-            ->from('tx_taskqueue_domain_model_task')
-            ->where(
-                $queryBuilder->expr()->eq('status', $this->status),
-                $queryBuilder->expr()->gte($this->datefield, $start),
-                $queryBuilder->expr()->lte($this->datefield, $end)
-            )
-            ->execute()
+            ->from('tx_taskqueue_domain_model_task')->where($queryBuilder->expr()->eq('status', $this->status), $queryBuilder->expr()->gte($this->datefield, $start), $queryBuilder->expr()->lte($this->datefield, $end))->executeQuery()
             ->rowCount();
     }
 

@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Undkonsorten\Taskqueue\Controller;
 
+use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
@@ -128,7 +130,7 @@ class TaskController extends ActionController
      * @param int $currentPage
      * @param Demand|null $demand
      * @return ResponseInterface
-     * @throws \TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException
+     * @throws NoSuchArgumentException
      */
     public function listAction(int $currentPage = 1, Demand $demand = null): ResponseInterface
     {
@@ -183,7 +185,7 @@ class TaskController extends ActionController
     {
         $task = $this->taskRepository->findByUid($uid);
         if (!$task) {
-            $this->addFlashMessage(sprintf('Task with uid %d could not be found.', $uid), 'Task not found', FlashMessage::WARNING);
+            $this->addFlashMessage(sprintf('Task with uid %d could not be found.', $uid), 'Task not found', AbstractMessage::WARNING);
             $this->forwardToReferringRequest();
         }
         return (new ForwardResponse('show'))->withArguments(['task' => $task]);
@@ -192,7 +194,7 @@ class TaskController extends ActionController
 
     /**
      * @param string $wordsInData
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @throws InvalidQueryException
      */
     public function searchResultAction(string $wordsInData = ''): ResponseInterface
     {
@@ -272,9 +274,9 @@ class TaskController extends ActionController
     {
         $title = 'Delete tasks';
         if ($tasks->count() === 0) {
-            $this->addFlashMessage('Nothing to delete', $title, FlashMessage::INFO);
+            $this->addFlashMessage('Nothing to delete', $title, AbstractMessage::INFO);
         } else {
-            $this->addFlashMessage(sprintf('%d task(s) deleted.', $tasks->count()), $title, FlashMessage::OK);
+            $this->addFlashMessage(sprintf('%d task(s) deleted.', $tasks->count()), $title, AbstractMessage::OK);
         }
     }
 

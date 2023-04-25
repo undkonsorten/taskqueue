@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Undkonsorten\Taskqueue\Widget\Provider;
 
+use Doctrine\DBAL\Driver\Exception;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -15,7 +16,7 @@ class LatestTasksProvider implements ListDataProviderInterface
     /**
      * @return array
      * @throws \Doctrine\DBAL\DBALException
-     * @throws \Doctrine\DBAL\Driver\Exception
+     * @throws Exception
      */
     public function getItems(): array
     {
@@ -24,9 +25,7 @@ class LatestTasksProvider implements ListDataProviderInterface
         return $queryBuilder
             ->select('*')
             ->from('tx_taskqueue_domain_model_task')
-            ->orderBy('crdate', 'DESC')
-            ->setMaxResults(7)
-            ->execute()
+            ->orderBy('crdate', 'DESC')->setMaxResults(7)->executeQuery()
             ->fetchAllAssociative();
     }
 

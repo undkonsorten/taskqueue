@@ -3,7 +3,7 @@ if (!defined('TYPO3')) {
     die('Access denied.');
 }
 (function () {
-    if (TYPO3_MODE === 'BE') {
+    if (TYPO3 === 'BE') {
 
         /**
          * Registers a Backend Module

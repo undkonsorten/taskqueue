@@ -2,6 +2,8 @@
 declare(strict_types=1);
 namespace Undkonsorten\Taskqueue\Command;
 
+use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -39,7 +41,7 @@ class DeleteTasksCommand extends Command
     /**
      * taskRepository
      *
-     * @var \Undkonsorten\Taskqueue\Domain\Repository\TaskRepository
+     * @var TaskRepository
      */
     protected $taskRepository;
 
@@ -68,8 +70,8 @@ class DeleteTasksCommand extends Command
      * @param InputInterface $input
      * @param OutputInterface $output
      * @return int
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @throws IllegalObjectTypeException
+     * @throws InvalidQueryException
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {

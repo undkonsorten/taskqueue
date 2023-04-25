@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Undkonsorten\Taskqueue\Domain\Repository;
 
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
@@ -57,8 +58,8 @@ class TaskRepository extends Repository
      * @param int $limit
      * @param string $whitelist
      * @param string $blacklist
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @return QueryResultInterface
+     * @throws InvalidQueryException
      */
     public function findRunableTasks($limit = 10, $whitelist = '', $blacklist = ''): QueryResultInterface
     {
@@ -101,7 +102,7 @@ class TaskRepository extends Repository
 
     /**
      * Find all finished tasks
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @return QueryResultInterface
      */
     public function findFinished(): QueryResultInterface
     {
@@ -114,7 +115,7 @@ class TaskRepository extends Repository
 
     /**
      * Finds all failed tasks
-     * @return \TYPO3\CMS\Extbase\Persistence\QueryResultInterface
+     * @return QueryResultInterface
      */
     public function findFailed(): QueryResultInterface
     {
@@ -128,7 +129,7 @@ class TaskRepository extends Repository
     /**
      * @param \DateInterval $dateInterval
      * @return array|QueryResultInterface
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @throws InvalidQueryException
      */
     public function findOutOfInterval(\DateInterval $dateInterval)
     {
@@ -152,7 +153,7 @@ class TaskRepository extends Repository
     /**
      * @param string $wordsInData
      * @return QueryResultInterface
-     * @throws \TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException
+     * @throws InvalidQueryException
      */
     public function findByWordsInData(string $wordsInData): QueryResultInterface
     {
