@@ -53,7 +53,7 @@
       "extension-key": "taskqueue"
     },
 	  "branch-alias":{
-		  "dev-ma": "8.0.x-dev"
+		  "dev-main": "8.0.x-dev"
 	  }
   }
 }
