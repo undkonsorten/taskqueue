@@ -1,15 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace GeorgRinger\Doc;
 
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use TYPO3\CMS\Dashboard\Dashboard;
 use TYPO3\CMS\Dashboard\Widgets\BarChartWidget;
-use TYPO3\CMS\Dashboard\Widgets\CtaWidget;
 use Undkonsorten\Taskqueue\Widget\LatestTasksWidget;
 use Undkonsorten\Taskqueue\Widget\Provider\FailedTasksProvider;
 use Undkonsorten\Taskqueue\Widget\Provider\FinishedTasksProvider;
@@ -25,8 +22,7 @@ return static function (ContainerConfigurator $configurator, ContainerBuilder $c
         $services->set('dashboard.widget.taskqueue.latestTasks')
             ->class(LatestTasksWidget::class)
             ->arg('$dataProvider', new Reference(LatestTasksProvider::class))
-            ->arg('$view', new Reference('dashboard.views.widget'))
-            ->arg('$buttonProvider', null)
+            ->arg('$backendViewFactory', new Reference(\TYPO3\CMS\Backend\View\BackendViewFactory::class))
             ->arg('$options', ['refreshAvailable' => true])
             ->tag('dashboard.widget', [
                 'identifier' => 'latesttasks',
@@ -41,8 +37,7 @@ return static function (ContainerConfigurator $configurator, ContainerBuilder $c
         $services->set('dashboard.widget.taskqueue.failedTasks')
             ->class(BarChartWidget::class)
             ->arg('$dataProvider', new Reference(FailedTasksProvider::class))
-            ->arg('$view', new Reference('dashboard.views.widget'))
-            ->arg('$buttonProvider', null)
+            ->arg('$backendViewFactory', new Reference(\TYPO3\CMS\Backend\View\BackendViewFactory::class))
             ->arg('$options', ['refreshAvailable' => true])
             ->tag('dashboard.widget', [
                 'identifier' => 'failedtasks',
@@ -57,8 +52,7 @@ return static function (ContainerConfigurator $configurator, ContainerBuilder $c
         $services->set('dashboard.widget.taskqueue.finishedTasks')
             ->class(BarChartWidget::class)
             ->arg('$dataProvider', new Reference(FinishedTasksProvider::class))
-            ->arg('$view', new Reference('dashboard.views.widget'))
-            ->arg('$buttonProvider', null)
+            ->arg('$backendViewFactory', new Reference(\TYPO3\CMS\Backend\View\BackendViewFactory::class))
             ->arg('$options', ['refreshAvailable' => true])
             ->tag('dashboard.widget', [
                 'identifier' => 'finishedtasks',
@@ -73,8 +67,7 @@ return static function (ContainerConfigurator $configurator, ContainerBuilder $c
         $services->set('dashboard.widget.taskqueue.icomingTasks')
             ->class(BarChartWidget::class)
             ->arg('$dataProvider', new Reference(IncomingTasksProvider::class))
-            ->arg('$view', new Reference('dashboard.views.widget'))
-            ->arg('$buttonProvider', null)
+            ->arg('$backendViewFactory', new Reference(\TYPO3\CMS\Backend\View\BackendViewFactory::class))
             ->arg('$options', ['refreshAvailable' => true])
             ->tag('dashboard.widget', [
                 'identifier' => 'incomingtasks',
@@ -88,8 +81,7 @@ return static function (ContainerConfigurator $configurator, ContainerBuilder $c
         $services->set('dashboard.widget.taskqueue.taskThroughput')
             ->class(BarChartWidget::class)
             ->arg('$dataProvider', new Reference(TaskThroughputProvider::class))
-            ->arg('$view', new Reference('dashboard.views.widget'))
-            ->arg('$buttonProvider', null)
+            ->arg('$backendViewFactory', new Reference(\TYPO3\CMS\Backend\View\BackendViewFactory::class))
             ->arg('$options', ['refreshAvailable' => true])
             ->tag('dashboard.widget', [
                 'identifier' => 'taskthroughput',
@@ -103,8 +95,7 @@ return static function (ContainerConfigurator $configurator, ContainerBuilder $c
         $services->set('dashboard.widget.taskqueue.waitingTasks')
             ->class(BarChartWidget::class)
             ->arg('$dataProvider', new Reference(WaitingTasksProvider::class))
-            ->arg('$view', new Reference('dashboard.views.widget'))
-            ->arg('$buttonProvider', null)
+            ->arg('$backendViewFactory', new Reference(\TYPO3\CMS\Backend\View\BackendViewFactory::class))
             ->arg('$options', ['refreshAvailable' => true])
             ->tag('dashboard.widget', [
                 'identifier' => 'waitingtasks',

@@ -17,8 +17,11 @@ declare(strict_types=1);
 
 namespace  Undkonsorten\Taskqueue\Widget;
 
+use Psr\Http\Message\ServerRequestInterface;
+use TYPO3\CMS\Backend\View\BackendViewFactory;
 use TYPO3\CMS\Dashboard\Widgets\ButtonProviderInterface;
 use TYPO3\CMS\Dashboard\Widgets\ListDataProviderInterface;
+use TYPO3\CMS\Dashboard\Widgets\RequestAwareWidgetInterface;
 use TYPO3\CMS\Dashboard\Widgets\WidgetConfigurationInterface;
 use TYPO3\CMS\Dashboard\Widgets\WidgetInterface;
 use TYPO3\CMS\Fluid\View\StandaloneView;
@@ -34,17 +37,14 @@ use TYPO3\CMS\Fluid\View\StandaloneView;
  * @see ListDataProviderInterface
  * @see ButtonProviderInterface
  */
-class LatestTasksWidget implements WidgetInterface
+class LatestTasksWidget implements WidgetInterface, RequestAwareWidgetInterface
 {
+    private ServerRequestInterface $request;
+
     /**
      * @var WidgetConfigurationInterface
      */
     private $configuration;
-
-    /**
-     * @var StandaloneView
-     */
-    private $view;
 
     /**
      * @var array
@@ -63,12 +63,12 @@ class LatestTasksWidget implements WidgetInterface
     public function __construct(
         WidgetConfigurationInterface $configuration,
         ListDataProviderInterface $dataProvider,
-        StandaloneView $view,
-                                     $buttonProvider = null,
+        BackendViewFactory $backendViewFactory,
+        $buttonProvider = null,
         array $options = []
     ) {
         $this->configuration = $configuration;
-        $this->view = $view;
+        $this->backendViewFactory = $backendViewFactory;
         $this->options = $options;
         $this->buttonProvider = $buttonProvider;
         $this->dataProvider = $dataProvider;
@@ -76,14 +76,14 @@ class LatestTasksWidget implements WidgetInterface
 
     public function renderWidgetContent(): string
     {
-        $this->view->setTemplate('Widget/LatestTasks');
-        $this->view->assignMultiple([
+        $view = $this->backendViewFactory->create($this->request,['typo3/cms-dashboard', 'undkonsorten/taskqueue']);
+        $view->assignMultiple([
             'items' => $this->getItems(),
             'options' => $this->options,
             'button' => $this->buttonProvider,
             'configuration' => $this->configuration,
         ]);
-        return $this->view->render();
+        return $view->render('Widget/LatestTasks');
     }
 
     protected function getItems(): array
@@ -97,5 +97,10 @@ class LatestTasksWidget implements WidgetInterface
     public function getOptions(): array
     {
         return $this->options;
+    }
+
+    public function setRequest(ServerRequestInterface $request): void
+    {
+        $this->request = $request;
     }
 }
