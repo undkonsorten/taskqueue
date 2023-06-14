@@ -4,6 +4,8 @@ namespace Undkonsorten\Taskqueue\Domain\Repository;
 
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Generic\Qom\ConstraintInterface;
+use TYPO3\CMS\Extbase\Persistence\Generic\Qom\LogicalAnd;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
@@ -48,7 +50,7 @@ class TaskRepository extends Repository
     // Example for repository wide settings
     public function initializeObject(): void
     {
-        $defaultQuerySettings = $this->objectManager->get(Typo3QuerySettings::class);
+        $defaultQuerySettings = GeneralUtility::makeInstance(Typo3QuerySettings::class);
         $defaultQuerySettings->setRespectStoragePage(false);
         $this->setDefaultQuerySettings($defaultQuerySettings);
     }
@@ -166,13 +168,9 @@ class TaskRepository extends Repository
     public function findByDemand(Demand $demand)
     {
         $query = $this->createQuery();
-        $constraints = [];
         if(!is_null($demand->getStatus())){
-            $constraints[] = $query->equals('status', $demand->getStatus());
-        }
-        if (!empty($constraints)) {
             $query->matching(
-                $query->logicalAnd($constraints)
+                $query->logicalAnd($query->equals('status', $demand->getStatus()))
             );
         }
         return $query->execute();
