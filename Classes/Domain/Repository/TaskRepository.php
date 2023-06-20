@@ -71,7 +71,7 @@ class TaskRepository extends Repository
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
         $blacklist = GeneralUtility::trimExplode(',', $blacklist, true);
         $constraints = [
-            $query->logicalOr([
+            $query->logicalOr(...[
                 $query->equals('status', TaskInterface::WAITING),
                 $query->equals('status', TaskInterface::RETRY),
             ]),
@@ -87,7 +87,7 @@ class TaskRepository extends Repository
         }
 
         $query->matching(
-            $query->logicalAnd($constraints)
+            $query->logicalAnd(...$constraints)
         );
 
         $query->setLimit((integer)$limit);
@@ -139,9 +139,9 @@ class TaskRepository extends Repository
         $now->sub($dateInterval);
         $query = $this->createQuery();
         $query->matching(
-            $query->logicalAnd([
+            $query->logicalAnd(...[
                     $query->lessThan('tstamp', $now->getTimestamp()),
-                    $query->logicalOr([
+                    $query->logicalOr(...[
                         $query->equals('status', TaskInterface::FAILED),
                         $query->equals('status', TaskInterface::FINISHED)
                     ])
