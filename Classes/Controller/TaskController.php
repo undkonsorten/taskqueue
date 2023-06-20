@@ -290,7 +290,7 @@ class TaskController extends ActionController
      * @throws UnknownObjectException
      * @throws \Exception
      */
-    public function runAction(Task $task): void
+    public function runAction(Task $task): ResponseInterface
     {
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
         /* @TODO this code duplicates in \Undkonsorten\Taskqueue\Controller\RunTasksCommand, maybe move to service class */
@@ -320,7 +320,7 @@ class TaskController extends ActionController
         $this->addFlashMessage('Task has been executed', '', AbstractMessage::INFO);
         $this->taskRepository->update($task);
         $this->persitenceManager->persistAll();
-        $this->redirect('list');
+        return $this->redirect('list');
     }
 
     /**
