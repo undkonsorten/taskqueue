@@ -36,9 +36,9 @@
   "require": {
     "ext-json": "*",
     "php": "^7.4|^8.1",
-    "typo3/cms-backend": "^11.5 || ^12.4",
-    "typo3/cms-core": "^11.5 || ^12.4",
-    "typo3/cms-extbase": "^11.5 || ^12.4"
+    "typo3/cms-backend": "^12.4",
+    "typo3/cms-core": "^12.4",
+    "typo3/cms-extbase": "^12.4"
   },
   "suggest": {
     "typo3/cms-dashboard": "Allows more advanced logging of the application flow"
@@ -53,7 +53,7 @@
       "extension-key": "taskqueue"
     },
 	  "branch-alias":{
-		  "dev-main": "8.0.x-dev"
+		  "dev-main": "9.0.x-dev"
 	  }
   }
 }
