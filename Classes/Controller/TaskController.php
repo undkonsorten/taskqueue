@@ -213,11 +213,11 @@ class TaskController extends ActionController
      * @throws UnsupportedRequestTypeException
      * @throws IllegalObjectTypeException
      */
-    public function deleteAction(Task $task): void
+    public function deleteAction(Task $task): ResponseInterface
     {
         $this->addFlashMessage(sprintf('%s [%d] was deleted.', $task->getShortName(), $task->getUid()), 'Task deleted', AbstractMessage::OK);
         $this->taskRepository->remove($task);
-        $this->redirect('list');
+        return $this->redirect('list');
     }
 
     /**
@@ -228,12 +228,12 @@ class TaskController extends ActionController
      * @throws IllegalObjectTypeException
      * @throws UnknownObjectException
      */
-    public function reactivateAction(Task $task, int $retries = 3)
+    public function reactivateAction(Task $task, int $retries = 3): ResponseInterface
     {
         $this->addFlashMessage(sprintf('%s [%d] was reactivated with %d retries.', $task->getShortName(), $task->getUid(), $retries), 'Task reactivated', AbstractMessage::OK);
         $task->reactivate($retries);
         $this->taskRepository->update($task);
-        $this->redirect('list');
+        return $this->redirect('list');
     }
 
     /**
@@ -243,14 +243,14 @@ class TaskController extends ActionController
      * @throws UnsupportedRequestTypeException
      * @throws IllegalObjectTypeException
      */
-    public function deleteFailedAction(): void
+    public function deleteFailedAction(): ResponseInterface
     {
         $tasks = $this->taskRepository->findFailed();
         $this->addFlashMessageForDeletion($tasks);
         foreach ($tasks as $task) {
             $this->taskRepository->remove($task);
         }
-        $this->redirect('list');
+        return $this->redirect('list');
     }
 
     /**
@@ -260,14 +260,14 @@ class TaskController extends ActionController
      * @throws UnsupportedRequestTypeException
      * @throws IllegalObjectTypeException
      */
-    public function deleteFinishedAction(): void
+    public function deleteFinishedAction(): ResponseInterface
     {
         $tasks = $this->taskRepository->findFinished();
         $this->addFlashMessageForDeletion($tasks);
         foreach ($tasks as $task) {
             $this->taskRepository->remove($task);
         }
-        $this->redirect('list');
+        return $this->redirect('list');
     }
 
     protected function addFlashMessageForDeletion(QueryResultInterface $tasks): void
