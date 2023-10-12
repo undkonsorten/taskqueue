@@ -94,7 +94,8 @@ class TaskRepository extends Repository
 
         $orderings = [
             'priority' => QueryInterface::ORDER_DESCENDING,
-            'tstamp' => QueryInterface::ORDER_DESCENDING
+            'retries' => QueryInterface::ORDER_ASCENDING,
+            'uid' => QueryInterface::ORDER_ASCENDING
         ];
 
         $query->setOrderings($orderings);
