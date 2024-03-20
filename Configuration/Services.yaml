@@ -25,6 +25,12 @@ services:
         command: 'taskqueue:notify-on-failure'
         description: 'Sends notification if there are more than a certain amount of failed tasks.'
 
+  Undkonsorten\Taskqueue\Command\ReactivateTasksCommand:
+    tags:
+      - name: 'console.command'
+        command: 'taskqueue:reactivate-failed-tasks'
+        description: 'Reactivates failed tasks in given period.'
+
   Undkonsorten\Taskqueue\Controller\TaskController:
     tags: [ 'backend.controller' ]
 
