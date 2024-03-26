@@ -165,7 +165,7 @@ class TaskRepository extends Repository
         $query = $this->createQuery();
         $query->matching(
             $query->logicalAnd(...[
-                $query->greaterThan('tstamp', $now->getTimestamp()),
+                $query->greaterThan('crdate', $now->getTimestamp()),
                 $query->equals('status', TaskInterface::FAILED)
             ])
 
