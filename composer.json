@@ -38,7 +38,8 @@
     "php": "^7.4|^8.1",
     "typo3/cms-backend": "^12.4",
     "typo3/cms-core": "^12.4",
-    "typo3/cms-extbase": "^12.4"
+    "typo3/cms-extbase": "^12.4",
+	"symfony/console": "^5.4 || ^6.0 || ^7"
   },
   "suggest": {
     "typo3/cms-dashboard": "Allows more advanced logging of the application flow"
