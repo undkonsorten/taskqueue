@@ -18,6 +18,9 @@ return [
             'starttime' => 'starttime',
             'endtime' => 'endtime',
         ],
+        'security' => [
+            'ignorePageTypeRestriction' => true,
+        ],
         'searchFields' => 'name,data,status,start_date,message,priority,',
         'iconfile' => 'EXT:taskqueue/Resources/Public/Icons/tx_taskqueue_domain_model_task.gif'
     ],

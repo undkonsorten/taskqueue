@@ -25,5 +25,4 @@ if (!defined('TYPO3')) {
         );
     }
 
-    \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_taskqueue_domain_model_task');
 })();
