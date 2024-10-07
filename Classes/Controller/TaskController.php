@@ -9,13 +9,25 @@ use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
-use TYPO3\CMS\Core\Http\HtmlResponse;
 use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
+use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
+use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
+use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
+use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
+use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use Undkonsorten\Taskqueue\Domain\Model\Demand;
+use Undkonsorten\Taskqueue\Domain\Model\Task;
+use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
+use Undkonsorten\Taskqueue\Domain\Repository\TaskRepository;
+
 /***************************************************************
  *
  *  Copyright notice
@@ -40,19 +52,6 @@ use TYPO3\CMS\Extbase\Http\ForwardResponse;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
-use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
-use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
-use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
-use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
-use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
-use TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use Undkonsorten\Taskqueue\Domain\Model\Demand;
-use Undkonsorten\Taskqueue\Domain\Model\Task;
-use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
-use Undkonsorten\Taskqueue\Domain\Repository\TaskRepository;
 
 /**
  * TaskController
