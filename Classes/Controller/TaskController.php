@@ -150,13 +150,16 @@ class TaskController extends ActionController
         $paginator = new QueryResultPaginator($tasks, (integer)$currentPage, (integer)$this->settings['pagination']['itemsPerPage']);
         $simplePagination = new SimplePagination($paginator);
         $pagination = $this->buildSimplePagination($simplePagination, $paginator);
-        $this->view->assign('tasks', $paginator->getPaginatedItems());
-        $this->view->assign('pagination', $pagination);
-        $this->view->assign('paginator', $paginator);
-        $this->view->assign('demand', $demand);
-        $this->view->assign('status', $status);
-        $this->moduleTemplate->setContent($this->view->render());
-        return new HtmlResponse($this->moduleTemplate->renderContent());
+
+        $this->moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+        $this->moduleTemplate->assignMultiple([
+            'tasks' => $paginator->getPaginatedItems(),
+            'pagination' => $pagination,
+            'paginator' => $paginator,
+            'demand' => $demand,
+            'status' => $status,
+        ]);
+        return $this->moduleTemplate->renderResponse('Task/List');
     }
 
     /**
@@ -166,15 +169,16 @@ class TaskController extends ActionController
      */
     public function showAction(Task $task): ResponseInterface
     {
-        $this->view->assign('task', $task);
-        $this->moduleTemplate->setContent($this->view->render());
-        return new HtmlResponse($this->moduleTemplate->renderContent());
+        $this->moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+        $this->moduleTemplate->assign('task', $task);
+
+        return $this->moduleTemplate->renderResponse('Task/Show');
     }
 
     public function searchAction(): ResponseInterface
     {
-        $this->moduleTemplate->setContent($this->view->render());
-        return new HtmlResponse($this->moduleTemplate->renderContent());
+        $this->moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+        return $this->moduleTemplate->renderResponse('Task/Search');
     }
 
     /**
@@ -199,10 +203,13 @@ class TaskController extends ActionController
     public function searchResultAction(string $wordsInData = ''): ResponseInterface
     {
         $tasks = $this->taskRepository->findByWordsInData($wordsInData);
-        $this->view->assign('tasks', $tasks);
-        $this->view->assign('searchWords', $wordsInData);
-        $this->moduleTemplate->setContent($this->view->render());
-        return new HtmlResponse($this->moduleTemplate->renderContent());
+        $this->moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+        $this->moduleTemplate->assignMultiple([
+            'tasks' => $tasks,
+            'searchWords' => $wordsInData,
+        ]);
+
+        return $this->moduleTemplate->renderResponse('Task/SearchResult');
     }
 
     /**

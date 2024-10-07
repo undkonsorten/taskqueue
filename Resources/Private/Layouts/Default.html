@@ -1,0 +1,28 @@
+<html xmlns:f="http://typo3.org/ns/TYPO3/CMS/Fluid/ViewHelpers">
+
+<f:render section="Before" arguments="{_all}" optional="true" />
+
+<div class="module {moduleClass}" data-module-id="{moduleId}" data-module-name="{moduleName}">
+	<f:if condition="{docHeader.enabled}">
+		<f:render partial="DocHeader" arguments="{docHeader:docHeader}" />
+	</f:if>
+	<div class="module-body t3js-module-body">
+		<f:if condition="{uiBlock}">
+			<div id="t3js-ui-block" class="ui-block">
+				<core:icon identifier="spinner-circle" size="large" />
+			</div>
+		</f:if>
+		<f:flashMessages queueIdentifier="{flashMessageQueueIdentifier}" />
+		<f:format.raw>{headerContent}</f:format.raw>
+
+		<div class="taskqueue-administration">
+			<f:render section="content"/>
+		</div>
+
+		<f:format.raw>{footerContent}</f:format.raw>
+	</div>
+</div>
+
+<f:render section="After" arguments="{_all}" optional="true" />
+
+</html>
