@@ -41,10 +41,7 @@ use TYPO3\CMS\Extbase\Http\ForwardResponse;
  ***************************************************************/
 
 use TYPO3\CMS\Core\Messaging\AbstractMessage;
-use TYPO3\CMS\Core\Messaging\FlashMessage;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
-use TYPO3\CMS\Extbase\Mvc\Exception\UnsupportedRequestTypeException;
 use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
@@ -183,7 +180,6 @@ class TaskController extends ActionController
 
     /**
      * @param int $uid
-     * @throws StopActionException
      */
     public function searchUidAction(?int $uid = null): ResponseInterface
     {
@@ -216,8 +212,6 @@ class TaskController extends ActionController
      * action delete
      *
      * @param Task $task
-     * @throws StopActionException
-     * @throws UnsupportedRequestTypeException
      * @throws IllegalObjectTypeException
      */
     public function deleteAction(Task $task): ResponseInterface
@@ -230,8 +224,6 @@ class TaskController extends ActionController
     /**
      * @param Task $task
      * @param int $retries
-     * @throws StopActionException
-     * @throws UnsupportedRequestTypeException
      * @throws IllegalObjectTypeException
      * @throws UnknownObjectException
      */
@@ -246,8 +238,6 @@ class TaskController extends ActionController
     /**
      * action delete failed tasks
      *
-     * @throws StopActionException
-     * @throws UnsupportedRequestTypeException
      * @throws IllegalObjectTypeException
      */
     public function deleteFailedAction(): ResponseInterface
@@ -263,8 +253,6 @@ class TaskController extends ActionController
     /**
      * action delete finished tasks
      *
-     * @throws StopActionException
-     * @throws UnsupportedRequestTypeException
      * @throws IllegalObjectTypeException
      */
     public function deleteFinishedAction(): ResponseInterface
@@ -291,8 +279,6 @@ class TaskController extends ActionController
      * runs an task
      *
      * @param Task $task
-     * @throws StopActionException
-     * @throws UnsupportedRequestTypeException
      * @throws IllegalObjectTypeException
      * @throws UnknownObjectException
      * @throws \Exception
