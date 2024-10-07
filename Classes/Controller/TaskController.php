@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Undkonsorten\Taskqueue\Controller;
 
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use Psr\Http\Message\ResponseInterface;
@@ -40,7 +41,6 @@ use TYPO3\CMS\Extbase\Http\ForwardResponse;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use TYPO3\CMS\Core\Messaging\AbstractMessage;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
@@ -185,7 +185,7 @@ class TaskController extends ActionController
     {
         $task = $this->taskRepository->findByUid($uid);
         if (!$task) {
-            $this->addFlashMessage(sprintf('Task with uid %d could not be found.', $uid), 'Task not found', AbstractMessage::WARNING);
+            $this->addFlashMessage(sprintf('Task with uid %d could not be found.', $uid), 'Task not found', ContextualFeedbackSeverity::WARNING);
             $this->forwardToReferringRequest();
         }
         return (new ForwardResponse('show'))->withArguments(['task' => $task]);
@@ -216,7 +216,7 @@ class TaskController extends ActionController
      */
     public function deleteAction(Task $task): ResponseInterface
     {
-        $this->addFlashMessage(sprintf('%s [%d] was deleted.', $task->getShortName(), $task->getUid()), 'Task deleted', AbstractMessage::OK);
+        $this->addFlashMessage(sprintf('%s [%d] was deleted.', $task->getShortName(), $task->getUid()), 'Task deleted', ContextualFeedbackSeverity::OK);
         $this->taskRepository->remove($task);
         return $this->redirect('list');
     }
@@ -229,7 +229,7 @@ class TaskController extends ActionController
      */
     public function reactivateAction(Task $task, int $retries = 3): ResponseInterface
     {
-        $this->addFlashMessage(sprintf('%s [%d] was reactivated with %d retries.', $task->getShortName(), $task->getUid(), $retries), 'Task reactivated', AbstractMessage::OK);
+        $this->addFlashMessage(sprintf('%s [%d] was reactivated with %d retries.', $task->getShortName(), $task->getUid(), $retries), 'Task reactivated', ContextualFeedbackSeverity::OK);
         $task->reactivate($retries);
         $this->taskRepository->update($task);
         return $this->redirect('list');
@@ -269,9 +269,9 @@ class TaskController extends ActionController
     {
         $title = 'Delete tasks';
         if ($tasks->count() === 0) {
-            $this->addFlashMessage('Nothing to delete', $title, AbstractMessage::INFO);
+            $this->addFlashMessage('Nothing to delete', $title, ContextualFeedbackSeverity::INFO);
         } else {
-            $this->addFlashMessage(sprintf('%d task(s) deleted.', $tasks->count()), $title, AbstractMessage::OK);
+            $this->addFlashMessage(sprintf('%d task(s) deleted.', $tasks->count()), $title, ContextualFeedbackSeverity::OK);
         }
     }
 
@@ -310,7 +310,7 @@ class TaskController extends ActionController
             throw $exception;
         }
 
-        $this->addFlashMessage('Task has been executed', '', AbstractMessage::INFO);
+        $this->addFlashMessage('Task has been executed', '', ContextualFeedbackSeverity::INFO);
         $this->taskRepository->update($task);
         $this->persitenceManager->persistAll();
         return $this->redirect('list');
