@@ -188,7 +188,6 @@ class TaskController extends ActionController
             $this->forwardToReferringRequest();
         }
         return (new ForwardResponse('show'))->withArguments(['task' => $task]);
-        return $this->htmlResponse();
     }
 
     /**
