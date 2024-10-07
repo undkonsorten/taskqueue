@@ -67,9 +67,9 @@ class TaskRepository extends Repository
     {
         $query = $this->createQuery();
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
-        $whitelist = GeneralUtility::trimExplode(',', $whitelist, true);
+        $whitelist = GeneralUtility::trimExplode(',', $whitelist ?? '', true);
         /** @noinspection CallableParameterUseCaseInTypeContextInspection */
-        $blacklist = GeneralUtility::trimExplode(',', $blacklist, true);
+        $blacklist = GeneralUtility::trimExplode(',', $blacklist ?? '', true);
         $constraints = [
             $query->logicalOr(...[
                 $query->equals('status', TaskInterface::WAITING),
