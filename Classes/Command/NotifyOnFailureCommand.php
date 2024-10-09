@@ -14,6 +14,7 @@ use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Undkonsorten\Taskqueue\Domain\Model\Task;
+use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
 
 class NotifyOnFailureCommand extends Command
 {
@@ -49,6 +50,13 @@ class NotifyOnFailureCommand extends Command
             'Date interval that should be respected.'
         );
 
+        $this->addOption(
+            'status',
+            's',
+            InputOption::VALUE_OPTIONAL,
+            'Status of the task: 0|1|2|3|4'
+        );
+
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -62,18 +70,31 @@ class NotifyOnFailureCommand extends Command
         }else{
             $maximumTimestamp = 0;
         }
+        if(!is_null($input->getOption('status'))){
+            $status = $input->getOption('status');
+        }else{
+            $status = TaskInterface::FAILED;
+        }
 
         /** @var QueryBuilder $queryBuilder */
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_taskqueue_domain_model_task');
         $failedTasks = $queryBuilder
             ->select('*')
-            ->from('tx_taskqueue_domain_model_task')->where($queryBuilder->expr()->and($queryBuilder->expr()->eq('name', $queryBuilder->createNamedParameter($input->getOption('name'))), $queryBuilder->expr()->eq('status', $queryBuilder->createNamedParameter(Task::FAILED)), $queryBuilder->expr()->gte('tstamp', $queryBuilder->createNamedParameter($maximumTimestamp))))->executeQuery()
+            ->from('tx_taskqueue_domain_model_task')
+            ->where(
+                $queryBuilder->expr()->and(
+                    $queryBuilder->expr()->eq('name', $queryBuilder->createNamedParameter($input->getOption('name'))),
+                    $queryBuilder->expr()->eq('status', $queryBuilder->createNamedParameter($status)),
+                    $queryBuilder->expr()->gte('tstamp', $queryBuilder->createNamedParameter($maximumTimestamp))
+                )
+            )
+            ->executeQuery()
             ->rowCount();
         if($failedTasks >= $input->getOption('count')){
             /** @var MailMessage $mail */
             $mail = GeneralUtility::makeInstance(MailMessage::class);
             $from = MailUtility::getSystemFrom();
-            $mail->setSubject('There are more than '.$input->getOption('count').' failed tasks.');
+            $mail->setSubject('There are more than '.$input->getOption('count').' tasks with status '.$input->getOption('status').'.');
             $mail->setFrom($from);
             $mail->setTo([$input->getOption('email')]);
             $mail->text('There are '.$failedTasks.' failed tasks since '.date('Y-m-d H:i',$maximumTimestamp).' , you might want to check that.');
