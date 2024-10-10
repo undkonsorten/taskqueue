@@ -2,6 +2,7 @@
 
 namespace Undkonsorten\Taskqueue\Command;
 
+use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Utility\MailUtility;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -18,6 +19,14 @@ use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
 
 class NotifyOnFailureCommand extends Command
 {
+
+    protected EventDispatcherInterface $eventDispatcher;
+
+    public function injectEventDispatcher(EventDispatcherInterface $eventDispatcher): void
+    {
+        $this->eventDispatcher = $eventDispatcher;
+    }
+
     protected function configure()
     {
         $this->setDescription('Sends notification about tasks.');
@@ -97,7 +106,7 @@ class NotifyOnFailureCommand extends Command
             $mail->setSubject('There are more than '.$input->getOption('count').' tasks with status '.$input->getOption('status').'.');
             $mail->setFrom($from);
             $mail->setTo([$input->getOption('email')]);
-            $mail->text('There are '.$failedTasks.' failed tasks since '.date('Y-m-d H:i',$maximumTimestamp).' , you might want to check that.');
+            $mail->text('There are ' . $failedTasks . ' tasks with status ' . $status . ' since ' . date('Y-m-d H:i', $maximumTimestamp) . ' , you might want to check that.');
             $mail->send();
         }
         return 0;
