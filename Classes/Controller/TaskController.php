@@ -185,7 +185,7 @@ class TaskController extends ActionController
         $task = $this->taskRepository->findByUid($uid);
         if (!$task) {
             $this->addFlashMessage(sprintf('Task with uid %d could not be found.', $uid), 'Task not found', ContextualFeedbackSeverity::WARNING);
-            $this->forwardToReferringRequest();
+            return (new ForwardResponse('search'));
         }
         return (new ForwardResponse('show'))->withArguments(['task' => $task]);
     }
