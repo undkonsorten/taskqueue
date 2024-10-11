@@ -22,7 +22,7 @@ return [
             'ignorePageTypeRestriction' => true,
         ],
         'searchFields' => 'name,data,status,start_date,message,priority,',
-        'iconfile' => 'EXT:taskqueue/Resources/Public/Icons/tx_taskqueue_domain_model_task.gif'
+        'iconfile' => 'EXT:taskqueue/Resources/Public/Icons/Extension.svg'
     ],
     'types' => [
         '1' => ['showitem' => 'sys_language_uid,l10n_parent,l10n_diffsource,hidden,--palette--;;1,name,data,status,start_date,message,priority,retries,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access,starttime,endtime'],
