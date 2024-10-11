@@ -147,7 +147,6 @@ class TaskController extends ActionController
         $simplePagination = new SimplePagination($paginator);
         $pagination = $this->buildSimplePagination($simplePagination, $paginator);
 
-        $this->moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         $this->moduleTemplate->assignMultiple([
             'tasks' => $paginator->getPaginatedItems(),
             'pagination' => $pagination,
@@ -165,7 +164,6 @@ class TaskController extends ActionController
      */
     public function showAction(Task $task): ResponseInterface
     {
-        $this->moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         $this->moduleTemplate->assign('task', $task);
 
         return $this->moduleTemplate->renderResponse('Task/Show');
@@ -173,7 +171,6 @@ class TaskController extends ActionController
 
     public function searchAction(): ResponseInterface
     {
-        $this->moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         return $this->moduleTemplate->renderResponse('Task/Search');
     }
 
@@ -197,7 +194,6 @@ class TaskController extends ActionController
     public function searchResultAction(string $wordsInData = ''): ResponseInterface
     {
         $tasks = $this->taskRepository->findByWordsInData($wordsInData);
-        $this->moduleTemplate = $this->moduleTemplateFactory->create($this->request);
         $this->moduleTemplate->assignMultiple([
             'tasks' => $tasks,
             'searchWords' => $wordsInData,
