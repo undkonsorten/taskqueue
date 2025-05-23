@@ -91,8 +91,8 @@ class ReactivateTasksCommand extends Command
         $failedTasks = $this->taskRepository->findFailedOutOfInterval(new \DateInterval($input->getArgument('dateInterval')));
         foreach ($failedTasks as $task){
             /** @var Task $task*/
-            $task->setRetries(Task::RETRY);
-            $task->setStatus(Task::WAITING);
+            $task->setRetries(3);
+            $task->setStatus(Task::RETRY);
             $this->taskRepository->update($task);
         }
         /** @noinspection DisconnectedForeachInstructionInspection */
