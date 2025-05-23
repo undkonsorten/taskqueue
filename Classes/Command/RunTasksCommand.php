@@ -104,7 +104,7 @@ class RunTasksCommand extends Command
                     $task->run();
                     $task->markFinished();
                     $usedTime = microtime(true) - $start;
-                    $output->writeln("Task finised in ".$usedTime,OutputInterface::VERBOSITY_VERBOSE);
+                    $output->writeln("Task finished in ".$usedTime,OutputInterface::VERBOSITY_VERBOSE);
                 }
                 catch
                     (StopRunException $exception ){
