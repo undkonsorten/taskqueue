@@ -115,7 +115,7 @@ class RunTasksCommand extends Command
                             $task->markRetry();
                         }
                         $this->skipTaskname = $exception->getTaskname();
-                    } catch (\Exception $exception) {
+                    } catch (\Throwable $exception) {
                         $task->setMessage($exception->getMessage());
                         if ($task->getRetries() === 0) {
                             $task->markFailed();
