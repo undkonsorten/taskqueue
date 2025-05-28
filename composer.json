@@ -54,7 +54,7 @@
       "extension-key": "taskqueue"
     },
 	  "branch-alias":{
-		  "dev-main": "9.1.x-dev"
+		  "dev-main": "9.2.x-dev"
 	  }
   }
 }
