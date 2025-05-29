@@ -26,9 +26,12 @@
             running
         </f:if>
 			<f:if condition="{task.status}==4">
-				<f:image src="EXT:taskqueue/Resources/Public/Icons/retry.svg"
-								 title="RETRY"/>
+				<f:image src="EXT:taskqueue/Resources/Public/Icons/retry.svg" title="RETRY"/>
 					retry
+			</f:if>
+			<f:if condition="{task.status}==5">
+				<f:image src="EXT:taskqueue/Resources/Public/Icons/terminated.svg" title="TERMINATED"/>
+				  terminated
 			</f:if>
     </td>
 </tr>

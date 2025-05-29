@@ -59,6 +59,11 @@ interface TaskInterface
     public const RETRY = 4;
 
     /**
+     *  The is signaled from outside
+     */
+    public const TERMINATED = 5;
+
+    /**
      * Returns the name
      *
      * @return string $name

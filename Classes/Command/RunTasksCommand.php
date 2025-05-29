@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Undkonsorten\Taskqueue\Command;
 
+use Symfony\Component\Console\Command\SignalableCommandInterface;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
@@ -38,7 +39,7 @@ use Undkonsorten\Taskqueue\Exception\StopRunException;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-class RunTasksCommand extends Command
+class RunTasksCommand extends Command implements SignalableCommandInterface
 {
 
     /**
@@ -57,6 +58,11 @@ class RunTasksCommand extends Command
      * @var string
      */
     protected $skipTaskname = "";
+
+    /**
+     * @var Task
+     */
+    protected $currentTask;
 
     public function injectTaskRepository(TaskRepository $taskRepository): void
     {
@@ -97,6 +103,7 @@ class RunTasksCommand extends Command
             if($task->getName() !== $this->skipTaskname) {
                 try {
                     $start = microtime(true);
+                    $this->currentTask = $task;
                     $task->setRetries($task->getRetries() - 1);
                     $task->markRunning();
                     $this->taskRepository->update($task);
@@ -135,5 +142,25 @@ class RunTasksCommand extends Command
         );
         $output->writeln("Time used: ".$globalTimeUsed,OutputInterface::VERBOSITY_VERBOSE);
         return 0;
+    }
+
+    public function getSubscribedSignals(): array
+    {
+        return [SIGINT, SIGTERM];
+    }
+
+    public function handleSignal(int $signal, false|int $previousExitCode = 0): int|false
+    {
+        if($signal === SIGINT || $signal === SIGTERM){
+            try{
+                $this->currentTask->setStatus(Task::TERMINATED);
+                $this->taskRepository->update($this->currentTask);
+                $this->persistenceManager->persistAll();
+            }catch(\Throwable $throwable){
+                return 1;
+            }
+
+        }
+        return $previousExitCode;
     }
 }
