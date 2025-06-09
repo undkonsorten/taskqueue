@@ -58,6 +58,8 @@ interface TaskInterface
      */
     public const RETRY = 4;
 
+    public const DEFERRED = 5;
+
     /**
      * Returns the name
      *

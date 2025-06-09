@@ -51,6 +51,10 @@
 										<f:image src="EXT:taskqueue/Resources/Public/Icons/running.svg"
 														 title="{task.uid}: RUNNING"/>
 									</f:if>
+									<f:if condition="{task.status}==5">
+										<f:image src="EXT:taskqueue/Resources/Public/Icons/deferred.svg"
+														 title="{task.uid}: DEFERRED" />
+									</f:if>
 									<f:if condition="{task.status}==4">
 										<f:image src="EXT:taskqueue/Resources/Public/Icons/retry.svg"
 														 title="{task.uid}: RETRY"/>
