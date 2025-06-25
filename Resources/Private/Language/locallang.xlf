@@ -31,6 +31,9 @@
 			<trans-unit id="tx_taskqueue_domain_model_task.status.retry">
 				<source>Retry</source>
 			</trans-unit>
+			<trans-unit id="tx_taskqueue_domain_model_task.status.terminated">
+				<source>Terminated</source>
+			</trans-unit>
 			<trans-unit id="tx_taskqueue_domain_model_task.record">
 				<source>Record</source>
 			</trans-unit>

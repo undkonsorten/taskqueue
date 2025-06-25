@@ -12,6 +12,7 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 use Undkonsorten\Taskqueue\Domain\Model\Task;
+use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
 use Undkonsorten\Taskqueue\Domain\Repository\TaskRepository;
 use Undkonsorten\Taskqueue\Exception\StopRunException;
 
