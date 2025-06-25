@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Undkonsorten\Taskqueue\Command;
 
+use Symfony\Component\Console\Command\SignalableCommandInterface;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
@@ -38,7 +39,7 @@ use Undkonsorten\Taskqueue\Exception\StopRunException;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-class RunTasksCommand extends Command
+class RunTasksCommand extends Command implements SignalableCommandInterface
 {
 
     /**
@@ -57,6 +58,11 @@ class RunTasksCommand extends Command
      * @var string
      */
     protected $skipTaskname = "";
+
+    /**
+     * @var TaskInterface
+     */
+    protected TaskInterface $currentTask;
 
     public function injectTaskRepository(TaskRepository $taskRepository): void
     {
@@ -97,6 +103,7 @@ class RunTasksCommand extends Command
             if($task->getName() !== $this->skipTaskname) {
                 try {
                     $start = microtime(true);
+                    $this->currentTask = $task;
                     $task->setRetries($task->getRetries() - 1);
                     $task->markRunning();
                     $this->taskRepository->update($task);
@@ -104,7 +111,7 @@ class RunTasksCommand extends Command
                     $task->run();
                     $task->markFinished();
                     $usedTime = microtime(true) - $start;
-                    $output->writeln("Task finised in ".$usedTime,OutputInterface::VERBOSITY_VERBOSE);
+                    $output->writeln("Task finished in ".$usedTime,OutputInterface::VERBOSITY_VERBOSE);
                 }
                 catch
                     (StopRunException $exception ){
@@ -135,5 +142,28 @@ class RunTasksCommand extends Command
         );
         $output->writeln("Time used: ".$globalTimeUsed,OutputInterface::VERBOSITY_VERBOSE);
         return 0;
+    }
+
+    public function getSubscribedSignals(): array
+    {
+        if(extension_loaded('pcntl')){
+            return [
+                SIGINT,
+                SIGTERM,
+            ];
+        }
+        return [];
+    }
+
+    public function handleSignal(int $signal, false|int $previousExitCode = 0): int|false
+    {
+        try{
+            $this->currentTask->setStatus(TaskInterface::TERMINATED);
+            $this->taskRepository->update($this->currentTask);
+            $this->persistenceManager->persistAll();
+        }catch(\Throwable $throwable){
+            return self::FAILURE;
+        }
+        return $previousExitCode;
     }
 }
