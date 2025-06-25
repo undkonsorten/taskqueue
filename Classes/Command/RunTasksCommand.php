@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Undkonsorten\Taskqueue\Command;
 
+use ErrorException;
 use Symfony\Component\Console\Command\SignalableCommandInterface;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
@@ -64,6 +65,12 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
      * @var TaskInterface
      */
     protected TaskInterface $currentTask;
+
+    public function __construct(?string $name = null)
+    {
+        register_shutdown_function([&$this, "shutdown"]);
+        parent::__construct($name);
+    }
 
     public function injectTaskRepository(TaskRepository $taskRepository): void
     {
@@ -160,11 +167,21 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
     {
         try{
             $this->currentTask->setStatus(TaskInterface::TERMINATED);
+            $this->currentTask->setMessage("Process was signaled with ".$signal);
             $this->taskRepository->update($this->currentTask);
             $this->persistenceManager->persistAll();
         }catch(\Throwable $throwable){
             return self::FAILURE;
         }
         return $previousExitCode;
+    }
+
+    public function shutdown(): void
+    {
+        $error = error_get_last();
+        $this->currentTask->setStatus(TaskInterface::TERMINATED);
+        $this->currentTask->setMessage($error['message'] ?? "Process had a fatal error.");
+        $this->taskRepository->update($this->currentTask);
+        $this->persistenceManager->persistAll();
     }
 }
