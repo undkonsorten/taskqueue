@@ -34,7 +34,6 @@
     }
   ],
   "require": {
-    "ext-pcntl": "*",
     "ext-json": "*",
 	"php": "^8.2",
 	"typo3/cms-backend": " ^13.2",
@@ -44,7 +43,8 @@
 	"symfony/console": "^5.4 || ^6.0 || ^7"
   },
   "suggest": {
-    "typo3/cms-dashboard": "Allows more advanced logging of the application flow"
+    "typo3/cms-dashboard": "Allows more advanced logging of the application flow",
+	"ext-pcntl": "Handling of signals, to have more robust task execution"
   },
   "autoload": {
     "psr-4": {

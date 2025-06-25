@@ -60,9 +60,9 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
     protected $skipTaskname = "";
 
     /**
-     * @var Task
+     * @var TaskInterface
      */
-    protected $currentTask;
+    protected TaskInterface $currentTask;
 
     public function injectTaskRepository(TaskRepository $taskRepository): void
     {
@@ -146,20 +146,23 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
 
     public function getSubscribedSignals(): array
     {
-        return [SIGINT, SIGTERM];
+        if(extension_loaded('pcntl')){
+            return [
+                SIGINT,
+                SIGTERM,
+            ];
+        }
+        return [];
     }
 
     public function handleSignal(int $signal, false|int $previousExitCode = 0): int|false
     {
-        if($signal === SIGINT || $signal === SIGTERM){
-            try{
-                $this->currentTask->setStatus(Task::TERMINATED);
-                $this->taskRepository->update($this->currentTask);
-                $this->persistenceManager->persistAll();
-            }catch(\Throwable $throwable){
-                return 1;
-            }
-
+        try{
+            $this->currentTask->setStatus(TaskInterface::TERMINATED);
+            $this->taskRepository->update($this->currentTask);
+            $this->persistenceManager->persistAll();
+        }catch(\Throwable $throwable){
+            return self::FAILURE;
         }
         return $previousExitCode;
     }
