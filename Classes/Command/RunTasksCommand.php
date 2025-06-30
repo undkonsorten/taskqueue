@@ -179,9 +179,11 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
     public function shutdown(): void
     {
         $error = error_get_last();
-        $this->currentTask->setStatus(TaskInterface::TERMINATED);
-        $this->currentTask->setMessage($error['message'] ?? "Process had a fatal error.");
-        $this->taskRepository->update($this->currentTask);
-        $this->persistenceManager->persistAll();
+        if(!is_null($error)){
+            $this->currentTask->setStatus(TaskInterface::TERMINATED);
+            $this->currentTask->setMessage($error['message'] ?? "Process had a fatal error.");
+            $this->taskRepository->update($this->currentTask);
+            $this->persistenceManager->persistAll();
+        }
     }
 }
