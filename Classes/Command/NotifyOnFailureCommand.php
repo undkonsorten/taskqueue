@@ -103,7 +103,7 @@ class NotifyOnFailureCommand extends Command
             /** @var MailMessage $mail */
             $mail = GeneralUtility::makeInstance(MailMessage::class);
             $from = MailUtility::getSystemFrom();
-            $mail->setSubject('There are more than '.$input->getOption('count').' tasks with status '.$input->getOption('status').'.');
+            $mail->setSubject('There are more than '.$input->getOption('count').' tasks with status '.$status.'.');
             $mail->setFrom($from);
             $mail->setTo([$input->getOption('email')]);
             $mail->text('There are ' . $failedTasks . ' tasks with status ' . $status . ' since ' . date('Y-m-d H:i', $maximumTimestamp) . ' , you might want to check that.');
