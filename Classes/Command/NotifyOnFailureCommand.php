@@ -63,7 +63,7 @@ class NotifyOnFailureCommand extends Command
             'status',
             's',
             InputOption::VALUE_OPTIONAL,
-            'Status of the task: 0|1|2|3|4|5'
+            'Status of the task: 0|1|2|3|4|5 (default: 3)'
         );
 
     }
