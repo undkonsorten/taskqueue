@@ -142,6 +142,7 @@ class TaskController extends ActionController
             TaskInterface::RUNNING => LocalizationUtility::translate('tx_taskqueue_domain_model_task.status.running','taskqueue'),
             TaskInterface::RETRY => LocalizationUtility::translate('tx_taskqueue_domain_model_task.status.retry','taskqueue'),
             TaskInterface::TERMINATED => LocalizationUtility::translate('tx_taskqueue_domain_model_task.status.terminated','taskqueue'),
+            TaskInterface::DEFERRED => LocalizationUtility::translate('tx_taskqueue_domain_model_task.status.deferred','taskqueue'),
         ];
         $currentPage = $this->request->hasArgument('currentPage') ? $this->request->getArgument('currentPage') : $currentPage;
         $paginator = new QueryResultPaginator($tasks, (integer)$currentPage, (integer)$this->settings['pagination']['itemsPerPage']);
