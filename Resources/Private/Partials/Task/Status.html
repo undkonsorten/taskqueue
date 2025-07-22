@@ -21,7 +21,11 @@
 				<f:translate extensionName="Taskqueue" key="tx_taskqueue_domain_model_task.status.retry"/>
 			</f:if>
 			<f:if condition="{task.status}==5">
-				<f:image  height="16" src="EXT:taskqueue/Resources/Public/Icons/terminated.svg" title="TERMINATED"/>
+				<f:image height="16" src="EXT:taskqueue/Resources/Public/Icons/terminated.svg" title="TERMINATED"/>
 				<f:translate extensionName="Taskqueue" key="tx_taskqueue_domain_model_task.status.terminated"/>
+			</f:if>
+			<f:if condition="{task.status}==6`">
+				<f:image height="16" src="EXT:taskqueue/Resources/Public/Icons/deferred.svg" title="DEFERRED" />
+				<f:translate extensionName="Taskqueue" key="tx_taskqueue_domain_model_task.status.deferred"/>
 			</f:if>
 </html>

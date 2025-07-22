@@ -58,6 +58,8 @@ interface TaskInterface
      */
     public const RETRY = 4;
 
+    public const DEFERRED = 6;
+
     /**
      *  The is signaled from outside
      */
