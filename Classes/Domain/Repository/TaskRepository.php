@@ -144,7 +144,8 @@ class TaskRepository extends Repository
                     $query->lessThan('tstamp', $now->getTimestamp()),
                     $query->logicalOr(...[
                         $query->equals('status', TaskInterface::FAILED),
-                        $query->equals('status', TaskInterface::FINISHED)
+                        $query->equals('status', TaskInterface::FINISHED),
+                        $query->equals('status', TaskInterface::TERMINATED)
                     ])
             ])
 
