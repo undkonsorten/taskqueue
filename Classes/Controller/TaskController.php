@@ -281,8 +281,6 @@ class TaskController extends ActionController
      */
     public function runAction(Task $task): ResponseInterface
     {
-        /** @noinspection CallableParameterUseCaseInTypeContextInspection */
-        /* @TODO this code duplicates in \Undkonsorten\Taskqueue\Controller\RunTasksCommand, maybe move to service class */
         /** @var Task $task */
         $task = $this->taskRepository->findByIdentifier($task->getUid());
         try {
