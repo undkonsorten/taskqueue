@@ -16,6 +16,7 @@ use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use Undkonsorten\Taskqueue\Domain\Model\Task;
 use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
+use Undkonsorten\Taskqueue\Event\BeforeSendingMailEvent;
 
 class NotifyOnFailureCommand extends Command
 {
@@ -107,6 +108,9 @@ class NotifyOnFailureCommand extends Command
             $mail->setFrom($from);
             $mail->setTo([$input->getOption('email')]);
             $mail->text('There are ' . $failedTasks . ' tasks with status ' . $status . ' since ' . date('Y-m-d H:i', $maximumTimestamp) . ' , you might want to check that.');
+            $this->eventDispatcher->dispatch(
+                new BeforeSendingMailEvent($mail, $failedTasks, $input),
+            );
             $mail->send();
         }
         return 0;
