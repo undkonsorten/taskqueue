@@ -15,6 +15,27 @@
 			<trans-unit id="tx_taskqueue_domain_model_task.status">
 				<source>Status</source>
 			</trans-unit>
+			<trans-unit id="tx_taskqueue_domain_model_task.status.0">
+				<source>Waiting</source>
+			</trans-unit>
+			<trans-unit id="tx_taskqueue_domain_model_task.status.1">
+				<source>Running</source>
+			</trans-unit>
+			<trans-unit id="tx_taskqueue_domain_model_task.status.2">
+				<source>Finished</source>
+			</trans-unit>
+			<trans-unit id="tx_taskqueue_domain_model_task.status.3">
+				<source>Failed</source>
+			</trans-unit>
+			<trans-unit id="tx_taskqueue_domain_model_task.status.4">
+				<source>Retry</source>
+			</trans-unit>
+			<trans-unit id="tx_taskqueue_domain_model_task.status.5">
+				<source>Terminated</source>
+			</trans-unit>
+			<trans-unit id="tx_taskqueue_domain_model_task.status.6">
+				<source>Deferred</source>
+			</trans-unit>
 			<trans-unit id="tx_taskqueue_domain_model_task.start_date">
 				<source>Start Date</source>
 			</trans-unit>

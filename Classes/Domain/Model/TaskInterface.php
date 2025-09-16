@@ -58,12 +58,15 @@ interface TaskInterface
      */
     public const RETRY = 4;
 
-    public const DEFERRED = 6;
-
     /**
      *  The is signaled from outside
      */
     public const TERMINATED = 5;
+
+    /**
+*  The job is deferred and will not be considered
+     */
+    public const DEFERRED = 6;
 
     /**
      * Returns the name
