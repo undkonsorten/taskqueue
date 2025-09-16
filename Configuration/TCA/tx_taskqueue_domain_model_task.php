@@ -99,9 +99,38 @@ return [
             'exclude' => 1,
             'label' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang_db.xlf:tx_taskqueue_domain_model_task.status',
             'config' => [
-                'type' => 'input',
-                'size' => 4,
-                'eval' => 'int'
+                'type' => 'select',
+                'renderType' => 'selectSingle',
+                'items' => [
+                    [
+                        'label' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang_db.xlf:tx_taskqueue_domain_model_task.status.0',
+                        'value' => 0,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang_db.xlf:tx_taskqueue_domain_model_task.status.1',
+                        'value' => 1,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang_db.xlf:tx_taskqueue_domain_model_task.status.2',
+                        'value' => 2,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang_db.xlf:tx_taskqueue_domain_model_task.status.3',
+                        'value' => 3,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang_db.xlf:tx_taskqueue_domain_model_task.status.4',
+                        'value' => 4,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang_db.xlf:tx_taskqueue_domain_model_task.status.5',
+                        'value' => 5,
+                    ],
+                    [
+                        'label' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang_db.xlf:tx_taskqueue_domain_model_task.status.6',
+                        'value' => 6,
+                    ],
+                ],
             ]
         ],
         'start_date' => [
