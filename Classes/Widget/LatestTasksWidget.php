@@ -60,6 +60,11 @@ class LatestTasksWidget implements WidgetInterface, RequestAwareWidgetInterface
      */
     private $dataProvider;
 
+    /**
+     * @var BackendViewFactory
+     */
+    private BackendViewFactory $backendViewFactory;
+
     public function __construct(
         WidgetConfigurationInterface $configuration,
         ListDataProviderInterface $dataProvider,
