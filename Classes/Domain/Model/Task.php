@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Undkonsorten\Taskqueue\Domain\Model;
 
+use JsonSerializable;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /***************************************************************
@@ -32,7 +33,7 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 /**
  * A Task
  */
-abstract class Task extends AbstractEntity implements TaskInterface
+abstract class Task extends AbstractEntity implements TaskInterface, JsonSerializable
 {
 
     /**
@@ -404,5 +405,19 @@ abstract class Task extends AbstractEntity implements TaskInterface
         $this->ttl = $ttl;
     }
 
+    public function jsonSerialize(): array
+    {
+        return [
+            'name' => $this->name,
+            'date' => $this->data,
+            'status' => $this->status,
+            'startDate' => $this->startDate,
+            'lastRun' => $this->lastRun,
+            'message' => $this->message,
+            'priority' => $this->priority,
+            'retries' => $this->retries,
+            'ttl' => $this->ttl,
+        ];
+    }
 
 }
