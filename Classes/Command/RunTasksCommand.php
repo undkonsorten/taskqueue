@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Undkonsorten\Taskqueue\Command;
 
 use ErrorException;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\SignalableCommandInterface;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -75,8 +76,14 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
      */
     private ExtensionConfiguration $extensionConfiguration;
 
-    public function __construct(?string $name = null)
+    /**
+     * @var LoggerInterface
+     */
+    private LoggerInterface $logger;
+
+    public function __construct(LoggerInterface $logger, ?string $name = null)
     {
+        $this->logger = $logger;
         register_shutdown_function([&$this, "shutdown"]);
         parent::__construct($name);
     }
@@ -130,6 +137,7 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
                 if ($now >= $expiry) {
                     $runningTask->markFailed();
                     $runningTask->setMessage(sprintf("Task exceeded lifetime of %d seconds", $runningTask->getTtl()));
+                    $this->logger->debug("Task exceeded lifetime of {$runningTask->getTtl()} seconds {$runningTask->getName()}", ['task' => $runningTask]);
                     $this->taskRepository->update($runningTask);
                     $this->persistenceManager->persistAll();
                 }
@@ -146,6 +154,7 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
             if ($task->getName() !== $this->skipTaskname) {
                 try {
                     $start = microtime(true);
+                    $this->logger->debug("Running task {$task->getName()}", ['task' => $task]);
                     $this->currentTask = $task;
                     $task->setRetries($task->getRetries() - 1);
                     $task->markRunning();
@@ -155,9 +164,11 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
                     $task->markFinished();
                     $usedTime = microtime(true) - $start;
                     $output->writeln("Task finished in " . $usedTime, OutputInterface::VERBOSITY_VERBOSE);
+                    $this->logger->debug("Task {$task->getName()} finished", ['task' => $task]);
                 } catch
                 (StopRunException $exception) {
                     $task->setMessage($exception->getMessage());
+                    $this->logger->debug("Caught exception: {$exception->getMessage()}", ['task' => $task, 'exception' => $exception]);
                     if ($task->getRetries() === 0) {
                         $task->markFailed();
                     } else {
@@ -166,6 +177,7 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
                     $this->skipTaskname = $exception->getTaskname();
                 } catch (\Throwable $exception) {
                     $task->setMessage($exception->getMessage());
+                    $this->logger->warning("Caught exception: {$exception->getMessage()}", ['task' => $task, 'exception' => $exception]);
                     if ($task->getRetries() === 0) {
                         $task->markFailed();
                     } else {
@@ -204,7 +216,9 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
             $this->currentTask->setMessage("Process was signaled with " . $signal);
             $this->taskRepository->update($this->currentTask);
             $this->persistenceManager->persistAll();
+            $this->logger->warning("Signal handled: $signal", ['task' => $this->currentTask]);
         } catch (\Throwable $throwable) {
+            $this->logger->critical($throwable->getMessage());
             return self::FAILURE;
         }
         return $previousExitCode;
@@ -216,6 +230,7 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
         if (!is_null($error)) {
             $this->currentTask->setStatus(TaskInterface::TERMINATED);
             $this->currentTask->setMessage($error['message'] ?? "Process had a fatal error.");
+            $this->logger->error("Shutdown function trigger with error: {$error['message']}", ['task' => $this->currentTask]);
             $this->taskRepository->update($this->currentTask);
             $this->persistenceManager->persistAll();
         }
