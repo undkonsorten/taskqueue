@@ -1,0 +1,2 @@
+# cat=FeatureSwitch; type=boolean; label=Activate TTL (time to live) for tasks, default value is 900 seconds
+activateTTL = 0
