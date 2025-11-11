@@ -90,6 +90,12 @@ abstract class Task extends AbstractEntity implements TaskInterface
      */
     protected $retries = 3;
 
+    /**
+     * time to live in seconds
+     * @var int
+     */
+    protected int $ttl = 900;
+
     public function __construct()
     {
         $this->name = static::class;
@@ -388,7 +394,15 @@ abstract class Task extends AbstractEntity implements TaskInterface
         $this->lastRun = $lastRun;
     }
 
+    public function getTtl(): int
+    {
+        return $this->ttl;
+    }
 
+    public function setTtl(int $ttl): void
+    {
+        $this->ttl = $ttl;
+    }
 
 
 }

@@ -4,6 +4,8 @@ namespace Undkonsorten\Taskqueue\Command;
 
 use ErrorException;
 use Symfony\Component\Console\Command\SignalableCommandInterface;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
@@ -12,6 +14,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
+use Undkonsorten\Taskqueue\Domain\Model\Demand;
 use Undkonsorten\Taskqueue\Domain\Model\Task;
 use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
 use Undkonsorten\Taskqueue\Domain\Repository\TaskRepository;
@@ -66,6 +69,11 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
      */
     protected TaskInterface $currentTask;
 
+    /**
+     * @var ExtensionConfiguration
+     */
+    private ExtensionConfiguration $extensionConfiguration;
+
     public function __construct(?string $name = null)
     {
         register_shutdown_function([&$this, "shutdown"]);
@@ -80,6 +88,11 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
     public function injectPersistenceManager(PersistenceManagerInterface $persistenceManager): void
     {
         $this->persistenceManager = $persistenceManager;
+    }
+
+    public function injectExtensionConfiguration(ExtensionConfiguration $extensionConfiguration):void
+    {
+        $this->extensionConfiguration = $extensionConfiguration;
     }
 
     protected function configure()
@@ -101,6 +114,30 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $globalTime = microtime(true);
+
+        /** Switch for ttl (time to live) feature */
+        $configuration = $this->extensionConfiguration->get('taskqueue');
+        if(
+            is_array($configuration) &&
+            isset($configuration['activateTTL']) &&
+            $configuration['activateTTL'] === '1'
+        ) {
+            $demand = GeneralUtility::makeInstance(Demand::class);
+            $demand->setStatus(TaskInterface::RUNNING);
+            $runningTasks = $this->taskRepository->findByDemand($demand);
+            foreach ($runningTasks as $runningTask) {
+                /** @var $runningTask Task */
+                $lastRun = $runningTask->getLastRun();
+                $lastRun->setTimestamp($lastRun->getTimestamp() + $runningTask->getTtl());
+                if($lastRun <= time()){
+                    $runningTask->markFailed();
+                    $runningTask->setMessage("Task exceeded lifetime of ".$runningTask->getTtl()." seconds");
+                    $this->taskRepository->update($runningTask);
+                    $this->persistenceManager->persistAll();
+                }
+            }
+        }
+
         $tasks = $this->taskRepository->findRunableTasks(
             $input->getArgument('limit'),
             $input->getArgument('whitelist'),

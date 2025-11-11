@@ -12,5 +12,6 @@ Configuration
 
 
    TypoScriptReference/Index
+   ExtensionSettings/Index
 
 
