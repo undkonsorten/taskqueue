@@ -213,7 +213,10 @@ Concrete Example
 
 All the code examples are taken from the extension **wall**. This extension allows feusers to write posts and comment on a wall, a little bit
 like facebook. It uses **taskqueue** to notify users on new posts and comments.
-The extension is available here: http://typo3.org/extensions/repository/view/wall
+The extension is available here: http://typo3.org/extensions/repository/view/wall (not yet)
+
+More examples:
+https://github.com/undkonsorten/typo3-cute-mailing
 
 It might help you to have a look at the code.
 
@@ -281,3 +284,15 @@ Example:
         }
       ...
       }
+
+
+Logging
+-----------------------------
+
+You can control the loglevel via TYPO3 or the environment variable TASKQUEUE_MINIMUM_LOGLEVEL.
+
+Example:
+
+::
+
+   TASKQUEUE_MINIMUM_LOGLEVEL=debug
