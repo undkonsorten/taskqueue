@@ -124,8 +124,10 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
             foreach ($runningTasks as $runningTask) {
                 /** @var $runningTask Task */
                 $lastRun = $runningTask->getLastRun();
-                $lastRun?->setTimestamp($lastRun?->getTimestamp() + $runningTask->getTtl());
-                if ($lastRun <= time()) {
+                $interval = new \DateInterval(sprintf('PT%dS', $runningTask->getTtl()));
+                $expiry = \DateTime::createFromInterface($lastRun)->add($interval);
+                $now = new \DateTime();
+                if ($now >= $expiry) {
                     $runningTask->markFailed();
                     $runningTask->setMessage(sprintf("Task exceeded lifetime of %d seconds", $runningTask->getTtl()));
                     $this->taskRepository->update($runningTask);
