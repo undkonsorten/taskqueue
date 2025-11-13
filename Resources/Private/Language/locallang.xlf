@@ -55,6 +55,9 @@
 			<trans-unit id="tx_taskqueue_domain_model_task.actions">
 				<source>Actions</source>
 			</trans-unit>
+			<trans-unit id="tx_taskqueue_domain_model_task.created_at">
+				<source>Created at</source>
+			</trans-unit>
 			<trans-unit id="tx_taskqueue_domain_model_task.last_run">
 				<source>Last run</source>
 			</trans-unit>

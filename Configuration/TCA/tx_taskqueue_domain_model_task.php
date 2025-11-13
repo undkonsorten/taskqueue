@@ -25,7 +25,7 @@ return [
         'iconfile' => 'EXT:taskqueue/Resources/Public/Icons/Extension.svg'
     ],
     'types' => [
-        '1' => ['showitem' => 'sys_language_uid,l10n_parent,l10n_diffsource,hidden,--palette--;;1,name,data,status,start_date,message,priority,ttl,retries,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access,starttime,endtime'],
+        '1' => ['showitem' => 'sys_language_uid,l10n_parent,l10n_diffsource,hidden,--palette--;;1,name,data,status,start_date,message,priority,ttl,last_run,crdate,retries,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access,starttime,endtime'],
     ],
     'palettes' => [
         '1' => ['showitem' => ''],
@@ -149,11 +149,9 @@ return [
             'exclude' => 1,
             'label' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang_db.xlf:tx_taskqueue_domain_model_task.last_run',
             'config' => [
-                'type' => 'input',
+                'type' => 'datetime',
                 'dbType' => 'datetime',
-                'renderType' => 'inputDateTime',
-                'size' => 7,
-                'eval' => 'datetime',
+                'format' => 'datetime',
                 'default' => '0000-00-00 00:00:00',
             ],
         ],
@@ -203,6 +201,15 @@ return [
                 'eval' => 'int',
                 'default' => 900
             ]
+        ],
+        'crdate' => [
+            'exclude' => 1,
+            'label' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang_db.xlf:tx_taskqueue_domain_model_task.created_at',
+            'config' => [
+                'type' => 'datetime',
+                'format' => 'datetime',
+                'readOnly' => 1
+            ],
         ],
     ],
 ];

@@ -34,6 +34,11 @@
 		</f:link.action>
 	</td>
 	<td>
+		<f:if condition="{task.createdAt}">
+			<f:format.date format="d.m.Y - H:i:s">{task.createdAt}</f:format.date>
+		</f:if>
+	</td>
+	<td>
 		<f:if condition="{task.lastRun}">
 			<f:format.date format="d.m.Y - H:i:s">{task.lastRun}</f:format.date>
 		</f:if>

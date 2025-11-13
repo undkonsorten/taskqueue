@@ -97,6 +97,11 @@ abstract class Task extends AbstractEntity implements TaskInterface, JsonSeriali
      */
     protected int $ttl = 900;
 
+    /**
+     * @var int
+     */
+    protected int $crdate;
+
     public function __construct()
     {
         $this->name = static::class;
@@ -403,6 +408,13 @@ abstract class Task extends AbstractEntity implements TaskInterface, JsonSeriali
     public function setTtl(int $ttl): void
     {
         $this->ttl = $ttl;
+    }
+
+    public function getCreatedAt(): \DateTime
+    {
+        $createdAt = new \DateTime('now');
+        $createdAt->setTimestamp($this->crdate);
+        return $createdAt;
     }
 
     public function jsonSerialize(): array
