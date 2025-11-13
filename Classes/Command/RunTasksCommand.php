@@ -130,16 +130,18 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
             $runningTasks = $this->taskRepository->findByDemand($demand);
             foreach ($runningTasks as $runningTask) {
                 /** @var $runningTask Task */
-                $lastRun = $runningTask->getLastRun();
-                $interval = new \DateInterval(sprintf('PT%dS', $runningTask->getTtl()));
-                $expiry = \DateTime::createFromInterface($lastRun)->add($interval);
-                $now = new \DateTime();
-                if ($now >= $expiry) {
-                    $runningTask->markFailed();
-                    $runningTask->setMessage(sprintf("Task exceeded lifetime of %d seconds", $runningTask->getTtl()));
-                    $this->logger->debug("Task exceeded lifetime of {$runningTask->getTtl()} seconds {$runningTask->getName()}", ['task' => $runningTask]);
-                    $this->taskRepository->update($runningTask);
-                    $this->persistenceManager->persistAll();
+                if($runningTask->getTtl() > 0){
+                    $lastRun = $runningTask->getLastRun();
+                    $interval = new \DateInterval(sprintf('PT%dS', $runningTask->getTtl()));
+                    $expiry = \DateTime::createFromInterface($lastRun)->add($interval);
+                    $now = new \DateTime();
+                    if ($now >= $expiry) {
+                        $runningTask->markFailed();
+                        $runningTask->setMessage(sprintf("Task exceeded lifetime of %d seconds", $runningTask->getTtl()));
+                        $this->logger->debug("Task exceeded lifetime of {$runningTask->getTtl()} seconds {$runningTask->getName()}", ['task' => $runningTask]);
+                        $this->taskRepository->update($runningTask);
+                        $this->persistenceManager->persistAll();
+                    }
                 }
             }
         }

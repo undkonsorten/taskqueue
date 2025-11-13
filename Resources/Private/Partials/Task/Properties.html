@@ -50,13 +50,23 @@
         {task.retries}
     </td>
 </tr>
-<f:if condition="{task.status} == 3">
+<f:if condition="{task.lastRun} == 3">
 	<tr>
 		<td>
-			<f:translate key="tx_taskqueue_domain_model_task.lastTry">last try</f:translate>
+			<f:translate key="tx_taskqueue_domain_model_task.lastRun">Last Run</f:translate>
 		</td>
 		<td>
-			{task.tstamp}
+			<f:format.date format="d.m.Y - H:i:s">{task.lastRun}</f:format.date>
+		</td>
+	</tr>
+</f:if>
+<f:if condition="{task.ttl} > 0">
+	<tr>
+		<td>
+			<f:translate key="tx_taskqueue_domain_model_task.ttl">Time to life</f:translate>
+		</td>
+		<td>
+			{task.ttl} seconds
 		</td>
 	</tr>
 </f:if>

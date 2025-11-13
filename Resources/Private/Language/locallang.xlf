@@ -58,6 +58,9 @@
 			<trans-unit id="tx_taskqueue_domain_model_task.last_run">
 				<source>Last run</source>
 			</trans-unit>
+			<trans-unit id="tx_taskqueue_domain_model_task.ttl">
+				<source>Time to live (seconds)</source>
+			</trans-unit>
 			<trans-unit id="tx_taskqueue_domain_model_task.additionalInformation">
 				<source>Additional Information</source>
 			</trans-unit>
