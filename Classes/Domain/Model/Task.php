@@ -100,7 +100,7 @@ abstract class Task extends AbstractEntity implements TaskInterface, JsonSeriali
     /**
      * @var int
      */
-    protected int $crdate;
+    protected $crdate;
 
     public function __construct()
     {
