@@ -159,6 +159,27 @@ class TaskRepository extends Repository
      * @return array|QueryResultInterface
      * @throws InvalidQueryException
      */
+    public function findDeferredOutOfInterval(\DateInterval $dateInterval)
+    {
+        $now = new \DateTime('now');
+        $now->sub($dateInterval);
+        $query = $this->createQuery();
+        $query->matching(
+            $query->logicalAnd(...[
+                $query->greaterThan('crdate', $now->getTimestamp()),
+                $query->equals('status', TaskInterface::DEFERRED)
+            ])
+
+        );
+        return $query->execute();
+
+    }
+
+    /**
+     * @param \DateInterval $dateInterval
+     * @return array|QueryResultInterface
+     * @throws InvalidQueryException
+     */
     public function findFailedOutOfInterval(\DateInterval $dateInterval)
     {
         $now = new \DateTime('now');

@@ -54,6 +54,38 @@ DateInterval defines the intervall after witch the tasks should be deleted.
 The following syntax is supported:
 https://www.php.net/manual/en/dateinterval.construct.php
 
+::
+
+   ./vendor/bin/typo3cms taskqueue:activate-deferred-tasks dateInterval
+
+All deferred tasks in this date intervall will be activated (status = WAITING)
+
+::
+
+   ./vendor/bin/typo3cms taskqueue:reactivate-failed-tasks dateInterval
+
+All failed tasks in this date intervall will be reactivated (status = RETRY)
+
+
+::
+
+   ./vendor/bin/typo3cms taskqueue:notify-on-failure name count email interval status
+
+With this command notification can be controlled.
+
+- name: The name of the task to be watched.
+- count: Number of failed tasks.
+- email: Email to send the notification to.
+- interval: Date interval of tasks that should be respected.
+- status: Status of the task: 0|1|2|3|4|5|6 (default: 3)
+
+Example:
+
+Notify es@as.de when there are more than 10 failed tasks in the last three days with name Undkonsorten\Motion\Domain\Model\Task\MotionTask
+
+::
+
+   ./vendor/bin/typo3cms taskqueue:notify-on-failure --name='Undkonsorten\Motion\Domain\Model\Task\MotionTask' --count=10 --email='fonds@undkonsorten.com' --interval=P3D
 
 Cronjob
 -------
