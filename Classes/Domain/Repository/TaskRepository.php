@@ -2,6 +2,7 @@
 declare(strict_types=1);
 namespace Undkonsorten\Taskqueue\Domain\Repository;
 
+use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Generic\Qom\ConstraintInterface;
@@ -12,6 +13,7 @@ use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
 use TYPO3\CMS\Extbase\Persistence\Repository;
 use Undkonsorten\Taskqueue\Domain\Model\Demand;
 use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
+use Undkonsorten\Taskqueue\Event\BeforeExecuteQueryFindDeferredOutOfIntervalEvent;
 
 /***************************************************************
  *
@@ -171,6 +173,11 @@ class TaskRepository extends Repository
             ])
 
         );
+        /** @var BeforeExecuteQueryFindDeferredOutOfIntervalEvent $event */
+        $event = $this->eventDispatcher->dispatch(
+            new BeforeExecuteQueryFindDeferredOutOfIntervalEvent($query),
+        );
+        $query = $event->getQuery();
         return $query->execute();
 
     }
