@@ -128,7 +128,7 @@ class TaskController extends ActionController
      * @return ResponseInterface
      * @throws NoSuchArgumentException
      */
-    public function listAction(int $currentPage = 1, Demand $demand = null): ResponseInterface
+    public function listAction(int $currentPage = 1, ?Demand $demand = null): ResponseInterface
     {
         if(is_null($demand)){
             $tasks = $this->taskRepository->findAll();
