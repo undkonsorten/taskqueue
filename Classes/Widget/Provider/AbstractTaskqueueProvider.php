@@ -51,14 +51,6 @@ abstract class AbstractTaskqueueProvider implements ChartDataProviderInterface
     }
 
     /**
-     *
-     */
-    protected function prepareChartData(): void
-    {
-        $this->chartData = $this->getChartData();
-    }
-
-    /**
      * @return array
      */
     public function getChartData(): array
