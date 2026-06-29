@@ -35,10 +35,10 @@
   ],
   "require": {
     "ext-json": "*",
-	"php": "^8.2",
-	"typo3/cms-backend": " ^13.2",
-	"typo3/cms-core": "^13.2",
-	"typo3/cms-extbase": "^13.2",
+	"php": "^8.3",
+	"typo3/cms-backend": " ^13.4 || ^14.3",
+	"typo3/cms-core": "^13.4 || ^14.3",
+	"typo3/cms-extbase": "^13.4 || ^14.3",
 	"undkonsorten/extbase-cli-aware-configuration-manager": "^0.1",
 	"symfony/console": "^5.4 || ^6.0 || ^7"
   },
@@ -56,7 +56,7 @@
       "extension-key": "taskqueue"
     },
 	  "branch-alias":{
-		  "dev-main": "9.2.x-dev"
+		  "dev-develop": "9.6.x-dev"
 	  }
   }
 }
