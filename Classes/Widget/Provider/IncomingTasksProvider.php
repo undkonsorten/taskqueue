@@ -16,6 +16,7 @@ class IncomingTasksProvider extends AbstractTaskqueueProvider
 
     protected $datefield = 'crdate';
 
+    #[\Override]
     protected function getNumberOfTasksInPeriod(int $start, int $end): int
     {
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_taskqueue_domain_model_task');

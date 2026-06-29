@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-
+use TYPO3\CMS\Backend\View\BackendViewFactory;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
@@ -22,7 +22,7 @@ return static function (ContainerConfigurator $configurator, ContainerBuilder $c
         $services->set('dashboard.widget.taskqueue.latestTasks')
             ->class(LatestTasksWidget::class)
             ->arg('$dataProvider', new Reference(LatestTasksProvider::class))
-            ->arg('$backendViewFactory', new Reference(\TYPO3\CMS\Backend\View\BackendViewFactory::class))
+            ->arg('$backendViewFactory', new Reference(BackendViewFactory::class))
             ->arg('$options', ['refreshAvailable' => true])
             ->tag('dashboard.widget', [
                 'identifier' => 'latesttasks',
@@ -37,7 +37,7 @@ return static function (ContainerConfigurator $configurator, ContainerBuilder $c
         $services->set('dashboard.widget.taskqueue.failedTasks')
             ->class(BarChartWidget::class)
             ->arg('$dataProvider', new Reference(FailedTasksProvider::class))
-            ->arg('$backendViewFactory', new Reference(\TYPO3\CMS\Backend\View\BackendViewFactory::class))
+            ->arg('$backendViewFactory', new Reference(BackendViewFactory::class))
             ->arg('$options', ['refreshAvailable' => true])
             ->tag('dashboard.widget', [
                 'identifier' => 'failedtasks',
@@ -52,7 +52,7 @@ return static function (ContainerConfigurator $configurator, ContainerBuilder $c
         $services->set('dashboard.widget.taskqueue.finishedTasks')
             ->class(BarChartWidget::class)
             ->arg('$dataProvider', new Reference(FinishedTasksProvider::class))
-            ->arg('$backendViewFactory', new Reference(\TYPO3\CMS\Backend\View\BackendViewFactory::class))
+            ->arg('$backendViewFactory', new Reference(BackendViewFactory::class))
             ->arg('$options', ['refreshAvailable' => true])
             ->tag('dashboard.widget', [
                 'identifier' => 'finishedtasks',
@@ -67,7 +67,7 @@ return static function (ContainerConfigurator $configurator, ContainerBuilder $c
         $services->set('dashboard.widget.taskqueue.icomingTasks')
             ->class(BarChartWidget::class)
             ->arg('$dataProvider', new Reference(IncomingTasksProvider::class))
-            ->arg('$backendViewFactory', new Reference(\TYPO3\CMS\Backend\View\BackendViewFactory::class))
+            ->arg('$backendViewFactory', new Reference(BackendViewFactory::class))
             ->arg('$options', ['refreshAvailable' => true])
             ->tag('dashboard.widget', [
                 'identifier' => 'incomingtasks',
@@ -81,7 +81,7 @@ return static function (ContainerConfigurator $configurator, ContainerBuilder $c
         $services->set('dashboard.widget.taskqueue.taskThroughput')
             ->class(BarChartWidget::class)
             ->arg('$dataProvider', new Reference(TaskThroughputProvider::class))
-            ->arg('$backendViewFactory', new Reference(\TYPO3\CMS\Backend\View\BackendViewFactory::class))
+            ->arg('$backendViewFactory', new Reference(BackendViewFactory::class))
             ->arg('$options', ['refreshAvailable' => true])
             ->tag('dashboard.widget', [
                 'identifier' => 'taskthroughput',
@@ -95,7 +95,7 @@ return static function (ContainerConfigurator $configurator, ContainerBuilder $c
         $services->set('dashboard.widget.taskqueue.waitingTasks')
             ->class(BarChartWidget::class)
             ->arg('$dataProvider', new Reference(WaitingTasksProvider::class))
-            ->arg('$backendViewFactory', new Reference(\TYPO3\CMS\Backend\View\BackendViewFactory::class))
+            ->arg('$backendViewFactory', new Reference(BackendViewFactory::class))
             ->arg('$options', ['refreshAvailable' => true])
             ->tag('dashboard.widget', [
                 'identifier' => 'waitingtasks',

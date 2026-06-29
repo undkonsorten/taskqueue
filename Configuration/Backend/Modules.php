@@ -1,5 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
+use Undkonsorten\Taskqueue\Controller\TaskController;
+
 return [
     'taskqueue' => [
         'parent' => 'tools',
@@ -11,7 +15,7 @@ return [
         'labels' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang_taskqueue.xlf',
         'extensionName' => 'Taskqueue',
         'controllerActions' => [
-            \Undkonsorten\Taskqueue\Controller\TaskController::class => [
+            TaskController::class => [
                 'list', 'show', 'delete', 'run', 'deleteFinished', 'deleteFailed', 'reactivate', 'search', 'searchUid', 'searchResult',
             ],
         ],

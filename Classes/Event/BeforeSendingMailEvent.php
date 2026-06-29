@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Undkonsorten\Taskqueue\Event;
 
 use Symfony\Component\Console\Input\InputInterface;

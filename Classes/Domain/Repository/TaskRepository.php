@@ -4,8 +4,6 @@ namespace Undkonsorten\Taskqueue\Domain\Repository;
 
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Persistence\Generic\Qom\ConstraintInterface;
-use TYPO3\CMS\Extbase\Persistence\Generic\Qom\LogicalAnd;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
@@ -77,10 +75,10 @@ class TaskRepository extends Repository
             ]),
             $query->lessThanOrEqual('startDate', time()),
         ];
-        if ($whitelist) {
+        if ($whitelist !== []) {
             $constraints[] = $query->in('name', $whitelist);
         }
-        if ($blacklist) {
+        if ($blacklist !== []) {
             $constraints[] = $query->logicalNot(
                 $query->in('name', $blacklist)
             );

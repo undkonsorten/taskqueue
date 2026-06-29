@@ -10,6 +10,10 @@ use TYPO3\CMS\Dashboard\Widgets\ChartDataProviderInterface;
 abstract class AbstractTaskqueueProvider implements ChartDataProviderInterface
 {
     /**
+     * @var mixed[]
+     */
+    public $chartData;
+    /**
      * @var string
      */
     protected $title = 'Failed by tasks by entry date';

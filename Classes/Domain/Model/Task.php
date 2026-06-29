@@ -378,7 +378,7 @@ abstract class Task extends AbstractEntity implements TaskInterface, JsonSeriali
      * @param int $retries
      * @return mixed|void
      */
-    public function reactivate(int $retries = 3)
+    public function reactivate(int $retries = 3): void
     {
         $this->setStatus(TaskInterface::RETRY);
         $this->setRetries($retries);
