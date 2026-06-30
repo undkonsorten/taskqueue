@@ -30,7 +30,7 @@ final class TaskRepositoryTest extends FunctionalTestCase
     #[Test]
     public function findRunableTasksReturnsWaitingAndRetryTasks(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../Fixtures/WaitingAndRetryTasks.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/WaitingAndRetryTasks.csv');
 
         $result = $this->subject->findRunableTasks(10);
 
@@ -41,7 +41,7 @@ final class TaskRepositoryTest extends FunctionalTestCase
     #[Test]
     public function findRunableTasksRespectsLimit(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../Fixtures/WaitingAndRetryTasks.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/WaitingAndRetryTasks.csv');
 
         $result = $this->subject->findRunableTasks(1);
 
@@ -52,7 +52,7 @@ final class TaskRepositoryTest extends FunctionalTestCase
     public function findRunableTasksFiltersOutFutureStartDate(): void
     {
         // A task with start_date in the far future should not be returned
-        $this->importCSVDataSet(__DIR__ . '/../Fixtures/WaitingAndRetryTasks.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/WaitingAndRetryTasks.csv');
 
         // All fixture tasks have start_date = 0 (past), so all WAITING+RETRY should be included
         $result = $this->subject->findRunableTasks(10);
@@ -62,7 +62,7 @@ final class TaskRepositoryTest extends FunctionalTestCase
     #[Test]
     public function findRunableTasksRespectsWhitelist(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../Fixtures/WaitingAndRetryTasks.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/WaitingAndRetryTasks.csv');
 
         $result = $this->subject->findRunableTasks(10, 'NonExistentTask');
 
@@ -72,7 +72,7 @@ final class TaskRepositoryTest extends FunctionalTestCase
     #[Test]
     public function findRunableTasksRespectsBlacklist(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../Fixtures/WaitingAndRetryTasks.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/WaitingAndRetryTasks.csv');
 
         $taskName = 'Undkonsorten\TaskqueueTest\Domain\Model\TestTask';
         $result = $this->subject->findRunableTasks(10, '', $taskName);
@@ -83,7 +83,7 @@ final class TaskRepositoryTest extends FunctionalTestCase
     #[Test]
     public function findRunableTasksOrdersByPriorityDescending(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../Fixtures/PriorityOrderTasks.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/PriorityOrderTasks.csv');
 
         $result = $this->subject->findRunableTasks(10);
         $items = iterator_to_array($result);
@@ -97,7 +97,7 @@ final class TaskRepositoryTest extends FunctionalTestCase
     #[Test]
     public function findFinishedReturnsOnlyFinishedTasks(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../Fixtures/FinishedAndFailedTasks.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/FinishedAndFailedTasks.csv');
 
         $result = $this->subject->findFinished();
 
@@ -108,7 +108,7 @@ final class TaskRepositoryTest extends FunctionalTestCase
     #[Test]
     public function findFailedReturnsOnlyFailedTasks(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../Fixtures/FinishedAndFailedTasks.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/FinishedAndFailedTasks.csv');
 
         $result = $this->subject->findFailed();
 
@@ -119,7 +119,7 @@ final class TaskRepositoryTest extends FunctionalTestCase
     #[Test]
     public function findOutOfIntervalReturnsOldCompletedTasks(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../Fixtures/OldTasks.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/OldTasks.csv');
 
         // P1D = tasks older than 1 day; uid 1,2,3 have old tstamp, uid 4 has future tstamp
         $result = $this->subject->findOutOfInterval(new \DateInterval('P1D'));
@@ -130,7 +130,7 @@ final class TaskRepositoryTest extends FunctionalTestCase
     #[Test]
     public function findOutOfIntervalExcludesRecentTasks(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../Fixtures/OldTasks.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/OldTasks.csv');
 
         // uid 4 has tstamp far in the future so it should never be "out of interval"
         $result = $this->subject->findOutOfInterval(new \DateInterval('P1D'));
@@ -142,7 +142,7 @@ final class TaskRepositoryTest extends FunctionalTestCase
     #[Test]
     public function findFailedOutOfIntervalReturnsRecentlyFailedTasks(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../Fixtures/OldTasks.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/OldTasks.csv');
 
         // uid 2 is FAILED with old crdate; this method looks for FAILED within the interval
         // P100Y includes everything
@@ -157,7 +157,7 @@ final class TaskRepositoryTest extends FunctionalTestCase
     #[Test]
     public function findByWordsInDataMatchesSubstring(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../Fixtures/TasksWithData.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/TasksWithData.csv');
 
         $result = $this->subject->findByWordsInData('foo@example.com');
 
@@ -167,7 +167,7 @@ final class TaskRepositoryTest extends FunctionalTestCase
     #[Test]
     public function findByWordsInDataReturnsNothingForUnmatchedString(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../Fixtures/TasksWithData.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/TasksWithData.csv');
 
         $result = $this->subject->findByWordsInData('nobody@nowhere.invalid');
 
@@ -177,7 +177,7 @@ final class TaskRepositoryTest extends FunctionalTestCase
     #[Test]
     public function findByDemandWithStatusReturnsMatchingTasks(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../Fixtures/FinishedAndFailedTasks.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/FinishedAndFailedTasks.csv');
 
         $demand = new Demand();
         $demand->setStatus(TaskInterface::FINISHED);
@@ -191,7 +191,7 @@ final class TaskRepositoryTest extends FunctionalTestCase
     #[Test]
     public function findByDemandWithNullStatusReturnsAllTasks(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/../Fixtures/FinishedAndFailedTasks.csv');
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/FinishedAndFailedTasks.csv');
 
         $demand = new Demand();
         // status is null by default → no filter
