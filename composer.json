@@ -34,7 +34,6 @@
 		"typo3/cms-backend": "^13.4 || ^14.3",
 		"typo3/cms-core": "^13.4 || ^14.3",
 		"typo3/cms-extbase": "^13.4 || ^14.3",
-		"typo3/minimal": "^13.4 || ^14.3",
 		"undkonsorten/extbase-cli-aware-configuration-manager": "^0.2"
 	},
 	"require-dev": {
