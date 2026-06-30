@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Undkonsorten\Taskqueue\Domain\Repository;
 
+use DateTime;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
@@ -136,7 +137,7 @@ class TaskRepository extends Repository
      */
     public function findOutOfInterval(\DateInterval $dateInterval)
     {
-        $now = new \DateTime('now');
+        $now = new DateTime('now');
         $now->sub($dateInterval);
         $query = $this->createQuery();
         $query->matching(
@@ -160,7 +161,7 @@ class TaskRepository extends Repository
      */
     public function findFailedOutOfInterval(\DateInterval $dateInterval)
     {
-        $now = new \DateTime('now');
+        $now = new DateTime('now');
         $now->sub($dateInterval);
         $query = $this->createQuery();
         $query->matching(

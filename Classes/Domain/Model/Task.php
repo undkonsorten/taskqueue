@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Undkonsorten\Taskqueue\Domain\Model;
 
+use DateTime;
+use InvalidArgumentException;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /***************************************************************
@@ -189,7 +191,7 @@ abstract class Task extends AbstractEntity implements TaskInterface, \JsonSerial
         if (is_array($value)) {
             array_walk_recursive($value, function ($element) {
                 if (!is_array($element) && !self::isScalarOrNull($element)) {
-                    throw new \InvalidArgumentException('The given array contains a complex type. Dont put complex types to a task, it might not be serializable.', 1452100147);
+                    throw new InvalidArgumentException('The given array contains a complex type. Dont put complex types to a task, it might not be serializable.', 1452100147);
                 }
             });
 
@@ -201,7 +203,7 @@ abstract class Task extends AbstractEntity implements TaskInterface, \JsonSerial
             $data[$property] = $value;
             $this->setData($data);
         } else {
-            throw new \InvalidArgumentException('Dont put complex types to a task, it might not be serializable', 1452100146);
+            throw new InvalidArgumentException('Dont put complex types to a task, it might not be serializable', 1452100146);
         }
     }
 
@@ -354,7 +356,7 @@ abstract class Task extends AbstractEntity implements TaskInterface, \JsonSerial
     public function markRunning(): void
     {
         $this->setStatus(TaskInterface::RUNNING);
-        $this->setLastRun(new \DateTime('now'));
+        $this->setLastRun(new DateTime('now'));
     }
 
     public function markFinished(): void
@@ -412,7 +414,7 @@ abstract class Task extends AbstractEntity implements TaskInterface, \JsonSerial
 
     public function getCreatedAt(): \DateTime
     {
-        $createdAt = new \DateTime('now');
+        $createdAt = new DateTime('now');
         $createdAt->setTimestamp($this->crdate);
         return $createdAt;
     }

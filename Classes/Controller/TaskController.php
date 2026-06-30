@@ -183,7 +183,7 @@ class TaskController extends ActionController
             $this->addFlashMessage(sprintf('Task with uid %d could not be found.', $uid), 'Task not found', ContextualFeedbackSeverity::WARNING);
             return new ForwardResponse('search');
         }
-        return new ForwardResponse('show')->withArguments(['task' => $task]);
+        return (new ForwardResponse('show'))->withArguments(['task' => $task]);
     }
 
     /**
@@ -347,7 +347,7 @@ class TaskController extends ActionController
                 'icon' => 'actions-search',
             ],
         ];
-        foreach ($buttons as $key => $tableConfiguration) {
+        foreach ($buttons as $tableConfiguration) {
             $title = LocalizationUtility::translate($tableConfiguration['label'], 'taskqueue');
             $viewButton = $this->componentFactory->createLinkButton()
                 ->setHref($this->uriBuilder->reset()->setRequest($this->request)->uriFor(

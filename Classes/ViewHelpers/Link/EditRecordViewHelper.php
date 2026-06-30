@@ -16,6 +16,7 @@ namespace Undkonsorten\Taskqueue\ViewHelpers\Link;
  *
  * The TYPO3 project - inspiring people to share!
  */
+use InvalidArgumentException;
 use TYPO3\CMS\Backend\Routing\Exception\RouteNotFoundException;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -76,7 +77,7 @@ class EditRecordViewHelper extends AbstractTagBasedViewHelper
     public function render(): string
     {
         if ($this->arguments['uid'] < 1) {
-            throw new \InvalidArgumentException('Uid must be a positive integer, ' . $this->arguments['uid'] . ' given.', 1526127158);
+            throw new InvalidArgumentException('Uid must be a positive integer, ' . $this->arguments['uid'] . ' given.', 1526127158);
         }
         if (empty($this->arguments['returnUrl'])) {
             $this->arguments['returnUrl'] = GeneralUtility::getIndpEnv('REQUEST_URI');

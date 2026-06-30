@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Undkonsorten\Taskqueue\Command;
 
+use DateInterval;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -76,7 +77,7 @@ class DeleteTasksCommand extends Command
      */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
-        $tasks = $this->taskRepository->findOutOfInterval(new \DateInterval($input->getArgument('keepDateInterval')));
+        $tasks = $this->taskRepository->findOutOfInterval(new DateInterval($input->getArgument('keepDateInterval')));
         if ($tasks->count() === 0) {
             $output->writeln('<info>No tasks found older than ' . $input->getArgument('keepDateInterval') . '</info>');
         } else {

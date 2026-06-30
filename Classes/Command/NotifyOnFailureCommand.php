@@ -2,6 +2,8 @@
 
 namespace Undkonsorten\Taskqueue\Command;
 
+use DateInterval;
+use DateTimeImmutable;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -82,7 +84,7 @@ class NotifyOnFailureCommand extends Command
         $io->title($this->getDescription());
         if (!is_null($input->getOption('interval'))) {
             $minAge = $input->getOption('interval');
-            $expiryDate = new \DateTimeImmutable()->sub(new \DateInterval($minAge));
+            $expiryDate = (new DateTimeImmutable())->sub(new DateInterval($minAge));
             $maximumTimestamp = $expiryDate->format('U');
         } else {
             $maximumTimestamp = 0;

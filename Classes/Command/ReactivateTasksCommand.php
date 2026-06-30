@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Undkonsorten\Taskqueue\Command;
 
+use DateInterval;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
@@ -86,7 +87,7 @@ class ReactivateTasksCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $globalTime = microtime(true);
-        $failedTasks = $this->taskRepository->findFailedOutOfInterval(new \DateInterval($input->getArgument('dateInterval')));
+        $failedTasks = $this->taskRepository->findFailedOutOfInterval(new DateInterval($input->getArgument('dateInterval')));
         foreach ($failedTasks as $task) {
             /** @var Task $task*/
             $task->setRetries(3);

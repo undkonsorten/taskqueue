@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Undkonsorten\Taskqueue\Command;
 
+use DateInterval;
+use DateTime;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Command\SignalableCommandInterface;
@@ -124,9 +126,9 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
                 /** @var $runningTask Task */
                 if ($runningTask->getTtl() > 0) {
                     $lastRun = $runningTask->getLastRun();
-                    $interval = new \DateInterval(sprintf('PT%dS', $runningTask->getTtl()));
+                    $interval = new DateInterval(sprintf('PT%dS', $runningTask->getTtl()));
                     $expiry = \DateTime::createFromInterface($lastRun)->add($interval);
-                    $now = new \DateTime();
+                    $now = new DateTime();
                     if ($now >= $expiry) {
                         $runningTask->markFailed();
                         $runningTask->setMessage(sprintf('Task exceeded lifetime of %d seconds', $runningTask->getTtl()));
