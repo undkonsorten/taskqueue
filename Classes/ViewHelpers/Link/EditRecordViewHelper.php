@@ -49,11 +49,18 @@ class EditRecordViewHelper extends AbstractTagBasedViewHelper
      * @var string
      */
     protected $tagName = 'a';
+    /**
+     * Constructor
+     */
+    public function __construct(private readonly UriBuilder $uriBuilder)
+    {
+        parent::__construct();
+    }
 
-    public function initializeArguments()
+    #[\Override]
+    public function initializeArguments(): void
     {
         parent::initializeArguments();
-        $this->registerUniversalTagAttributes();
         $this->registerArgument('uid', 'int', 'uid of record to be edited', true);
         $this->registerArgument('table', 'string', 'target database table', true);
         $this->registerArgument('returnUrl', 'string', 'return to this URL after closing the edit dialog', false, '');
@@ -63,6 +70,7 @@ class EditRecordViewHelper extends AbstractTagBasedViewHelper
      * @return string
      * @throws RouteNotFoundException
      */
+    #[\Override]
     public function render(): string
     {
         if ($this->arguments['uid'] < 1) {
@@ -76,7 +84,7 @@ class EditRecordViewHelper extends AbstractTagBasedViewHelper
             'edit' => [$this->arguments['table'] => [$this->arguments['uid'] => 'edit']],
             'returnUrl' => $this->arguments['returnUrl']
         ];
-        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+        $uriBuilder = $this->uriBuilder;
         $uri = (string)$uriBuilder->buildUriFromRoute('record_edit', $params);
         $this->tag->addAttribute('href', $uri);
         $this->tag->setContent($this->renderChildren());

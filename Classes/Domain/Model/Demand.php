@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Undkonsorten\Taskqueue\Domain\Model;
 
 use TYPO3\CMS\Extbase\DomainObject\AbstractValueObject;

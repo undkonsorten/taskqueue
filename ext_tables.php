@@ -1,4 +1,7 @@
 <?php
+use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
+use Undkonsorten\Taskqueue\Controller\TaskController;
+
 if (!defined('TYPO3')) {
     die('Access denied.');
 }
@@ -8,13 +11,13 @@ if (!defined('TYPO3')) {
         /**
          * Registers a Backend Module
          */
-        \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
+        ExtensionUtility::registerModule(
             'Taskqueue',
             'tools',     // Make module a submodule of 'tools'
             'taskqueue',    // Submodule key
             '',                        // Position
             [
-                \Undkonsorten\Taskqueue\Controller\TaskController::class => 'list, show, delete, run, deleteFinished, deleteFailed, reactivate, search, searchUid, searchResult',
+                TaskController::class => 'list, show, delete, run, deleteFinished, deleteFailed, reactivate, search, searchUid, searchResult',
 
             ],
             [

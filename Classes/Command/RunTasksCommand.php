@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Undkonsorten\Taskqueue\Command;
 
-use ErrorException;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Command\SignalableCommandInterface;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
@@ -17,7 +16,6 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 use Undkonsorten\Taskqueue\Domain\Model\Demand;
-use Undkonsorten\Taskqueue\Domain\Model\Task;
 use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
 use Undkonsorten\Taskqueue\Domain\Repository\TaskRepository;
 use Undkonsorten\Taskqueue\Exception\StopRunException;
@@ -76,14 +74,8 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
      */
     private ExtensionConfiguration $extensionConfiguration;
 
-    /**
-     * @var LoggerInterface
-     */
-    private LoggerInterface $logger;
-
-    public function __construct(LoggerInterface $logger, ?string $name = null)
+    public function __construct(private readonly LoggerInterface $logger, ?string $name = null)
     {
-        $this->logger = $logger;
         register_shutdown_function([&$this, "shutdown"]);
         parent::__construct($name);
     }
@@ -200,6 +192,7 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
         return 0;
     }
 
+    #[\Override]
     public function getSubscribedSignals(): array
     {
         if (extension_loaded('pcntl')) {
@@ -211,6 +204,7 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
         return [];
     }
 
+    #[\Override]
     public function handleSignal(int $signal, false|int $previousExitCode = 0): int|false
     {
         try {

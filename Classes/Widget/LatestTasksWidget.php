@@ -24,7 +24,6 @@ use TYPO3\CMS\Dashboard\Widgets\ListDataProviderInterface;
 use TYPO3\CMS\Dashboard\Widgets\RequestAwareWidgetInterface;
 use TYPO3\CMS\Dashboard\Widgets\WidgetConfigurationInterface;
 use TYPO3\CMS\Dashboard\Widgets\WidgetInterface;
-use TYPO3\CMS\Fluid\View\StandaloneView;
 
 /**
  * Concrete List Widget implementation
@@ -42,41 +41,10 @@ class LatestTasksWidget implements WidgetInterface, RequestAwareWidgetInterface
     private ServerRequestInterface $request;
 
     /**
-     * @var WidgetConfigurationInterface
+     * @param ButtonProviderInterface|null $buttonProvider
      */
-    private $configuration;
-
-    /**
-     * @var array
-     */
-    private $options;
-    /**
-     * @var ButtonProviderInterface|null
-     */
-    private $buttonProvider;
-
-    /**
-     * @var ListDataProviderInterface
-     */
-    private $dataProvider;
-
-    /**
-     * @var BackendViewFactory
-     */
-    private BackendViewFactory $backendViewFactory;
-
-    public function __construct(
-        WidgetConfigurationInterface $configuration,
-        ListDataProviderInterface $dataProvider,
-        BackendViewFactory $backendViewFactory,
-        $buttonProvider = null,
-        array $options = []
-    ) {
-        $this->configuration = $configuration;
-        $this->backendViewFactory = $backendViewFactory;
-        $this->options = $options;
-        $this->buttonProvider = $buttonProvider;
-        $this->dataProvider = $dataProvider;
+    public function __construct(private readonly WidgetConfigurationInterface $configuration, private readonly ListDataProviderInterface $dataProvider, private readonly BackendViewFactory $backendViewFactory, private $buttonProvider = null, private readonly array $options = [])
+    {
     }
 
     public function renderWidgetContent(): string

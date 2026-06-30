@@ -1,62 +1,62 @@
 {
-  "name": "undkonsorten/taskqueue",
-  "type": "typo3-cms-extension",
-  "description": "Provides a task queue for other extensions to use.",
-  "homepage": "https://www.undkonsorten.com",
-  "authors": [
-    {
-      "name": "Eike Starkmann",
-      "email": "starkmann@undkonsorten.com",
-      "homepage": "http://undkonsorten.com",
-      "role": "Developer"
-    },
-    {
-      "name": "Thomas Alboth",
-      "email": "alboth@undkonsorten.com",
-      "homepage": "http://undkonsorten.com",
-      "role": "Product Owner"
-    }
-  ],
-  "license": [
-    "GPL-2.0+"
-  ],
-  "keywords": [
-    "email",
-    "TYPO3"
-  ],
-  "support": {
-    "issues": ""
-  },
-  "repositories": [
-    {
-      "type": "vcs",
-      "url": ""
-    }
-  ],
-  "require": {
-    "ext-json": "*",
-	"php": "^8.2",
-	"typo3/cms-backend": " ^13.2",
-	"typo3/cms-core": "^13.2",
-	"typo3/cms-extbase": "^13.2",
-	"undkonsorten/extbase-cli-aware-configuration-manager": "^0.1",
-	"symfony/console": "^5.4 || ^6.0 || ^7"
-  },
-  "suggest": {
-    "typo3/cms-dashboard": "Allows more advanced logging of the application flow",
-	"ext-pcntl": "Handling of signals, to have more robust task execution"
-  },
-  "autoload": {
-    "psr-4": {
-      "Undkonsorten\\Taskqueue\\": "Classes/"
-    }
-  },
-  "extra": {
-    "typo3/cms": {
-      "extension-key": "taskqueue"
-    },
-	  "branch-alias":{
-		  "dev-main": "9.2.x-dev"
-	  }
-  }
+	"name": "undkonsorten/taskqueue",
+	"type": "typo3-cms-extension",
+	"description": "Provides a task queue for other extensions to use.",
+	"homepage": "https://www.undkonsorten.com",
+	"authors": [
+		{
+			"name": "Eike Starkmann",
+			"email": "starkmann@undkonsorten.com",
+			"homepage": "http://undkonsorten.com",
+			"role": "Developer"
+		},
+		{
+			"name": "Thomas Alboth",
+			"email": "alboth@undkonsorten.com",
+			"homepage": "http://undkonsorten.com",
+			"role": "Product Owner"
+		}
+	],
+	"license": [
+		"GPL-2.0+"
+	],
+	"keywords": [
+		"email",
+		"TYPO3"
+	],
+	"support": {
+		"issues": ""
+	},
+	"repositories": [
+		{
+			"type": "vcs",
+			"url": ""
+		}
+	],
+	"require": {
+		"ext-json": "*",
+		"php": "^8.3",
+		"typo3/cms-backend": " ^13.4 || ^14.3",
+		"typo3/cms-core": "^13.4 || ^14.3",
+		"typo3/cms-extbase": "^13.4 || ^14.3",
+		"undkonsorten/extbase-cli-aware-configuration-manager": "^0.2",
+		"symfony/console": "^5.4 || ^6.0 || ^7"
+	},
+	"suggest": {
+		"typo3/cms-dashboard": "Allows more advanced logging of the application flow",
+		"ext-pcntl": "Handling of signals, to have more robust task execution"
+	},
+	"autoload": {
+		"psr-4": {
+			"Undkonsorten\\Taskqueue\\": "Classes/"
+		}
+	},
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "taskqueue"
+		},
+		"branch-alias": {
+			"dev-develop": "9.6.x-dev"
+		}
+	}
 }

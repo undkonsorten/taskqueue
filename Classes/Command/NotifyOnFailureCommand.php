@@ -2,10 +2,10 @@
 
 namespace Undkonsorten\Taskqueue\Command;
 
+use TYPO3\CMS\Core\Mail\MailerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
 use TYPO3\CMS\Core\Utility\MailUtility;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -14,7 +14,6 @@ use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use Undkonsorten\Taskqueue\Domain\Model\Task;
 use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
 use Undkonsorten\Taskqueue\Event\BeforeSendingMailEvent;
 
@@ -22,6 +21,15 @@ class NotifyOnFailureCommand extends Command
 {
 
     protected EventDispatcherInterface $eventDispatcher;
+    /**
+     * @param string|null $name The name of the command; passing null means it must be set in configure()
+     *
+     * @throws LogicException When the command name is empty
+     */
+    public function __construct(private readonly MailerInterface $mailer, ?string $name = null, ?callable $code = null)
+    {
+        parent::__construct($name, $code);
+    }
 
     public function injectEventDispatcher(EventDispatcherInterface $eventDispatcher): void
     {
@@ -75,7 +83,7 @@ class NotifyOnFailureCommand extends Command
         $io->title($this->getDescription());
         if(!is_null($input->getOption('interval'))){
             $minAge = $input->getOption('interval');
-            $expiryDate = (new \DateTimeImmutable())->sub(new \DateInterval($minAge));
+            $expiryDate = new \DateTimeImmutable()->sub(new \DateInterval($minAge));
             $maximumTimestamp = $expiryDate->format('U');
         }else{
             $maximumTimestamp = 0;
@@ -111,7 +119,7 @@ class NotifyOnFailureCommand extends Command
             $this->eventDispatcher->dispatch(
                 new BeforeSendingMailEvent($mail, $failedTasks, $input),
             );
-            $mail->send();
+            $this->mailer->send($mail);
         }
         return 0;
     }
