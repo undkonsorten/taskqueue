@@ -17,7 +17,7 @@ final class DeleteTasksCommandTest extends FunctionalTestCase
 {
     protected array $testExtensionsToLoad = [
         'undkonsorten/taskqueue',
-        'Tests/Functional/Fixtures/Extensions/taskqueue_test',
+        'undkonsorten/taskqueue-test',
     ];
 
     private TaskRepository $taskRepository;

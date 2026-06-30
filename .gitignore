@@ -16,3 +16,4 @@
 .webprj
 nbproject
 .Build
+.cache

@@ -36,10 +36,17 @@
 		"undkonsorten/extbase-cli-aware-configuration-manager": "^0.2",
 		"symfony/console": "^5.4 || ^6.0 || ^7"
 	},
+	"repositories": [
+		{
+			"type": "path",
+			"url": "Tests/Functional/Fixtures/Extensions/taskqueue_test"
+		}
+	],
 	"require-dev": {
-		"phpunit/phpunit": "^10.5",
-		"typo3/testing-framework": "^8.3",
-		"typo3/cms-dashboard": "^13.4 || ^14.3"
+		"phpunit/phpunit": "^10.5 || ^11.0",
+		"typo3/testing-framework": "^9.0",
+		"typo3/cms-dashboard": "^13.4 || ^14.3",
+		"undkonsorten/taskqueue-test": "@dev"
 	},
 	"suggest": {
 		"typo3/cms-dashboard": "Allows more advanced logging of the application flow",

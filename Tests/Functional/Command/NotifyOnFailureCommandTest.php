@@ -19,7 +19,7 @@ final class NotifyOnFailureCommandTest extends FunctionalTestCase
 {
     protected array $testExtensionsToLoad = [
         'undkonsorten/taskqueue',
-        'Tests/Functional/Fixtures/Extensions/taskqueue_test',
+        'undkonsorten/taskqueue-test',
     ];
 
     #[Test]
