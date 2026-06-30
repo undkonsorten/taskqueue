@@ -1,8 +1,14 @@
 {
 	"name": "undkonsorten/taskqueue",
-	"type": "typo3-cms-extension",
 	"description": "Provides a task queue for other extensions to use.",
-	"homepage": "https://www.undkonsorten.com",
+	"license": [
+		"GPL-2.0+"
+	],
+	"type": "typo3-cms-extension",
+	"keywords": [
+		"email",
+		"TYPO3"
+	],
 	"authors": [
 		{
 			"name": "Eike Starkmann",
@@ -17,13 +23,7 @@
 			"role": "Product Owner"
 		}
 	],
-	"license": [
-		"GPL-2.0+"
-	],
-	"keywords": [
-		"email",
-		"TYPO3"
-	],
+	"homepage": "https://www.undkonsorten.com",
 	"support": {
 		"issues": "https://github.com/undkonsorten/taskqueue/issues"
 	},
@@ -31,11 +31,26 @@
 		"php": "^8.3",
 		"ext-json": "*",
 		"symfony/console": "^5.4 || ^6.0 || ^7",
-		"typo3/cms-backend": " ^13.4 || ^14.3",
+		"typo3/cms-backend": "^13.4 || ^14.3",
 		"typo3/cms-core": "^13.4 || ^14.3",
 		"typo3/cms-extbase": "^13.4 || ^14.3",
 		"typo3/minimal": "^14.3",
 		"undkonsorten/extbase-cli-aware-configuration-manager": "^0.2"
+	},
+	"require-dev": {
+		"ergebnis/composer-normalize": "^2.0",
+		"friendsofphp/php-cs-fixer": "^3.0",
+		"php-parallel-lint/php-console-highlighter": "^1.0",
+		"php-parallel-lint/php-parallel-lint": "^1.4",
+		"phpunit/phpunit": "^10.5 || ^11.0",
+		"typo3/cms-dashboard": "^13.4 || ^14.3",
+		"typo3/coding-standards": "^0.8",
+		"typo3/testing-framework": "^9.0",
+		"undkonsorten/taskqueue-test": "@dev"
+	},
+	"suggest": {
+		"ext-pcntl": "Handling of signals, to have more robust task execution",
+		"typo3/cms-dashboard": "Allows more advanced logging of the application flow"
 	},
 	"repositories": [
 		{
@@ -43,20 +58,8 @@
 			"url": "Tests/Functional/Fixtures/Extensions/taskqueue_test"
 		}
 	],
-	"require-dev": {
-		"friendsofphp/php-cs-fixer": "^3.0",
-		"php-parallel-lint/php-console-highlighter": "^1.0",
-		"php-parallel-lint/php-parallel-lint": "^1.4",
-		"phpunit/phpunit": "^10.5 || ^11.0",
-		"typo3/coding-standards": "^0.8",
-		"typo3/testing-framework": "^9.0",
-		"typo3/cms-dashboard": "^13.4 || ^14.3",
-		"undkonsorten/taskqueue-test": "@dev"
-	},
-	"suggest": {
-		"typo3/cms-dashboard": "Allows more advanced logging of the application flow",
-		"ext-pcntl": "Handling of signals, to have more robust task execution"
-	},
+	"minimum-stability": "dev",
+	"prefer-stable": true,
 	"autoload": {
 		"psr-4": {
 			"Undkonsorten\\Taskqueue\\": "Classes/"
@@ -65,28 +68,11 @@
 	"autoload-dev": {
 		"psr-4": {
 			"Undkonsorten\\Taskqueue\\Tests\\": "Tests/"
-		}
-	},
-	"scripts": {
-		"post-install-cmd": [
-			"@composer:clean-app-var"
-		],
-		"post-update-cmd": [
-			"@composer:clean-app-var"
-		],
-		"composer:clean-app-var": "@php -r \"is_dir('var') && shell_exec('rm -rf var'); is_dir('packages') && shell_exec('rm -rf packages');\""
-	},
-	"extra": {
-		"typo3/cms": {
-			"extension-key": "taskqueue",
-			"web-dir": ".Build/public"
 		},
-		"branch-alias": {
-			"dev-develop": "9.6.x-dev"
-		}
+		"exclude-from-classmap": [
+			"Tests/Functional/Fixtures/"
+		]
 	},
-	"prefer-stable": true,
-	"minimum-stability": "dev",
 	"config": {
 		"allow-plugins": {
 			"ergebnis/composer-normalize": true,
@@ -101,5 +87,23 @@
 		},
 		"sort-packages": true,
 		"vendor-dir": ".Build/vendor"
+	},
+	"extra": {
+		"branch-alias": {
+			"dev-develop": "9.6.x-dev"
+		},
+		"typo3/cms": {
+			"extension-key": "taskqueue",
+			"web-dir": ".Build/public"
+		}
+	},
+	"scripts": {
+		"post-install-cmd": [
+			"@composer:clean-app-var"
+		],
+		"post-update-cmd": [
+			"@composer:clean-app-var"
+		],
+		"composer:clean-app-var": "@php -r \"is_dir('var') && shell_exec('rm -rf var'); is_dir('packages') && shell_exec('rm -rf packages');\""
 	}
 }

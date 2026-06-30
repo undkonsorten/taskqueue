@@ -394,9 +394,9 @@ phpstan() {
     ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name phpstan-${SUFFIX} -e COMPOSER_CACHE_DIR=.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} /bin/sh -c "${COMMAND}"
 }
 
-psr-verify() {
+psrVerify() {
     COMMAND="composer dumpautoload --optimize --strict-psr --no-plugins"
-    ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name psr-verify-${SUFFIX} ${IMAGE_PHP} ${COMMAND}
+    ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name psr-verify-${SUFFIX} -e COMPOSER_CACHE_DIR=.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} /bin/sh -c "${COMMAND}"
 }
 
 rector() {
@@ -629,8 +629,13 @@ case ${TEST_SUITE} in
         ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name composer-${SUFFIX} -e COMPOSER_CACHE_DIR=.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} "${COMMAND[@]}"
         SUITE_EXIT_CODE=$?
         ;;
+    composerNormalize)
+        COMMAND="composer normalize --no-check-lock"
+        ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name composer-normalize-${SUFFIX} -e COMPOSER_CACHE_DIR=.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} /bin/sh -c "${COMMAND}"
+        SUITE_EXIT_CODE=$?
+        ;;
     composerUnused)
-        COMMAND="composer check:composer:unused"
+        COMMAND="composer unused"
         ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name composer-unused-${SUFFIX} -e COMPOSER_CACHE_DIR=.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} /bin/sh -c "${COMMAND}"
         SUITE_EXIT_CODE=$?
         ;;
@@ -752,7 +757,7 @@ case ${TEST_SUITE} in
         SUITE_EXIT_CODE=$?
         ;;
     psr-verify)
-        psr-verify
+        psrVerify
         SUITE_EXIT_CODE=$?
         ;;
     shellcheck)
