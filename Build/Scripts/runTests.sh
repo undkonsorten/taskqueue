@@ -367,8 +367,8 @@ lintJs() {
 }
 
 lintPhp() {
-    COMMAND="composer check:php:lint"
-    ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name lintPhp-${SUFFIX} -e COMPOSER_CACHE_DIR=.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} /bin/sh -c "${COMMAND}"
+    COMMAND=".Build/bin/parallel-lint --exclude .Build --exclude vendor ."
+    ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name lintPhp-${SUFFIX} ${IMAGE_PHP} /bin/sh -c "${COMMAND}"
 }
 
 lintTypoScript() {

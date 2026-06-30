@@ -28,6 +28,14 @@ To target a specific TYPO3 version:
 ./Build/Scripts/runTests.sh -t 14.3 -s composerUpdateMax
 ```
 
+### PHP linting
+
+Check all PHP files for syntax errors:
+
+```bash
+./Build/Scripts/runTests.sh -s lintPhp
+```
+
 ### Unit tests
 
 ```bash
@@ -53,7 +61,7 @@ Run against MySQL or PostgreSQL:
 
 | Option | Description | Default |
 |--------|-------------|---------|
-| `-s <suite>` | Test suite: `unit`, `functional`, `composerUpdateMin`, `composerUpdateMax` | `unit` |
+| `-s <suite>` | Test suite: `lintPhp`, `unit`, `functional`, `composerUpdateMin`, `composerUpdateMax` | `unit` |
 | `-p <version>` | PHP version: `8.3`, `8.4` | `8.4` |
 | `-t <version>` | TYPO3 version (for composer steps): `13.4`, `14.3` | `14.3` |
 | `-d <dbms>` | Database for functional tests: `sqlite`, `mysql`, `mariadb`, `postgres` | `sqlite` |

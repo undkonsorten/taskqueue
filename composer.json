@@ -28,13 +28,14 @@
 		"issues": "https://github.com/undkonsorten/taskqueue/issues"
 	},
 	"require": {
-		"ext-json": "*",
 		"php": "^8.3",
+		"ext-json": "*",
+		"symfony/console": "^5.4 || ^6.0 || ^7",
 		"typo3/cms-backend": " ^13.4 || ^14.3",
 		"typo3/cms-core": "^13.4 || ^14.3",
 		"typo3/cms-extbase": "^13.4 || ^14.3",
-		"undkonsorten/extbase-cli-aware-configuration-manager": "^0.2",
-		"symfony/console": "^5.4 || ^6.0 || ^7"
+		"typo3/minimal": "^14.3",
+		"undkonsorten/extbase-cli-aware-configuration-manager": "^0.2"
 	},
 	"repositories": [
 		{
@@ -43,6 +44,8 @@
 		}
 	],
 	"require-dev": {
+		"php-parallel-lint/php-console-highlighter": "^1.0",
+		"php-parallel-lint/php-parallel-lint": "^1.4",
 		"phpunit/phpunit": "^10.5 || ^11.0",
 		"typo3/testing-framework": "^9.0",
 		"typo3/cms-dashboard": "^13.4 || ^14.3",

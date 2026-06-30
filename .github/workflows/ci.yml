@@ -13,9 +13,27 @@ permissions:
   contents: read
 
 jobs:
+  php-lint:
+    name: "PHP linter (PHP ${{ matrix.php-version }})"
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Lint PHP
+        run: ./Build/Scripts/runTests.sh -b docker -p ${{ matrix.php-version }} -s lintPhp
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version:
+          - "8.3"
+          - "8.4"
+
   unit-tests:
     name: "Unit tests (PHP ${{ matrix.php-version }}, TYPO3 ${{ matrix.typo3-version }}, ${{ matrix.composer-dependencies }})"
     runs-on: ubuntu-24.04
+    needs: php-lint
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -53,6 +71,7 @@ jobs:
   functional-tests:
     name: "Functional tests (PHP ${{ matrix.php-version }}, TYPO3 ${{ matrix.typo3-version }}, ${{ matrix.dbms }}, ${{ matrix.composer-dependencies }})"
     runs-on: ubuntu-24.04
+    needs: php-lint
     steps:
       - name: Checkout
         uses: actions/checkout@v4
