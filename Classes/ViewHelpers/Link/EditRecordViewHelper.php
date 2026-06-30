@@ -1,5 +1,7 @@
 <?php
-declare(strict_types = 1);
+
+declare(strict_types=1);
+
 namespace Undkonsorten\Taskqueue\ViewHelpers\Link;
 
 /*
@@ -82,7 +84,7 @@ class EditRecordViewHelper extends AbstractTagBasedViewHelper
 
         $params = [
             'edit' => [$this->arguments['table'] => [$this->arguments['uid'] => 'edit']],
-            'returnUrl' => $this->arguments['returnUrl']
+            'returnUrl' => $this->arguments['returnUrl'],
         ];
         $uriBuilder = $this->uriBuilder;
         $uri = (string)$uriBuilder->buildUriFromRoute('record_edit', $params);

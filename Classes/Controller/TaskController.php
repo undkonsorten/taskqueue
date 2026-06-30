@@ -1,24 +1,26 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Undkonsorten\Taskqueue\Controller;
 
-use TYPO3\CMS\Backend\Template\Components\ComponentFactory;
-use TYPO3\CMS\Core\Imaging\IconSize;
-use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
-use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
-use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Backend\Template\Components\ButtonBar;
+use TYPO3\CMS\Backend\Template\Components\ComponentFactory;
 use TYPO3\CMS\Backend\Template\ModuleTemplate;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Imaging\IconFactory;
+use TYPO3\CMS\Core\Imaging\IconSize;
 use TYPO3\CMS\Core\Localization\LanguageService;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
+use TYPO3\CMS\Core\Type\ContextualFeedbackSeverity;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Mvc\Exception\NoSuchArgumentException;
 use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
 use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
@@ -59,7 +61,6 @@ use Undkonsorten\Taskqueue\Domain\Repository\TaskRepository;
  */
 class TaskController extends ActionController
 {
-
     /**
      * taskRepository
      *
@@ -90,8 +91,7 @@ class TaskController extends ActionController
         ModuleTemplateFactory $moduleTemplateFactory,
         IconFactory $iconFactory,
         private readonly ComponentFactory $componentFactory
-    )
-    {
+    ) {
         $this->taskRepository = $taskRepository;
         $this->persitenceManager = $persistenceManager;
         $this->moduleTemplateFactory = $moduleTemplateFactory;
@@ -118,11 +118,10 @@ class TaskController extends ActionController
             $propertyMappingConfiguration = $this->arguments['demand']->getPropertyMappingConfiguration();
             $propertyMappingConfiguration->allowCreationForSubProperty('status');
             $propertyMappingConfiguration->allowProperties('status');
-            $propertyMappingConfiguration->setTypeConverterOption(PersistentObjectConverter::class, PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED, TRUE);
+            $propertyMappingConfiguration->setTypeConverterOption(PersistentObjectConverter::class, PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED, true);
         }
 
     }
-
 
     /**
      * @param int $currentPage
@@ -134,16 +133,16 @@ class TaskController extends ActionController
     {
         $tasks = is_null($demand) ? $this->taskRepository->findAll() : $this->taskRepository->findByDemand($demand);
         $status = [
-            TaskInterface::FINISHED => LocalizationUtility::translate('tx_taskqueue_domain_model_task.status.finished','taskqueue'),
-            TaskInterface::FAILED => LocalizationUtility::translate('tx_taskqueue_domain_model_task.status.failed','taskqueue'),
-            TaskInterface::WAITING => LocalizationUtility::translate('tx_taskqueue_domain_model_task.status.waiting','taskqueue'),
-            TaskInterface::RUNNING => LocalizationUtility::translate('tx_taskqueue_domain_model_task.status.running','taskqueue'),
-            TaskInterface::RETRY => LocalizationUtility::translate('tx_taskqueue_domain_model_task.status.retry','taskqueue'),
-            TaskInterface::TERMINATED => LocalizationUtility::translate('tx_taskqueue_domain_model_task.status.terminated','taskqueue'),
-            TaskInterface::DEFERRED => LocalizationUtility::translate('tx_taskqueue_domain_model_task.status.deferred','taskqueue'),
+            TaskInterface::FINISHED => LocalizationUtility::translate('tx_taskqueue_domain_model_task.status.finished', 'taskqueue'),
+            TaskInterface::FAILED => LocalizationUtility::translate('tx_taskqueue_domain_model_task.status.failed', 'taskqueue'),
+            TaskInterface::WAITING => LocalizationUtility::translate('tx_taskqueue_domain_model_task.status.waiting', 'taskqueue'),
+            TaskInterface::RUNNING => LocalizationUtility::translate('tx_taskqueue_domain_model_task.status.running', 'taskqueue'),
+            TaskInterface::RETRY => LocalizationUtility::translate('tx_taskqueue_domain_model_task.status.retry', 'taskqueue'),
+            TaskInterface::TERMINATED => LocalizationUtility::translate('tx_taskqueue_domain_model_task.status.terminated', 'taskqueue'),
+            TaskInterface::DEFERRED => LocalizationUtility::translate('tx_taskqueue_domain_model_task.status.deferred', 'taskqueue'),
         ];
         $currentPage = $this->request->hasArgument('currentPage') ? $this->request->getArgument('currentPage') : $currentPage;
-        $paginator = new QueryResultPaginator($tasks, (integer)$currentPage, (integer)$this->settings['pagination']['itemsPerPage']);
+        $paginator = new QueryResultPaginator($tasks, (int)$currentPage, (int)$this->settings['pagination']['itemsPerPage']);
         $simplePagination = new SimplePagination($paginator);
         $pagination = $this->buildSimplePagination($simplePagination, $paginator);
 
@@ -182,7 +181,7 @@ class TaskController extends ActionController
         $task = $this->taskRepository->findByUid($uid);
         if (!$task) {
             $this->addFlashMessage(sprintf('Task with uid %d could not be found.', $uid), 'Task not found', ContextualFeedbackSeverity::WARNING);
-            return (new ForwardResponse('search'));
+            return new ForwardResponse('search');
         }
         return new ForwardResponse('show')->withArguments(['task' => $task]);
     }
@@ -327,7 +326,7 @@ class TaskController extends ActionController
             'startRecordNumber' => $simplePagination->getStartRecordNumber(),
             'endRecordNumber' => $simplePagination->getEndRecordNumber(),
             'currentPageNumber' => $paginator->getCurrentPageNumber(),
-            'pages' => range($firstPage, $lastPage)
+            'pages' => range($firstPage, $lastPage),
         ];
     }
 
@@ -339,17 +338,17 @@ class TaskController extends ActionController
                 'table' => 'tx_taskqueue_domain_model_task',
                 'label' => 'module.list',
                 'action' => 'list',
-                'icon' => 'actions-list'
+                'icon' => 'actions-list',
             ],
             [
                 'table' => 'tx_taskqueue_domain_model_task',
                 'label' => 'module.search',
                 'action' => 'search',
-                'icon' => 'actions-search'
+                'icon' => 'actions-search',
             ],
         ];
         foreach ($buttons as $key => $tableConfiguration) {
-            $title = LocalizationUtility::translate($tableConfiguration['label'],'taskqueue');
+            $title = LocalizationUtility::translate($tableConfiguration['label'], 'taskqueue');
             $viewButton = $this->componentFactory->createLinkButton()
                 ->setHref($this->uriBuilder->reset()->setRequest($this->request)->uriFor(
                     $tableConfiguration['action'],
@@ -377,8 +376,8 @@ class TaskController extends ActionController
                 'toggle' => 'tooltip',
                 'placement' => 'bottom',
                 'title' => $title])
-            ->setTitle(LocalizationUtility::translate('button.deleteFinished','taskqueue'))
-            ->setIcon($this->iconFactory->getIcon('actions-delete', IconSize::SMALL,'tx-taskqueue-status-finished'));
+            ->setTitle(LocalizationUtility::translate('button.deleteFinished', 'taskqueue'))
+            ->setIcon($this->iconFactory->getIcon('actions-delete', IconSize::SMALL, 'tx-taskqueue-status-finished'));
         $buttonBar->addButton($deleteFinished, ButtonBar::BUTTON_POSITION_LEFT, 3);
 
         $deleteFailed = $this->componentFactory->createLinkButton()
@@ -393,8 +392,8 @@ class TaskController extends ActionController
                 'toggle' => 'tooltip',
                 'placement' => 'bottom',
                 'title' => $title])
-            ->setTitle(LocalizationUtility::translate('button.deleteFailed','taskqueue'))
-            ->setIcon($this->iconFactory->getIcon('actions-delete', IconSize::SMALL,'tx-taskqueue-status-failed'));
+            ->setTitle(LocalizationUtility::translate('button.deleteFailed', 'taskqueue'))
+            ->setIcon($this->iconFactory->getIcon('actions-delete', IconSize::SMALL, 'tx-taskqueue-status-failed'));
         $buttonBar->addButton($deleteFailed, ButtonBar::BUTTON_POSITION_LEFT, 3);
 
         // Refresh
@@ -409,8 +408,5 @@ class TaskController extends ActionController
     {
         return $GLOBALS['LANG'];
     }
-
-
-
 
 }

@@ -50,13 +50,8 @@ abstract class AbstractTaskqueueProvider implements ChartDataProviderInterface
         $this->days = $days;
     }
 
-    public function prepareData(): void
-    {
-    }
+    public function prepareData(): void {}
 
-    /**
-     *
-     */
     protected function prepareChartData(): void
     {
         $this->chartData = $this->getChartData();
@@ -73,7 +68,7 @@ abstract class AbstractTaskqueueProvider implements ChartDataProviderInterface
         $data = [];
 
         if ($period === 'lastWeek') {
-            for ($daysBefore=7; $daysBefore--; $daysBefore>0) {
+            for ($daysBefore = 7; $daysBefore--; $daysBefore > 0) {
                 $labels[] = date('d-m-Y', strtotime('-' . $daysBefore . ' day'));
                 $startPeriod = strtotime('-' . $daysBefore . ' day 0:00:00');
                 $endPeriod =  strtotime('-' . $daysBefore . ' day 23:59:59');
@@ -83,7 +78,7 @@ abstract class AbstractTaskqueueProvider implements ChartDataProviderInterface
         }
 
         if ($period === 'lastMonth') {
-            for ($daysBefore=31; $daysBefore--; $daysBefore>0) {
+            for ($daysBefore = 31; $daysBefore--; $daysBefore > 0) {
                 $labels[] = date('d-m-Y', strtotime('-' . $daysBefore . ' day'));
                 $startPeriod = strtotime('-' . $daysBefore . ' day 0:00:00');
                 $endPeriod =  strtotime('-' . $daysBefore . ' day 23:59:59');
@@ -99,9 +94,9 @@ abstract class AbstractTaskqueueProvider implements ChartDataProviderInterface
                     'label' => 'Number of tasks',
                     'borderColor' => WidgetApi::getDefaultChartColors()[0],
                     'fill' => false,
-                    'data' => $data
-                ]
-            ]
+                    'data' => $data,
+                ],
+            ],
         ];
     }
 

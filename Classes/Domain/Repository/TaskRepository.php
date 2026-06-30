@@ -1,9 +1,11 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Undkonsorten\Taskqueue\Domain\Repository;
 
-use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\Generic\Typo3QuerySettings;
 use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\CMS\Extbase\Persistence\QueryResultInterface;
@@ -88,12 +90,12 @@ class TaskRepository extends Repository
             $query->logicalAnd(...$constraints)
         );
 
-        $query->setLimit((integer)$limit);
+        $query->setLimit((int)$limit);
 
         $orderings = [
             'priority' => QueryInterface::ORDER_DESCENDING,
             'retries' => QueryInterface::ORDER_DESCENDING,
-            'uid' => QueryInterface::ORDER_ASCENDING
+            'uid' => QueryInterface::ORDER_ASCENDING,
         ];
 
         $query->setOrderings($orderings);
@@ -109,7 +111,7 @@ class TaskRepository extends Repository
     {
         $query = $this->createQuery();
         $query->matching(
-                $query->equals('status', TaskInterface::FINISHED)
+            $query->equals('status', TaskInterface::FINISHED)
         );
         return $query->execute();
     }
@@ -122,7 +124,7 @@ class TaskRepository extends Repository
     {
         $query = $this->createQuery();
         $query->matching(
-                $query->equals('status', TaskInterface::FAILED)
+            $query->equals('status', TaskInterface::FAILED)
         );
         return $query->execute();
     }
@@ -139,14 +141,13 @@ class TaskRepository extends Repository
         $query = $this->createQuery();
         $query->matching(
             $query->logicalAnd(...[
-                    $query->lessThan('tstamp', $now->getTimestamp()),
-                    $query->logicalOr(...[
-                        $query->equals('status', TaskInterface::FAILED),
-                        $query->equals('status', TaskInterface::FINISHED),
-                        $query->equals('status', TaskInterface::TERMINATED)
-                    ])
+                $query->lessThan('tstamp', $now->getTimestamp()),
+                $query->logicalOr(...[
+                    $query->equals('status', TaskInterface::FAILED),
+                    $query->equals('status', TaskInterface::FINISHED),
+                    $query->equals('status', TaskInterface::TERMINATED),
+                ]),
             ])
-
         );
         return $query->execute();
 
@@ -165,9 +166,8 @@ class TaskRepository extends Repository
         $query->matching(
             $query->logicalAnd(...[
                 $query->greaterThan('crdate', $now->getTimestamp()),
-                $query->equals('status', TaskInterface::FAILED)
+                $query->equals('status', TaskInterface::FAILED),
             ])
-
         );
         return $query->execute();
 
@@ -189,7 +189,7 @@ class TaskRepository extends Repository
     public function findByDemand(Demand $demand)
     {
         $query = $this->createQuery();
-        if(!is_null($demand->getStatus())){
+        if (!is_null($demand->getStatus())) {
             $query->matching(
                 $query->logicalAnd($query->equals('status', $demand->getStatus()))
             );

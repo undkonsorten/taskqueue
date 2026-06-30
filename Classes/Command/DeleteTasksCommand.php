@@ -1,13 +1,15 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Undkonsorten\Taskqueue\Command;
 
-use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
-use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 use Undkonsorten\Taskqueue\Domain\Repository\TaskRepository;
 
@@ -37,7 +39,6 @@ use Undkonsorten\Taskqueue\Domain\Repository\TaskRepository;
  ***************************************************************/
 class DeleteTasksCommand extends Command
 {
-
     /**
      * taskRepository
      *
@@ -62,7 +63,7 @@ class DeleteTasksCommand extends Command
 
     protected function configure()
     {
-        $this->addArgument('keepDateInterval',InputArgument::OPTIONAL, 'Date interval of tasks to be kept.','P3M');
+        $this->addArgument('keepDateInterval', InputArgument::OPTIONAL, 'Date interval of tasks to be kept.', 'P3M');
         parent::configure();
     }
 
@@ -77,15 +78,15 @@ class DeleteTasksCommand extends Command
     {
         $tasks = $this->taskRepository->findOutOfInterval(new \DateInterval($input->getArgument('keepDateInterval')));
         if ($tasks->count() === 0) {
-            $output->writeln("<info>No tasks found older than " . $input->getArgument('keepDateInterval') . "</info>");
+            $output->writeln('<info>No tasks found older than ' . $input->getArgument('keepDateInterval') . '</info>');
         } else {
             foreach ($tasks as $task) {
                 $this->taskRepository->remove($task);
-                $output->writeln("<info>Task " . $task->getName() . " has been deleted.</info>", OutputInterface::VERBOSITY_VERY_VERBOSE);
+                $output->writeln('<info>Task ' . $task->getName() . ' has been deleted.</info>', OutputInterface::VERBOSITY_VERY_VERBOSE);
             }
             $output->writeln(
                 sprintf(
-                    "<info>%d tasks found older than %s were deleted</info>",
+                    '<info>%d tasks found older than %s were deleted</info>',
                     $tasks->count(),
                     $input->getArgument('keepDateInterval')
                 ),

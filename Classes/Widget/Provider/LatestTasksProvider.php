@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Undkonsorten\Taskqueue\Widget\Provider;
@@ -7,13 +8,9 @@ use Doctrine\DBAL\Driver\Exception;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Dashboard\Widgets\ListDataProviderInterface;
 
-
 class LatestTasksProvider implements ListDataProviderInterface
 {
-
-    public function __construct(private readonly ConnectionPool $connectionPool)
-    {
-    }
+    public function __construct(private readonly ConnectionPool $connectionPool) {}
     /**
      * @return array
      * @throws \Doctrine\DBAL\DBALException

@@ -8,13 +8,12 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use Psr\Log\NullLogger;
 use Symfony\Component\Console\Tester\CommandTester;
+use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
+use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use Undkonsorten\Taskqueue\Command\RunTasksCommand;
 use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
 use Undkonsorten\Taskqueue\Domain\Repository\TaskRepository;
-use Undkonsorten\Taskqueue\Exception\StopRunException;
-use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
-use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 
 #[CoversClass(RunTasksCommand::class)]
 final class RunTasksCommandTest extends FunctionalTestCase

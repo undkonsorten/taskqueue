@@ -15,7 +15,7 @@ declare(strict_types=1);
  * The TYPO3 project - inspiring people to share!
  */
 
-namespace  Undkonsorten\Taskqueue\Widget;
+namespace Undkonsorten\Taskqueue\Widget;
 
 use Psr\Http\Message\ServerRequestInterface;
 use TYPO3\CMS\Backend\View\BackendViewFactory;
@@ -43,13 +43,11 @@ class LatestTasksWidget implements WidgetInterface, RequestAwareWidgetInterface
     /**
      * @param ButtonProviderInterface|null $buttonProvider
      */
-    public function __construct(private readonly WidgetConfigurationInterface $configuration, private readonly ListDataProviderInterface $dataProvider, private readonly BackendViewFactory $backendViewFactory, private $buttonProvider = null, private readonly array $options = [])
-    {
-    }
+    public function __construct(private readonly WidgetConfigurationInterface $configuration, private readonly ListDataProviderInterface $dataProvider, private readonly BackendViewFactory $backendViewFactory, private $buttonProvider = null, private readonly array $options = []) {}
 
     public function renderWidgetContent(): string
     {
-        $view = $this->backendViewFactory->create($this->request,['typo3/cms-dashboard', 'undkonsorten/taskqueue']);
+        $view = $this->backendViewFactory->create($this->request, ['typo3/cms-dashboard', 'undkonsorten/taskqueue']);
         $view->assignMultiple([
             'items' => $this->getItems(),
             'options' => $this->options,

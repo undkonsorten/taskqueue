@@ -1,5 +1,7 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Undkonsorten\Taskqueue\Domain\Model;
 
 /***************************************************************
@@ -32,7 +34,6 @@ namespace Undkonsorten\Taskqueue\Domain\Model;
  */
 interface TaskInterface
 {
-
     /**
      * The job is waiting to be executed
      */

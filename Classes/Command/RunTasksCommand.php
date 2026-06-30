@@ -1,19 +1,20 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Undkonsorten\Taskqueue\Command;
 
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Command\SignalableCommandInterface;
+use Symfony\Component\Console\Input\InputArgument;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Core\Configuration\ExtensionConfiguration;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
 use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
 use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 use Undkonsorten\Taskqueue\Domain\Model\Demand;
 use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
@@ -46,7 +47,6 @@ use Undkonsorten\Taskqueue\Exception\StopRunException;
  ***************************************************************/
 class RunTasksCommand extends Command implements SignalableCommandInterface
 {
-
     /**
      * taskRepository
      *
@@ -62,7 +62,7 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
     /**
      * @var string
      */
-    protected $skipTaskname = "";
+    protected $skipTaskname = '';
 
     /**
      * @var TaskInterface
@@ -76,7 +76,7 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
 
     public function __construct(private readonly LoggerInterface $logger, ?string $name = null)
     {
-        register_shutdown_function([&$this, "shutdown"]);
+        register_shutdown_function([&$this, 'shutdown']);
         parent::__construct($name);
     }
 
@@ -122,14 +122,14 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
             $runningTasks = $this->taskRepository->findByDemand($demand);
             foreach ($runningTasks as $runningTask) {
                 /** @var $runningTask Task */
-                if($runningTask->getTtl() > 0){
+                if ($runningTask->getTtl() > 0) {
                     $lastRun = $runningTask->getLastRun();
                     $interval = new \DateInterval(sprintf('PT%dS', $runningTask->getTtl()));
                     $expiry = \DateTime::createFromInterface($lastRun)->add($interval);
                     $now = new \DateTime();
                     if ($now >= $expiry) {
                         $runningTask->markFailed();
-                        $runningTask->setMessage(sprintf("Task exceeded lifetime of %d seconds", $runningTask->getTtl()));
+                        $runningTask->setMessage(sprintf('Task exceeded lifetime of %d seconds', $runningTask->getTtl()));
                         $this->logger->debug("Task exceeded lifetime of {$runningTask->getTtl()} seconds {$runningTask->getName()}", ['task' => $runningTask]);
                         $this->taskRepository->update($runningTask);
                         $this->persistenceManager->persistAll();
@@ -157,10 +157,9 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
                     $task->run();
                     $task->markFinished();
                     $usedTime = microtime(true) - $start;
-                    $output->writeln("Task finished in " . $usedTime, OutputInterface::VERBOSITY_VERBOSE);
+                    $output->writeln('Task finished in ' . $usedTime, OutputInterface::VERBOSITY_VERBOSE);
                     $this->logger->debug("Task {$task->getName()} finished", ['task' => $task]);
-                } catch
-                (StopRunException $exception) {
+                } catch (StopRunException $exception) {
                     $task->setMessage($exception->getMessage());
                     $this->logger->debug("Caught exception: {$exception->getMessage()}", ['task' => $task, 'exception' => $exception]);
                     if ($task->getRetries() === 0) {
@@ -188,7 +187,7 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
             sprintf('<info>%d tasks have been processed', $tasks->count()),
             OutputInterface::VERBOSITY_VERBOSE
         );
-        $output->writeln("Time used: " . $globalTimeUsed, OutputInterface::VERBOSITY_VERBOSE);
+        $output->writeln('Time used: ' . $globalTimeUsed, OutputInterface::VERBOSITY_VERBOSE);
         return 0;
     }
 
@@ -209,7 +208,7 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
     {
         try {
             $this->currentTask->setStatus(TaskInterface::TERMINATED);
-            $this->currentTask->setMessage("Process was signaled with " . $signal);
+            $this->currentTask->setMessage('Process was signaled with ' . $signal);
             $this->taskRepository->update($this->currentTask);
             $this->persistenceManager->persistAll();
             $this->logger->warning("Signal handled: $signal", ['task' => $this->currentTask]);
@@ -225,7 +224,7 @@ class RunTasksCommand extends Command implements SignalableCommandInterface
         $error = error_get_last();
         if (!is_null($error)) {
             $this->currentTask->setStatus(TaskInterface::TERMINATED);
-            $this->currentTask->setMessage($error['message'] ?? "Process had a fatal error.");
+            $this->currentTask->setMessage($error['message'] ?? 'Process had a fatal error.');
             $this->logger->error("Shutdown function trigger with error: {$error['message']}", ['task' => $this->currentTask]);
             $this->taskRepository->update($this->currentTask);
             $this->persistenceManager->persistAll();

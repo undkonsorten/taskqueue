@@ -2,9 +2,7 @@
 
 namespace Undkonsorten\Taskqueue\Command;
 
-use TYPO3\CMS\Core\Mail\MailerInterface;
 use Psr\EventDispatcher\EventDispatcherInterface;
-use TYPO3\CMS\Core\Utility\MailUtility;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -12,14 +10,15 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use TYPO3\CMS\Core\Mail\MailerInterface;
 use TYPO3\CMS\Core\Mail\MailMessage;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\MailUtility;
 use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
 use Undkonsorten\Taskqueue\Event\BeforeSendingMailEvent;
 
 class NotifyOnFailureCommand extends Command
 {
-
     protected EventDispatcherInterface $eventDispatcher;
     /**
      * @param string|null $name The name of the command; passing null means it must be set in configure()
@@ -81,16 +80,16 @@ class NotifyOnFailureCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
         $io->title($this->getDescription());
-        if(!is_null($input->getOption('interval'))){
+        if (!is_null($input->getOption('interval'))) {
             $minAge = $input->getOption('interval');
             $expiryDate = new \DateTimeImmutable()->sub(new \DateInterval($minAge));
             $maximumTimestamp = $expiryDate->format('U');
-        }else{
+        } else {
             $maximumTimestamp = 0;
         }
-        if(!is_null($input->getOption('status'))){
+        if (!is_null($input->getOption('status'))) {
             $status = $input->getOption('status');
-        }else{
+        } else {
             $status = TaskInterface::FAILED;
         }
 
@@ -108,11 +107,11 @@ class NotifyOnFailureCommand extends Command
             )
             ->executeQuery()
             ->fetchOne();
-        if($failedTasks >= $input->getOption('count')){
+        if ($failedTasks >= $input->getOption('count')) {
             /** @var MailMessage $mail */
             $mail = GeneralUtility::makeInstance(MailMessage::class);
             $from = MailUtility::getSystemFrom();
-            $mail->setSubject('There are more than '.$input->getOption('count').' tasks with status '.$status.'.');
+            $mail->setSubject('There are more than ' . $input->getOption('count') . ' tasks with status ' . $status . '.');
             $mail->setFrom($from);
             $mail->setTo([$input->getOption('email')]);
             $mail->text('There are ' . $failedTasks . ' tasks with status ' . $status . ' since ' . date('Y-m-d H:i', $maximumTimestamp) . ' , you might want to check that.');

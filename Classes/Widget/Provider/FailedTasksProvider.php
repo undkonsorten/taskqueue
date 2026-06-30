@@ -1,10 +1,10 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Undkonsorten\Taskqueue\Widget\Provider;
 
 use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
-
 
 class FailedTasksProvider extends AbstractTaskqueueProvider
 {

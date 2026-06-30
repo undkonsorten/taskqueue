@@ -7,7 +7,7 @@ use Undkonsorten\Taskqueue\Controller\TaskController;
 return [
     'taskqueue' => [
         'parent' => 'tools',
-        #'position' => ['after' => 'scheduler'],
+        //'position' => ['after' => 'scheduler'],
         'workspaces' => 'scheduler',
         'path' => '/module/page/taskqueue',
         'access' => 'systemMaintainer',
@@ -19,5 +19,5 @@ return [
                 'list', 'show', 'delete', 'run', 'deleteFinished', 'deleteFailed', 'reactivate', 'search', 'searchUid', 'searchResult',
             ],
         ],
-    ]
+    ],
 ];

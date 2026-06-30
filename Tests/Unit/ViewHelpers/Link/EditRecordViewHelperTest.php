@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Undkonsorten\Taskqueue\Tests\Unit\ViewHelpers\Link;
 
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\TestingFramework\Core\Unit\UnitTestCase;

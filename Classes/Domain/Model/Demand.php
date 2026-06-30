@@ -8,7 +8,6 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractValueObject;
 
 class Demand extends AbstractValueObject
 {
-
     /**
      * @var int|null
      */

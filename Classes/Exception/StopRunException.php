@@ -1,18 +1,17 @@
 <?php
+
 namespace Undkonsorten\Taskqueue\Exception;
 
-use Throwable;
 use TYPO3\CMS\Core\Exception;
 
 class StopRunException extends Exception
 {
-
     /**
      * @var string
      */
     protected $taskname;
 
-    public function __construct(string $taskname, $message = "", $code = 0, ?Throwable $previous = null)
+    public function __construct(string $taskname, $message = '', $code = 0, ?\Throwable $previous = null)
     {
         $this->taskname = $taskname;
         parent::__construct($message, $code, $previous);
@@ -33,6 +32,5 @@ class StopRunException extends Exception
     {
         $this->taskname = $taskname;
     }
-
 
 }

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 if (!defined('TYPO3')) {
     die('Access denied.');
@@ -21,9 +22,9 @@ return [
         'security' => [
             'ignorePageTypeRestriction' => true,
         ],
-        #@todo deprecated for TYPO3 14, can be removed after 13 support is dropped
+        //@todo deprecated for TYPO3 14, can be removed after 13 support is dropped
         'searchFields' => 'name,data,status,start_date,message,priority,',
-        'iconfile' => 'EXT:taskqueue/Resources/Public/Icons/Extension.svg'
+        'iconfile' => 'EXT:taskqueue/Resources/Public/Icons/Extension.svg',
     ],
     'types' => [
         '1' => ['showitem' => 'sys_language_uid,l10n_parent,l10n_diffsource,hidden,--palette--;;1,name,data,status,start_date,message,priority,ttl,last_run,crdate,retries,--div--;LLL:EXT:frontend/Resources/Private/Language/locallang_ttc.xlf:tabs.access,starttime,endtime'],
@@ -39,7 +40,7 @@ return [
                 'size' => 30,
                 'max' => 255,
                 'searchable' => false,
-            ]
+            ],
         ],
 
         'hidden' => [
@@ -58,7 +59,7 @@ return [
                 'checkbox' => 0,
                 'default' => 0,
                 'range' => [
-                    'lower' => mktime(0, 0, 0, (int)date('m'), (int)date('d'), (int)date('Y'))
+                    'lower' => mktime(0, 0, 0, (int)date('m'), (int)date('d'), (int)date('Y')),
                 ],
                 'searchable' => false,
             ],
@@ -72,7 +73,7 @@ return [
                 'checkbox' => 0,
                 'default' => 0,
                 'range' => [
-                    'lower' => mktime(0, 0, 0, (int)date('m'), (int)date('d'), (int)date('Y'))
+                    'lower' => mktime(0, 0, 0, (int)date('m'), (int)date('d'), (int)date('Y')),
                 ],
                 'searchable' => false,
             ],
@@ -83,7 +84,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim'
+                'eval' => 'trim',
             ],
         ],
         'data' => [
@@ -92,7 +93,7 @@ return [
             'config' => [
                 'type' => 'text',
                 'cols' => 40,
-                'rows' => 6
+                'rows' => 6,
             ],
         ],
         'status' => [
@@ -131,7 +132,7 @@ return [
                         'value' => 6,
                     ],
                 ],
-            ]
+            ],
         ],
         'start_date' => [
             'exclude' => 1,
@@ -141,8 +142,8 @@ return [
                 'size' => 6,
                 'checkbox' => 1,
                 'default' => time(),
-                'format' => 'timesec'
-            ]
+                'format' => 'timesec',
+            ],
         ],
         'last_run' => [
             'exclude' => 1,
@@ -160,7 +161,7 @@ return [
             'config' => [
                 'type' => 'input',
                 'size' => 30,
-                'eval' => 'trim'
+                'eval' => 'trim',
             ],
         ],
         'priority' => [
@@ -168,16 +169,16 @@ return [
             'label' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang_db.xlf:tx_taskqueue_domain_model_task.priority',
             'config' => [
                 'type' => 'number',
-                'size' => 4
-            ]
+                'size' => 4,
+            ],
         ],
         'retries' => [
             'exclude' => 1,
             'label' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang_db.xlf:tx_taskqueue_domain_model_task.retries',
             'config' => [
                 'type' => 'number',
-                'size' => 4
-            ]
+                'size' => 4,
+            ],
         ],
         'type' => [
             'label' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang_db.xlf:tx_taskqueue_domain_model_task',
@@ -195,8 +196,8 @@ return [
             'config' => [
                 'type' => 'number',
                 'size' => 4,
-                'default' => 900
-            ]
+                'default' => 900,
+            ],
         ],
         'crdate' => [
             'exclude' => 1,
@@ -205,7 +206,7 @@ return [
                 'type' => 'datetime',
                 'format' => 'datetime',
                 'readOnly' => 1,
-                'searchable' => false
+                'searchable' => false,
             ],
         ],
     ],

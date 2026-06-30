@@ -1,10 +1,11 @@
 <?php
+
 declare(strict_types=1);
 
-use TYPO3\CMS\Backend\View\BackendViewFactory;
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
+use TYPO3\CMS\Backend\View\BackendViewFactory;
 use TYPO3\CMS\Dashboard\Dashboard;
 use TYPO3\CMS\Dashboard\Widgets\BarChartWidget;
 use Undkonsorten\Taskqueue\Widget\LatestTasksWidget;
@@ -31,7 +32,7 @@ return static function (ContainerConfigurator $configurator, ContainerBuilder $c
                 'description' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang.xlf:widgets.taskqueue.latesttasks.description',
                 'iconIdentifier' => 'content-widget-text',
                 'height' => 'medium',
-                'width' => 'medium'
+                'width' => 'medium',
             ]);
 
         $services->set('dashboard.widget.taskqueue.failedTasks')
@@ -46,7 +47,7 @@ return static function (ContainerConfigurator $configurator, ContainerBuilder $c
                 'description' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang.xlf:widgets.taskqueue.failedtasks.description',
                 'iconIdentifier' => 'tx-taskqueue-status-failed',
                 'height' => 'medium',
-                'width' => 'medium'
+                'width' => 'medium',
             ]);
 
         $services->set('dashboard.widget.taskqueue.finishedTasks')
@@ -61,7 +62,7 @@ return static function (ContainerConfigurator $configurator, ContainerBuilder $c
                 'description' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang.xlf:widgets.taskqueue.finishedtasks.description',
                 'iconIdentifier' => 'tx-taskqueue-status-finished',
                 'height' => 'medium',
-                'width' => 'medium'
+                'width' => 'medium',
             ]);
 
         $services->set('dashboard.widget.taskqueue.icomingTasks')
@@ -75,7 +76,7 @@ return static function (ContainerConfigurator $configurator, ContainerBuilder $c
                 'title' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang.xlf:widgets.taskqueue.incomingtasks.title',
                 'description' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang.xlf:widgets.taskqueue.incomingtasks.description',
                 'height' => 'medium',
-                'width' => 'medium'
+                'width' => 'medium',
             ]);
 
         $services->set('dashboard.widget.taskqueue.taskThroughput')
@@ -89,7 +90,7 @@ return static function (ContainerConfigurator $configurator, ContainerBuilder $c
                 'title' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang.xlf:widgets.taskqueue.taskthroughput.title',
                 'description' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang.xlf:widgets.taskqueue.taskthroughput.description',
                 'height' => 'medium',
-                'width' => 'medium'
+                'width' => 'medium',
             ]);
 
         $services->set('dashboard.widget.taskqueue.waitingTasks')
@@ -104,7 +105,7 @@ return static function (ContainerConfigurator $configurator, ContainerBuilder $c
                 'description' => 'LLL:EXT:taskqueue/Resources/Private/Language/locallang.xlf:widgets.taskqueue.waitingtasks.description',
                 'iconIdentifier' => 'tx-taskqueue-status-waiting',
                 'height' => 'medium',
-                'width' => 'medium'
+                'width' => 'medium',
             ]);
     }
 

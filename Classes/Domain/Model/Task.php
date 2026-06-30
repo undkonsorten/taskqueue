@@ -1,8 +1,9 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Undkonsorten\Taskqueue\Domain\Model;
 
-use JsonSerializable;
 use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /***************************************************************
@@ -33,9 +34,8 @@ use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 /**
  * A Task
  */
-abstract class Task extends AbstractEntity implements TaskInterface, JsonSerializable
+abstract class Task extends AbstractEntity implements TaskInterface, \JsonSerializable
 {
-
     /**
      * name
      *

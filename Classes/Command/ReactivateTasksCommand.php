@@ -1,14 +1,16 @@
 <?php
+
 declare(strict_types=1);
+
 namespace Undkonsorten\Taskqueue\Command;
 
-use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
-use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
-use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
+use TYPO3\CMS\Extbase\Persistence\Exception\InvalidQueryException;
+use TYPO3\CMS\Extbase\Persistence\Exception\UnknownObjectException;
 use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 use Undkonsorten\Taskqueue\Domain\Model\Task;
 use Undkonsorten\Taskqueue\Domain\Repository\TaskRepository;
@@ -39,7 +41,6 @@ use Undkonsorten\Taskqueue\Domain\Repository\TaskRepository;
  ***************************************************************/
 class ReactivateTasksCommand extends Command
 {
-
     /**
      * taskRepository
      *
@@ -55,7 +56,7 @@ class ReactivateTasksCommand extends Command
     /**
      * @var string
      */
-    protected $skipTaskname = "";
+    protected $skipTaskname = '';
 
     public function injectTaskRepository(TaskRepository $taskRepository): void
     {
@@ -67,14 +68,12 @@ class ReactivateTasksCommand extends Command
         $this->persistenceManager = $persistenceManager;
     }
 
-
     protected function configure()
     {
         $this->setDescription('Set failed tasks to waiting (reactivate failed tasks)');
-        $this->addArgument('dateInterval',InputArgument::OPTIONAL, 'Date interval of tasks to be reactivated. (default last three months (https://en.wikipedia.org/wiki/ISO_8601#Durations))','P3M');
+        $this->addArgument('dateInterval', InputArgument::OPTIONAL, 'Date interval of tasks to be reactivated. (default last three months (https://en.wikipedia.org/wiki/ISO_8601#Durations))', 'P3M');
         parent::configure();
     }
-
 
     /**
      * @param InputInterface $input
@@ -88,7 +87,7 @@ class ReactivateTasksCommand extends Command
     {
         $globalTime = microtime(true);
         $failedTasks = $this->taskRepository->findFailedOutOfInterval(new \DateInterval($input->getArgument('dateInterval')));
-        foreach ($failedTasks as $task){
+        foreach ($failedTasks as $task) {
             /** @var Task $task*/
             $task->setRetries(3);
             $task->setStatus(Task::RETRY);
@@ -101,7 +100,7 @@ class ReactivateTasksCommand extends Command
             sprintf('<info>%d tasks have been processed', $failedTasks->count()),
             OutputInterface::VERBOSITY_VERBOSE
         );
-        $output->writeln("Time used: ".$globalTimeUsed,OutputInterface::VERBOSITY_VERBOSE);
+        $output->writeln('Time used: ' . $globalTimeUsed, OutputInterface::VERBOSITY_VERBOSE);
         return 0;
     }
 }

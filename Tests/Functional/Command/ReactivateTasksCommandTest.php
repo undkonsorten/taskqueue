@@ -7,11 +7,11 @@ namespace Undkonsorten\Taskqueue\Tests\Functional\Command;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use Symfony\Component\Console\Tester\CommandTester;
+use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use Undkonsorten\Taskqueue\Command\ReactivateTasksCommand;
 use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
 use Undkonsorten\Taskqueue\Domain\Repository\TaskRepository;
-use TYPO3\CMS\Extbase\Persistence\PersistenceManagerInterface;
 
 #[CoversClass(ReactivateTasksCommand::class)]
 final class ReactivateTasksCommandTest extends FunctionalTestCase
