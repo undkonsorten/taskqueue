@@ -377,8 +377,8 @@ lintTypoScript() {
 }
 
 lintYaml() {
-    COMMAND="composer check:yaml:lint"
-    ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name lintYaml-${SUFFIX} -e COMPOSER_CACHE_DIR=.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} /bin/sh -c "${COMMAND}"
+    COMMAND="find . \( -name '*.yaml' -o -name '*.yml' \) -not -path './.Build/*' -not -path './vendor/*' | xargs .Build/bin/yaml-lint"
+    ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name lintYaml-${SUFFIX} ${IMAGE_PHP} /bin/sh -c "${COMMAND}"
 }
 
 phpCsFixer() {

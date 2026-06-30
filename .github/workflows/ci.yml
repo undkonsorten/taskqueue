@@ -30,6 +30,27 @@ jobs:
           - "8.3"
           - "8.4"
 
+  yaml-lint:
+    name: "YAML linter"
+    runs-on: ubuntu-24.04
+    needs: php-lint
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Cache composer dependencies
+        uses: actions/cache@v4
+        with:
+          key: "php-8.4-typo3-14.3-Max-composer-${{ hashFiles('**/composer.json') }}"
+          path: .cache/composer
+          restore-keys: "php-8.4-typo3-14.3-Max-composer-"
+
+      - name: Install composer dependencies
+        run: ./Build/Scripts/runTests.sh -b docker -p 8.4 -t 14.3 -s composerUpdateMax
+
+      - name: Lint YAML files
+        run: ./Build/Scripts/runTests.sh -b docker -p 8.4 -s lintYaml
+
   composer-normalize:
     name: "Composer normalize"
     runs-on: ubuntu-24.04
