@@ -68,6 +68,13 @@
 		}
 	},
 	"scripts": {
+		"post-install-cmd": [
+			"@composer:clean-app-var"
+		],
+		"post-update-cmd": [
+			"@composer:clean-app-var"
+		],
+		"composer:clean-app-var": "@php -r \"is_dir('var') && shell_exec('rm -rf var'); is_dir('packages') && shell_exec('rm -rf packages');\"",
 		"ci:tests:create-directories": "mkdir -p .Build/public/typo3temp/var/tests",
 		"ci:tests:unit": "phpunit -c Build/phpunit/UnitTests.xml",
 		"ci:tests:functional": [
