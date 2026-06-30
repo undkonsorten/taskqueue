@@ -19,16 +19,29 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-
+      - name: Cache dependencies installed with composer
+        uses: actions/cache@v6
+        with:
+          key: "php-${{ matrix.php-version }}-typo3-${{ matrix.typo3-version }}-${{ matrix.composer-dependencies }}-composer-${{ hashFiles('**/composer.json') }}"
+          path: .cache/composer
+          restore-keys: "php-${{ matrix.php-version }}-typo3-${{ matrix.typo3-version }}-${{ matrix.composer-dependencies }}-composer-\n"
+      - name: Install composer dependencies
+        run: |
+          ./Build/Scripts/runTests.sh -p ${{ matrix.php-version }} -t ${{matrix.typo3-version}} -s composerUpdate${{matrix.composer-dependencies}}
       - name: Lint PHP
-        run: ./Build/Scripts/runTests.sh -b docker -p ${{ matrix.php-version }} -s lintPhp
+        run: |
+          Build/Scripts/runTests.sh -p ${{ matrix.php-version }} -s lintPhp
 
     strategy:
       fail-fast: false
       matrix:
-        php-version:
-          - "8.3"
-          - "8.4"
+        include:
+          - typo3-version: "14.3"
+            php-version: "8.3"
+            composer-dependencies: Max
+          - typo3-version: "14.3"
+            php-version: "8.4"
+            composer-dependencies: Max
 
   yaml-lint:
     name: "YAML linter"
