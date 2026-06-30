@@ -6,6 +6,8 @@ services:
 
   Undkonsorten\Taskqueue\:
     resource: '../Classes/*'
+    exclude:
+      - '../Classes/Controller/TaskController.php'
 
   Undkonsorten\Taskqueue\Command\RunTasksCommand:
     tags:
@@ -30,15 +32,3 @@ services:
       - name: 'console.command'
         command: 'taskqueue:reactivate-failed-tasks'
         description: 'Reactivates failed tasks in given period.'
-
-  Undkonsorten\Taskqueue\Controller\TaskController:
-    tags: [ 'backend.controller' ]
-
-
-
-
-
-
-
-
-

@@ -5,8 +5,10 @@ declare(strict_types=1);
 use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\DependencyInjection\Reference;
+use TYPO3\CMS\Backend\Template\Components\ComponentFactory;
 use TYPO3\CMS\Backend\View\BackendViewFactory;
 use TYPO3\CMS\Dashboard\Dashboard;
+use Undkonsorten\Taskqueue\Controller\TaskController;
 use TYPO3\CMS\Dashboard\Widgets\BarChartWidget;
 use Undkonsorten\Taskqueue\Widget\LatestTasksWidget;
 use Undkonsorten\Taskqueue\Widget\Provider\FailedTasksProvider;
@@ -18,6 +20,13 @@ use Undkonsorten\Taskqueue\Widget\Provider\WaitingTasksProvider;
 
 return static function (ContainerConfigurator $configurator, ContainerBuilder $containerBuilder) {
     $services = $configurator->services();
+
+    if (class_exists(ComponentFactory::class)) {
+        $services->set(TaskController::class)
+            ->autowire()
+            ->autoconfigure()
+            ->tag('backend.controller');
+    }
 
     if ($containerBuilder->hasDefinition(Dashboard::class)) {
         $services->set('dashboard.widget.taskqueue.latestTasks')
