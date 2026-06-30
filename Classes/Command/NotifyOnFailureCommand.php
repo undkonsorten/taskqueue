@@ -96,8 +96,8 @@ class NotifyOnFailureCommand extends Command
 
         /** @var QueryBuilder $queryBuilder */
         $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_taskqueue_domain_model_task');
-        $failedTasks = $queryBuilder
-            ->select('*')
+        $failedTasks = (int)$queryBuilder
+            ->count('uid')
             ->from('tx_taskqueue_domain_model_task')
             ->where(
                 $queryBuilder->expr()->and(
@@ -107,7 +107,7 @@ class NotifyOnFailureCommand extends Command
                 )
             )
             ->executeQuery()
-            ->rowCount();
+            ->fetchOne();
         if($failedTasks >= $input->getOption('count')){
             /** @var MailMessage $mail */
             $mail = GeneralUtility::makeInstance(MailMessage::class);
