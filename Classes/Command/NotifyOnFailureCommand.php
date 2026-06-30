@@ -26,7 +26,7 @@ class NotifyOnFailureCommand extends Command
      *
      * @throws LogicException When the command name is empty
      */
-    public function __construct(?string $name = null, ?callable $code = null, private readonly MailerInterface $mailer)
+    public function __construct(private readonly MailerInterface $mailer, ?string $name = null, ?callable $code = null)
     {
         parent::__construct($name, $code);
     }
