@@ -1,0 +1,4 @@
+"tx_taskqueue_domain_model_task",,,,,,,,,,,,
+,"uid","pid","name","data","status","start_date","last_run","message","priority","retries","ttl","crdate","tstamp","deleted","hidden","type"
+,1,0,"Undkonsorten\TaskqueueTest\Domain\Model\TestTask","{}",2,0,NULL,"finished task",0,3,900,1000000,1000000,0,0,"Undkonsorten\TaskqueueTest\Domain\Model\TestTask"
+,2,0,"Undkonsorten\TaskqueueTest\Domain\Model\TestTask","{}",3,0,NULL,"failed task",0,3,900,1000001,1000001,0,0,"Undkonsorten\TaskqueueTest\Domain\Model\TestTask"

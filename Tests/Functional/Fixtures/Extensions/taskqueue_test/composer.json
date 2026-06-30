@@ -1,0 +1,19 @@
+{
+	"name": "undkonsorten/taskqueue-test",
+	"description": "Fixture extension for taskqueue functional tests",
+	"type": "typo3-cms-extension",
+	"license": "GPL-2.0+",
+	"require": {
+		"undkonsorten/taskqueue": "*"
+	},
+	"autoload": {
+		"psr-4": {
+			"Undkonsorten\\TaskqueueTest\\": "Classes/"
+		}
+	},
+	"extra": {
+		"typo3/cms": {
+			"extension-key": "taskqueue_test"
+		}
+	}
+}
