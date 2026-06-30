@@ -3,4 +3,4 @@
 ,1,0,"Undkonsorten\TaskqueueTest\Domain\Model\TestTask","{}",2,0,\NULL,"old finished",0,3,900,500000,500000,0,0,"Undkonsorten\TaskqueueTest\Domain\Model\TestTask"
 ,2,0,"Undkonsorten\TaskqueueTest\Domain\Model\TestTask","{}",3,0,\NULL,"old failed",0,3,900,500001,500001,0,0,"Undkonsorten\TaskqueueTest\Domain\Model\TestTask"
 ,3,0,"Undkonsorten\TaskqueueTest\Domain\Model\TestTask","{}",5,0,\NULL,"old terminated",0,3,900,500002,500002,0,0,"Undkonsorten\TaskqueueTest\Domain\Model\TestTask"
-,4,0,"Undkonsorten\TaskqueueTest\Domain\Model\TestTask","{}",2,0,\NULL,"recent finished",0,3,900,9999999999,9999999999,0,0,"Undkonsorten\TaskqueueTest\Domain\Model\TestTask"
+,4,0,"Undkonsorten\TaskqueueTest\Domain\Model\TestTask","{}",2,0,\NULL,"recent finished",0,3,900,4000000000,4000000000,0,0,"Undkonsorten\TaskqueueTest\Domain\Model\TestTask"
