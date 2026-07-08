@@ -326,24 +326,21 @@ Options:
         Show this help.
 
 Examples:
-    # Run all core unit tests using PHP 8.2
+    # Run all unit tests using the default PHP version
     ./Build/Scripts/runTests.sh
     ./Build/Scripts/runTests.sh -s unit
 
-    # Run all core units tests and enable xdebug (have a PhpStorm listening on port 9003!)
+    # Run all unit tests and enable xdebug (have a PhpStorm listening on port 9003!)
     ./Build/Scripts/runTests.sh -x
 
-    # Run unit tests in phpunit with xdebug on PHP 8.1 and filter for test filterByValueRecursiveCorrectlyFiltersArray
-    ./Build/Scripts/runTests.sh -x -p 8.1 -- --filter filterByValueRecursiveCorrectlyFiltersArray
+    # Run unit tests in phpunit with xdebug on PHP 8.3 and filter for a single test
+    ./Build/Scripts/runTests.sh -x -p 8.3 -- --filter getRecipientsParsesOneAddressPerLine
 
     # Run functional tests in phpunit with a filtered test method name in a specified file
-    # example will currently execute two tests, both of which start with the search term
-    ./Build/Scripts/runTests.sh -s functional -- \
-          --filter datetimeInstanceCanBePersistedToDatabaseIfTypeIsExplicitlySpecified \
-          typo3/sysext/core/Tests/Functional/Database/ConnectionTest.php
+    ./Build/Scripts/runTests.sh -s functional -- --filter findByRootline Tests/Functional/Domain/Repository/NewsletterRepositoryTest.php
 
-    # Run functional tests on postgres with xdebug, php 8.1 and execute a restricted set of tests
-    ./Build/Scripts/runTests.sh -x -p 8.1 -s functional -d postgres typo3/sysext/core/Tests/Functional/Authentication
+    # Run functional tests on postgres with xdebug, php 8.3
+    ./Build/Scripts/runTests.sh -x -p 8.3 -s functional -d postgres
 
     # Run functional tests on postgres 11
     ./Build/Scripts/runTests.sh -s functional -d postgres -i 11
@@ -425,7 +422,7 @@ TEST_SUITE="unit"
 CORE_VERSION="14.3"
 DBMS="sqlite"
 DBMS_VERSION=""
-PHP_VERSION="8.4"
+PHP_VERSION="8.3"
 PHP_XDEBUG_ON=0
 PHP_XDEBUG_PORT=9003
 PHPUNIT_RANDOM=""
@@ -441,7 +438,7 @@ HOST_UID=$(id -u)
 HOST_PID=$(id -g)
 USERSET=""
 SUFFIX="$RANDOM"
-NETWORK="typo3-best-practices-tea-${SUFFIX}"
+NETWORK="typo3-taskqueue-${SUFFIX}"
 CI_PARAMS="${CI_PARAMS:-}"
 CONTAINER_HOST="host.docker.internal"
 # shellcheck disable=SC2034 # This variable will be needed when we try to clean up the root folder
@@ -593,12 +590,7 @@ fi
 # Suite execution
 case ${TEST_SUITE} in
     cgl)
-        if [ -n "${CGLCHECK_DRY_RUN}" ]; then
-            COMMAND="composer check:php:cs-fixer"
-        else
-            COMMAND="composer fix:php:cs"
-        fi
-        ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name composer-command-${SUFFIX} -e COMPOSER_CACHE_DIR=.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} /bin/sh -c "${COMMAND}"
+        phpCsFixer
         SUITE_EXIT_CODE=$?
         ;;
     checkComposerNormalize)
@@ -641,13 +633,19 @@ case ${TEST_SUITE} in
         ;;
     composerUpdateMax)
         # `dumpautoload` removed due to error with missing `composer.lock` file on publishing public assets.
-        COMMAND="cp composer.json /tmp/composer.json.bak && { composer config --unset platform.php && composer update --no-progress --no-interaction --with typo3/minimal:^${CORE_VERSION} && composer show; }; EXIT=\$?; cp /tmp/composer.json.bak composer.json; exit \$EXIT"
+        # `composer update --with ...` is only a soft solver hint: if it can't be satisfied, composer
+        # silently drops it instead of failing, so the requested TYPO3 version can silently not be the
+        # one that actually gets installed. `composer require --no-install` performs real dependency
+        # resolution and fails loudly (reverting composer.json) if the version genuinely can't be
+        # satisfied, so it is used here to pin the constraint before the actual update/install.
+        COMMAND="cp composer.json /tmp/composer.json.bak && { composer config --unset platform.php && composer require --no-ansi --no-interaction --no-progress --no-install typo3/minimal:^${CORE_VERSION} && composer update --no-progress --no-interaction && composer show; }; EXIT=\$?; cp /tmp/composer.json.bak composer.json; exit \$EXIT"
         ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name composer-install-max-${SUFFIX} -e COMPOSER_CACHE_DIR=.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} /bin/sh -c "${COMMAND}"
         SUITE_EXIT_CODE=$?
         ;;
     composerUpdateMin)
         # `dumpautoload` removed due to error with missing `composer.lock` file on publishing public assets.
-        COMMAND="cp composer.json /tmp/composer.json.bak && { composer config platform.php ${PHP_VERSION}.0 && composer update --prefer-lowest --no-progress --no-interaction --with typo3/minimal:^${CORE_VERSION} && composer show; }; EXIT=\$?; cp /tmp/composer.json.bak composer.json; exit \$EXIT"
+        # See composerUpdateMax comment above for why `require --no-install` is used instead of `--with`.
+        COMMAND="cp composer.json /tmp/composer.json.bak && { composer config platform.php ${PHP_VERSION}.0 && composer require --no-ansi --no-interaction --no-progress --no-install --prefer-lowest typo3/minimal:^${CORE_VERSION} && composer update --prefer-lowest --no-progress --no-interaction && composer show; }; EXIT=\$?; cp /tmp/composer.json.bak composer.json; exit \$EXIT"
         ${CONTAINER_BIN} run ${CONTAINER_COMMON_PARAMS} --name composer-install-min-${SUFFIX} -e COMPOSER_CACHE_DIR=.cache/composer -e COMPOSER_ROOT_VERSION=${COMPOSER_ROOT_VERSION} ${IMAGE_PHP} /bin/sh -c "${COMMAND}"
         SUITE_EXIT_CODE=$?
         ;;
