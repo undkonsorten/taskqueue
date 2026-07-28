@@ -1,8 +1,5 @@
  # Module configuration
 module.tx_taskqueue {
-	persistence {
-		storagePid = {$module.tx_taskqueue.persistence.storagePid}
-	}
 	settings.pagination {
 		itemsPerPage = 50
 		insertAbove = 1

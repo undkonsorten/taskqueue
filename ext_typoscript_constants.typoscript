@@ -1,6 +1,0 @@
-module.tx_taskqueue {
-	persistence {
-		# cat=module.tx_taskqueue//a; type=string; label=Default storage PID
-		storagePid =
-	}
-}
