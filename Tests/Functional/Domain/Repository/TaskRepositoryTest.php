@@ -264,20 +264,26 @@ final class TaskRepositoryTest extends FunctionalTestCase
 
         $result = $this->subject->findByDemand($demand);
 
-        // falls back to the repository's default ordering (crdate DESC) instead of throwing
-        // or sorting by the disallowed property
+        // falls back to the repository's default ordering (task execution order: priority DESC,
+        // retries DESC, uid ASC) instead of throwing or sorting by the disallowed property
         self::assertSame([1, 3, 2], array_map(static fn($task) => $task->getUid(), iterator_to_array($result)));
     }
 
     #[Test]
-    public function findByDemandWithoutOrderByKeepsDefaultCrdateDescendingOrdering(): void
+    public function findByDemandWithoutOrderByMatchesTaskExecutionOrder(): void
     {
-        $this->importCSVDataSet(__DIR__ . '/Fixtures/SortableTasks.csv');
+        // Same fixture used by findRunableTasksOrdersByPriorityDescending() below: the backend
+        // module's default (unsorted) list must show tasks in the same order they'd actually be
+        // picked up and run in, i.e. findByDemand() and findRunableTasks() must agree.
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/PriorityOrderTasks.csv');
 
-        $demand = new Demand();
+        $demandResult = $this->subject->findByDemand(new Demand());
+        $runableResult = $this->subject->findRunableTasks(10);
 
-        $result = $this->subject->findByDemand($demand);
+        $demandUids = array_map(static fn($task) => $task->getUid(), iterator_to_array($demandResult));
+        $runableUids = array_map(static fn($task) => $task->getUid(), iterator_to_array($runableResult));
 
-        self::assertSame([1, 3, 2], array_map(static fn($task) => $task->getUid(), iterator_to_array($result)));
+        self::assertSame([2, 3, 1], $demandUids);
+        self::assertSame($runableUids, $demandUids);
     }
 }

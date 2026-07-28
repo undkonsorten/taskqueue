@@ -46,9 +46,18 @@ class TaskRepository extends Repository
 {
     private const SORTABLE_PROPERTIES = ['status', 'name', 'retries', 'crdate', 'lastRun', 'message'];
 
-    protected $defaultOrderings = [
-        'crdate' => QueryInterface::ORDER_DESCENDING,
+    /**
+     * The order in which findRunableTasks() picks up tasks to execute. Used as the repository's
+     * default ordering too, so the backend module list shows tasks in the same order they'll
+     * actually be run in when no explicit column sort is chosen.
+     */
+    private const EXECUTION_ORDER = [
+        'priority' => QueryInterface::ORDER_DESCENDING,
+        'retries' => QueryInterface::ORDER_DESCENDING,
+        'uid' => QueryInterface::ORDER_ASCENDING,
     ];
+
+    protected $defaultOrderings = self::EXECUTION_ORDER;
 
     // Example for repository wide settings
     public function initializeObject(): void
@@ -95,13 +104,7 @@ class TaskRepository extends Repository
 
         $query->setLimit((int)$limit);
 
-        $orderings = [
-            'priority' => QueryInterface::ORDER_DESCENDING,
-            'retries' => QueryInterface::ORDER_DESCENDING,
-            'uid' => QueryInterface::ORDER_ASCENDING,
-        ];
-
-        $query->setOrderings($orderings);
+        $query->setOrderings(self::EXECUTION_ORDER);
 
         return $query->execute();
     }
