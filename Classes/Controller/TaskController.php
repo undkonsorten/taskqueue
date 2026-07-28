@@ -117,7 +117,7 @@ class TaskController extends ActionController
         if ($this->arguments->hasArgument('demand')) {
             $propertyMappingConfiguration = $this->arguments['demand']->getPropertyMappingConfiguration();
             $propertyMappingConfiguration->allowCreationForSubProperty('status');
-            $propertyMappingConfiguration->allowProperties('status');
+            $propertyMappingConfiguration->allowProperties('status', 'orderBy', 'orderDirection');
             $propertyMappingConfiguration->setTypeConverterOption(PersistentObjectConverter::class, PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED, true);
         }
 
@@ -131,7 +131,8 @@ class TaskController extends ActionController
      */
     public function listAction(int $currentPage = 1, ?Demand $demand = null): ResponseInterface
     {
-        $tasks = is_null($demand) ? $this->taskRepository->findAll() : $this->taskRepository->findByDemand($demand);
+        $demand ??= new Demand();
+        $tasks = $this->taskRepository->findByDemand($demand);
         $status = [
             TaskInterface::FINISHED => LocalizationUtility::translate('tx_taskqueue_domain_model_task.status.finished', 'taskqueue'),
             TaskInterface::FAILED => LocalizationUtility::translate('tx_taskqueue_domain_model_task.status.failed', 'taskqueue'),
@@ -152,8 +153,40 @@ class TaskController extends ActionController
             'paginator' => $paginator,
             'demand' => $demand,
             'status' => $status,
+            'sortableColumns' => $this->buildSortableColumns($demand),
         ]);
         return $this->moduleTemplate->renderResponse('Task/List');
+    }
+
+    /**
+     * Builds view-ready sort-link data for each sortable column of the task list: whether it is
+     * the currently active sort column, its current direction, and the Demand to link to in order
+     * to (re-)sort by it, toggling direction if it's already active.
+     *
+     * @return array<string, array{labelKey: string, active: bool, direction: ?string, targetDemand: Demand}>
+     */
+    protected function buildSortableColumns(Demand $demand): array
+    {
+        $columns = [
+            'status' => 'tx_taskqueue_domain_model_task.status',
+            'name' => 'tx_taskqueue_domain_model_task.name',
+            'retries' => 'tx_taskqueue_domain_model_task.retries',
+            'crdate' => 'tx_taskqueue_domain_model_task.created_at',
+            'lastRun' => 'tx_taskqueue_domain_model_task.last_run',
+            'message' => 'tx_taskqueue_domain_model_task.message',
+        ];
+
+        $sortableColumns = [];
+        foreach ($columns as $property => $labelKey) {
+            $isActive = $demand->getOrderBy() === $property;
+            $sortableColumns[$property] = [
+                'labelKey' => $labelKey,
+                'active' => $isActive,
+                'direction' => $isActive ? $demand->getOrderDirection() : null,
+                'targetDemand' => $demand->withOrder($property, $demand->getToggledDirectionFor($property)),
+            ];
+        }
+        return $sortableColumns;
     }
 
     /**

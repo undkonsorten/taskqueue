@@ -44,6 +44,8 @@ use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
  */
 class TaskRepository extends Repository
 {
+    private const SORTABLE_PROPERTIES = ['status', 'name', 'retries', 'crdate', 'lastRun', 'message'];
+
     protected $defaultOrderings = [
         'crdate' => QueryInterface::ORDER_DESCENDING,
     ];
@@ -194,6 +196,9 @@ class TaskRepository extends Repository
             $query->matching(
                 $query->logicalAnd($query->equals('status', $demand->getStatus()))
             );
+        }
+        if ($demand->getOrderBy() !== null && in_array($demand->getOrderBy(), self::SORTABLE_PROPERTIES, true)) {
+            $query->setOrderings([$demand->getOrderBy() => $demand->getOrderDirection()]);
         }
         return $query->execute();
     }

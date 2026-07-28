@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Undkonsorten\Taskqueue\Tests\Functional\Domain\Repository;
 
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
 use TYPO3\TestingFramework\Core\Functional\FunctionalTestCase;
 use Undkonsorten\Taskqueue\Domain\Model\Demand;
 use Undkonsorten\Taskqueue\Domain\Model\TaskInterface;
@@ -199,5 +201,83 @@ final class TaskRepositoryTest extends FunctionalTestCase
         $result = $this->subject->findByDemand($demand);
 
         self::assertSame(2, $result->count());
+    }
+
+    /**
+     * Fixture: uid 1 (Bravo, status 2, retries 5, crdate 1000003, last_run 2021-01-01, message Zebra),
+     *          uid 2 (Alpha, status 0, retries 1, crdate 1000001, last_run 2021-01-03, message Mango),
+     *          uid 3 (Charlie, status 1, retries 3, crdate 1000002, last_run 2021-01-02, message Apple).
+     *
+     * @return array<string, array{0: string, 1: int[]}>
+     */
+    public static function sortablePropertyProvider(): array
+    {
+        return [
+            'name' => ['name', [2, 1, 3]],
+            'status' => ['status', [2, 3, 1]],
+            'retries' => ['retries', [2, 3, 1]],
+            'crdate' => ['crdate', [2, 3, 1]],
+            'lastRun' => ['lastRun', [1, 3, 2]],
+            'message' => ['message', [3, 2, 1]],
+        ];
+    }
+
+    #[Test]
+    #[DataProvider('sortablePropertyProvider')]
+    public function findByDemandOrdersAscendingByEachSortableProperty(string $property, array $expectedUidOrderAscending): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/SortableTasks.csv');
+
+        $demand = new Demand();
+        $demand->setOrderBy($property);
+        $demand->setOrderDirection(QueryInterface::ORDER_ASCENDING);
+
+        $result = $this->subject->findByDemand($demand);
+
+        self::assertSame($expectedUidOrderAscending, array_map(static fn($task) => $task->getUid(), iterator_to_array($result)));
+    }
+
+    #[Test]
+    #[DataProvider('sortablePropertyProvider')]
+    public function findByDemandOrdersDescendingByEachSortableProperty(string $property, array $expectedUidOrderAscending): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/SortableTasks.csv');
+
+        $demand = new Demand();
+        $demand->setOrderBy($property);
+        $demand->setOrderDirection(QueryInterface::ORDER_DESCENDING);
+
+        $result = $this->subject->findByDemand($demand);
+
+        self::assertSame(array_reverse($expectedUidOrderAscending), array_map(static fn($task) => $task->getUid(), iterator_to_array($result)));
+    }
+
+    #[Test]
+    public function findByDemandIgnoresOrderByOutsideTheSortableWhitelist(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/SortableTasks.csv');
+
+        $demand = new Demand();
+        // 'data' is a real column but intentionally not in the sortable whitelist
+        $demand->setOrderBy('data');
+        $demand->setOrderDirection(QueryInterface::ORDER_ASCENDING);
+
+        $result = $this->subject->findByDemand($demand);
+
+        // falls back to the repository's default ordering (crdate DESC) instead of throwing
+        // or sorting by the disallowed property
+        self::assertSame([1, 3, 2], array_map(static fn($task) => $task->getUid(), iterator_to_array($result)));
+    }
+
+    #[Test]
+    public function findByDemandWithoutOrderByKeepsDefaultCrdateDescendingOrdering(): void
+    {
+        $this->importCSVDataSet(__DIR__ . '/Fixtures/SortableTasks.csv');
+
+        $demand = new Demand();
+
+        $result = $this->subject->findByDemand($demand);
+
+        self::assertSame([1, 3, 2], array_map(static fn($task) => $task->getUid(), iterator_to_array($result)));
     }
 }

@@ -3,6 +3,8 @@
 
 <div class="search-form">
 	<f:form object="{demand}" controller="Task" action="list" name="demand">
+		<f:form.hidden property="orderBy" />
+		<f:form.hidden property="orderDirection" />
 		<fieldset>
 			<div class="row row-cols-auto align-items-end g-3">
 				<div class="col">

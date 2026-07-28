@@ -15,28 +15,16 @@
 					<f:render partial="SimplePagination" arguments="{paginator:paginator,pagination:pagination,action:'list',demand:demand}" />
 					<table data-table="tx_taskqueue" class="table table-striped table-hover m-0">
 						<tr>
-							<th>
-								<f:translate key="tx_taskqueue_domain_model_task.status"/>
-							</th>
-							<th align="left">
-								<f:translate key="tx_taskqueue_domain_model_task.name"/>
-							</th>
+							<f:render partial="List/SortableColumnHeader" arguments="{column: sortableColumns.status}" />
+							<f:render partial="List/SortableColumnHeader" arguments="{column: sortableColumns.name}" />
 							<th align="left">
 								<f:translate key="tx_taskqueue_domain_model_task.additionalInformation" />
 							</th>
-							<th align="left">
-								<f:translate key="tx_taskqueue_domain_model_task.retries"/>
-							</th>
+							<f:render partial="List/SortableColumnHeader" arguments="{column: sortableColumns.retries}" />
 							<th colspan="2"><f:translate key="tx_taskqueue_domain_model_task.actions" /></th>
-							<th align="left">
-								<f:translate key="tx_taskqueue_domain_model_task.created_at"/>
-							</th>
-							<th align="left">
-								<f:translate key="tx_taskqueue_domain_model_task.last_run"/>
-							</th>
-							<th align="left">
-								<f:translate key="tx_taskqueue_domain_model_task.message"/>
-							</th>
+							<f:render partial="List/SortableColumnHeader" arguments="{column: sortableColumns.crdate}" />
+							<f:render partial="List/SortableColumnHeader" arguments="{column: sortableColumns.lastRun}" />
+							<f:render partial="List/SortableColumnHeader" arguments="{column: sortableColumns.message}" />
 						</tr>
 						<f:for each="{tasks}" as="task">
 							<f:render partial="List/Item" arguments="{task:task}" />
