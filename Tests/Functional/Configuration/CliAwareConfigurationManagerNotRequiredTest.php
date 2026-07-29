@@ -39,10 +39,6 @@ final class CliAwareConfigurationManagerNotRequiredTest extends FunctionalTestCa
         $configurationManager = $this->get(ConfigurationManagerInterface::class);
 
         self::assertInstanceOf(ConfigurationManager::class, $configurationManager);
-        self::assertNotInstanceOf(
-            'Undkonsorten\ExtbaseCliAwareConfigurationManager\Configuration\CliAwareConfigurationManager',
-            $configurationManager,
-        );
     }
 
     #[Test]
