@@ -6,8 +6,9 @@ services:
 
   Undkonsorten\Taskqueue\:
     resource: '../Classes/*'
-    exclude:
-      - '../Classes/Controller/TaskController.php'
+
+  Undkonsorten\Taskqueue\Controller\TaskController:
+    tags: [ 'backend.controller' ]
 
   Undkonsorten\Taskqueue\Command\RunTasksCommand:
     tags:
